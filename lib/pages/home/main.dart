@@ -31,6 +31,8 @@ class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true, // set it to false
+
         body: SafeArea(
       child: Stack(
         children: [
@@ -121,7 +123,7 @@ class HomeState extends State<HomePage> {
                   )
                 ]),
               )),
-              BottomSheetWiget()       
+              const BottomSheetWiget()       
         ],
       ),
     ));
