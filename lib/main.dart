@@ -1,6 +1,8 @@
 import 'package:finance/pages/home/main.dart';
+import 'package:finance/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const App());
@@ -14,31 +16,25 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+
   @override
   void initState() {
-    // TODO: implement initState
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive,);
-SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-  statusBarColor: Colors.blue
-));
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     super.initState();
   }
 
-  //  @override
-  // void dispose() {
-  //   super.dispose();
-
-  //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);  // to re-show bars
-
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        "/": (context) =>  HomePage(),
-        "/details": (context) =>  HomePage()
-      },
+    return ChangeNotifierProvider(
+      create: (context) => WalletProvider(),
+      child: MaterialApp(
+        routes: {
+          "/": (context) => const  HomePage(),
+        },
+      ),
     );
   }
 }
+
+

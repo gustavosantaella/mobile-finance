@@ -1,11 +1,12 @@
 import 'package:finance/pages/home/widgets/balance.dart';
 import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
 import 'package:finance/pages/home/widgets/bottom_sheet.dart';
+import 'package:finance/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   HomeState createState() => HomeState();
 }
@@ -19,17 +20,18 @@ class HomeState extends State<HomePage> {
     });
   }
 
-  List<Widget> _sd() {
+  List<Widget> listTransactios(List data) {
     List<Widget> array = [];
-
-    for (int i = 0; i < 10; i++) {
-      array.add(ListTransactionWidget(i: i));
+    for (int i = 0; i < data.length; i++) {
+      array.add(ListTransactionWidget(data[i], i: i));
     }
     return array;
   }
 
   @override
   Widget build(BuildContext context) {
+
+    final provider = Provider.of<WalletProvider>(context);
     return Scaffold(
         resizeToAvoidBottomInset: true, // set it to false
 
@@ -97,8 +99,12 @@ class HomeState extends State<HomePage> {
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext contex) {
-                                          return const AlertDialog(
-                                            content: Text("asdasd"),
+                                          return AlertDialog(
+                                            content: Consumer<WalletProvider>(
+                                                builder:
+                                                    (context, value, child) =>
+                                                        Text(value.errorMessage
+                                                            .toString())),
                                           );
                                         })
                                   },
@@ -112,26 +118,50 @@ class HomeState extends State<HomePage> {
                       Expanded(
                           flex: 1,
                           child: FractionallySizedBox(
+                            widthFactor: 1,
                             heightFactor: 1,
                             child: Container(
-                              height: MediaQuery.of(context).size.height,
-                              margin: const EdgeInsets.all(10),
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Color.fromRGBO(100, 100, 100, .5),
-                                    blurRadius: 10.0,
-                                    spreadRadius: 2.0,
-                                  )
-                                ],
-                                color: Colors.white,
-                              ),
-                              child: ListView(
-                                children: _sd(),
-                              ),
-                            ),
+                                height: MediaQuery.of(context).size.height,
+                                margin: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                      color: Color.fromRGBO(100, 100, 100, .5),
+                                      blurRadius: 10.0,
+                                      spreadRadius: 2.0,
+                                    )
+                                  ],
+                                  color: Colors.white,
+                                ),
+                                child: Consumer<WalletProvider>(
+                                  builder: (context, value, child) {
+                                    return FutureBuilder(
+                                      // TODO: remove hard-code
+                                      future: value.getHistroy(
+                                          "6428550c474acb036e24f579"),
+                                      builder: (context, snapshot) {
+                                        
+                                        if (snapshot.hasData == false && snapshot.data == null) {
+                                          // TODO: progress indicator could be wraped in a custom widget
+                                          return  const Center(
+                                            child:  FractionallySizedBox(
+                                              widthFactor: 0.3,
+                                              heightFactor: 0.3,
+                                              child:  CircularProgressIndicator(),
+                                            ),
+                                          );
+                                        }
+                                
+                                        return ListView(
+                                          children:
+                                              listTransactios(snapshot.data!.reversed.toList()),
+                                        );
+                                      },
+                                    );
+                                  },
+                                )),
                           ))
                     ]),
                   )),

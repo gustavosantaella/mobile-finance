@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:finance/pages/home/services/service.dart' as service;
+import 'package:finance/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BottomSheetWiget extends StatelessWidget {
   const BottomSheetWiget({super.key});
@@ -75,6 +77,8 @@ class _AddMovementState extends State<AddMovementWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final BuildContext ctx;
+    final provider = Provider.of<WalletProvider>(context);
     return Container(
         // height: MediaQuery.of(context).size.height  <= 700 == true ? MediaQuery.of(context).size.height /2.2 : MediaQuery.of(context).size.height /4,
         margin: const EdgeInsets.all(10),
@@ -89,10 +93,15 @@ class _AddMovementState extends State<AddMovementWidget> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                         Center(
+                        Center(
                           child: Container(
                             margin: const EdgeInsets.all(10),
-                            child:  const Text("ADD MOVEMENT", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
+                            child: const Text(
+                              "ADD MOVEMENT",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w200),
+                            ),
                           ),
                         ),
                         Row(
@@ -127,7 +136,7 @@ class _AddMovementState extends State<AddMovementWidget> {
                               const Icon(Icons.description),
                               Flexible(
                                 child: TextFormField(
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.text,
                                   controller: descriptionController,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
@@ -166,10 +175,11 @@ class _AddMovementState extends State<AddMovementWidget> {
                                         List<DropdownMenuItem> items = [];
                                         snapshot.data?.forEach((item) {
                                           items.add(DropdownMenuItem(
-                                            value: item,
+                                            value: item?['id'],
                                             child: SizedBox(
                                               width: 200,
-                                              child: Text(item.toString()),
+                                              child: Text(
+                                                  item['label'].toString()),
                                             ),
                                           ));
                                         });
@@ -180,11 +190,9 @@ class _AddMovementState extends State<AddMovementWidget> {
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                             hint: Text(categorySelected),
-                                            onChanged: (obj) {
-                                              print(obj);
+                                            onChanged: (categoryId) {
                                               setState(() {
-                                                categorySelected =
-                                                    obj.toString();
+                                                categorySelected = categoryId;
                                               });
                                             });
                                       },
@@ -212,14 +220,25 @@ class _AddMovementState extends State<AddMovementWidget> {
                           ],
                         ),
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               bool validation =
                                   _formKey.currentState?.validate() as bool;
                               if (validation == false) {
                                 return;
                               }
 
-                              var a = _formKey.currentState?.save();
+                              await service.addTohistory(
+                                  amountController.text,
+                                  descriptionController.text,
+                                  categorySelected,
+                                  isExpense);
+                              // TODO: remove hard-code
+                              provider.setRefreshHistory(
+                                  "6428550c474acb036e24f579");
+                              print('ready');
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
                             },
                             child: const Text("Send"))
                       ],
