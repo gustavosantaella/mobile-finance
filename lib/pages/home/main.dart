@@ -4,6 +4,7 @@ import 'package:finance/pages/home/widgets/bottom_sheet.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:finance/config/constanst.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -41,8 +42,8 @@ class HomeState extends State<HomePage> {
               FractionallySizedBox(
                   heightFactor: 1,
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.blue,
+                    decoration:  BoxDecoration(
+                      color: definitions['colors']['background']['blue'] 
                     ),
                     child: Column(children: [
                       //   nav
@@ -142,6 +143,9 @@ class HomeState extends State<HomePage> {
                                       future: value.getHistroy(
                                           "6428550c474acb036e24f579"),
                                       builder: (context, snapshot) {
+                                        if(snapshot.hasError){
+                                          return const Text("an error ocurred to get history");
+                                        }
                                         
                                         if (snapshot.hasData == false && snapshot.data == null) {
                                           // TODO: progress indicator could be wraped in a custom widget

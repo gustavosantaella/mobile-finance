@@ -114,7 +114,7 @@ class _AddMovementState extends State<AddMovementWidget> {
                                   if (value == null ||
                                       value == '0' ||
                                       value.isEmpty) {
-                                    return 'Can';
+                                    return 'can not be 0';
                                   }
                                   return null;
                                 },

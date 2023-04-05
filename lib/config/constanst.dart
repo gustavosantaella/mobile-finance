@@ -16,7 +16,13 @@ const Map<String, dynamic> definitions = {
   },
 
   "colors":{
-    "default": Colors.black
+    "default": Colors.black,
+    "background":{
+      "blue":Colors.blue
+    }
   }
 };
+
+const String url = 'http://10.0.2.2:8000/api';
+
 

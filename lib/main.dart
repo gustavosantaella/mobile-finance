@@ -1,3 +1,4 @@
+import 'package:finance/pages/login/main.dart';
 import 'package:finance/pages/home/main.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,8 @@ class _AppState extends State<App> {
       create: (context) => WalletProvider(),
       child: MaterialApp(
         routes: {
-          "/": (context) => const  HomePage(),
+          "/": (context) => const  LoginWidget(),
+          "/home": (context) => const  HomePage(),
         },
       ),
     );
