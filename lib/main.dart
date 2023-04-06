@@ -4,6 +4,7 @@ import 'package:finance/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:finance/database/main.dart';
 
 void main() {
   runApp(const App());

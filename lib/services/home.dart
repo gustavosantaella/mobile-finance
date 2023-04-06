@@ -1,21 +1,15 @@
 import 'dart:convert';
-import 'dart:math';
-
+import 'package:finance/config/constanst.dart';
 import 'package:http/http.dart' as http;
-
-// TODO: REFACTOR THIS
-const String url = 'http://10.0.2.2:8000/api';
-
-//  TODO: REMOVE HARD-CDOE AND REPLACE BY DYNAMIC TOKEN
-const String token =  "Wafi eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDI4NTYzOWNiNmY2MWQzMzRmNGU1MGUifQ.IWGhoM4Lby4NnAL7vwnsbZeAkRzdSZz08NIwJ7il8SI";
+import 'auth.dart';
 
 Future<List> getCategoriest() async {
   try {
+    String token = await getuserToken(formatted: true);
+
     var data = await http.get(
       Uri.parse("$url/categories"),
-      headers: {
-        "Authorization": token
-      },
+      headers: {"Authorization": token},
     );
     var payload = jsonDecode(data.body);
     if (data.statusCode != 200) {
@@ -31,6 +25,8 @@ Future<bool> addTohistory(
     String amount, String description, String category, dynamic type,
     {String provider = 'WAFI'}) async {
   try {
+    String token = await getuserToken(formatted: true);
+
     final jsonBody = {
       "type": type is bool
           ? type == true
@@ -45,8 +41,7 @@ Future<bool> addTohistory(
     };
     await http.post(Uri.parse("$url/financial/history/"),
         headers: {
-          "Authorization":
-              "Wafi eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDI4NTYzOWNiNmY2MWQzMzRmNGU1MGUifQ.IWGhoM4Lby4NnAL7vwnsbZeAkRzdSZz08NIwJ7il8SI",
+          "Authorization": token,
           "Content-Type": "application/json"
         },
         body: jsonEncode(jsonBody));
@@ -58,21 +53,19 @@ Future<bool> addTohistory(
 
 Future<List> getHistory(String walletId) async {
   try {
-    // TODO: remove hard-code walletId in query params
-    final data = await http
-        .get(
-          Uri.parse("$url/financial/history/6428550c474acb036e24f579"),
-          headers: {
-            "Authorization": token
-          });
+    String token = await getuserToken(formatted: true);
+    final data = await http.get(
+        Uri.parse("$url/financial/history/6428550c474acb036e24f579"),
+        headers: {
+          "Authorization": token,
+        });
 
-      Map decode = jsonDecode(data.body);
-      if(data.statusCode != 200){
-        throw decode['error'];
-      }
+    Map decode = jsonDecode(data.body);
+    if (data.statusCode != 200) {
+      throw decode['error'];
+    }
     return decode['data'];
   } catch (e) {
-    print(e.toString());
     print("An error ocurred");
     rethrow;
   }

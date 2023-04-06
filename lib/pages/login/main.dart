@@ -89,8 +89,11 @@ class LoginWidgetState extends State<LoginWidget> {
                                           if (context.mounted && error != null) {
                                             SnackBarMessage(context, Colors.red,
                                                 Text(error));
-
                                             return;
+                                          }
+
+                                          if(context.mounted && error == null){
+                                            await Navigator.pushNamed(context, '/home');
                                           }
                                         },
                                         child: const Text("Submit"))

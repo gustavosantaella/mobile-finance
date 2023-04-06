@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:finance/pages/home/services/service.dart' as service;
+import 'package:finance/services/home.dart' as service;
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,8 +29,6 @@ class BottomSheetWiget extends StatelessWidget {
                     return const AddMovementWidget();
                   },
                 );
-
-                print(22323423);
               },
               icon: const Icon(
                 Icons.add_circle_rounded,
@@ -233,9 +231,8 @@ class _AddMovementState extends State<AddMovementWidget> {
                                   categorySelected,
                                   isExpense);
                               // TODO: remove hard-code
-                              provider.setRefreshHistory(
+                               provider.setRefreshHistory(
                                   "6428550c474acb036e24f579");
-                              print('ready');
                               if (context.mounted) {
                                 Navigator.pop(context);
                               }

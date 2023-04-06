@@ -1,12 +1,19 @@
-import 'package:finance/pages/home/services/service.dart';
+import 'package:finance/services/home.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+
+class WalletDTO{
+List wallets = [];
+late List history = [];
+
+WalletDTO();
+
+}
 
 class WalletProvider extends ChangeNotifier {
   dynamic walletS;
   late List history = [];
 
-  dynamic errorMessage;
 
   Future<dynamic> getHistroy(walletId) async {
     try {
@@ -21,12 +28,10 @@ class WalletProvider extends ChangeNotifier {
     }
   }
 
-
-
   Future<List> setRefreshHistory(String walletId) async {
     try {
-      await Future.delayed(const Duration(seconds: 10));
-      var history = await getHistory(walletId);
+    
+      var history = await getHistory(walletId);;
       this.history = history;
       notifyListeners();
 

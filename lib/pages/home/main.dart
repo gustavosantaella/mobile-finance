@@ -31,9 +31,13 @@ class HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    final provider = Provider.of<WalletProvider>(context);
+    final provider = Provider.of<WalletProvider>(context, listen: true);
     return Scaffold(
+        drawer: const NavigationDrawer(
+          children: [
+            Text("In construction. Please wait to the next version."),
+          ],
+        ),
         resizeToAvoidBottomInset: true, // set it to false
 
         body: SafeArea(
@@ -42,9 +46,8 @@ class HomeState extends State<HomePage> {
               FractionallySizedBox(
                   heightFactor: 1,
                   child: Container(
-                    decoration:  BoxDecoration(
-                      color: definitions['colors']['background']['blue'] 
-                    ),
+                    decoration: BoxDecoration(
+                        color: definitions['colors']['background']['blue']),
                     child: Column(children: [
                       //   nav
                       Row(
@@ -104,8 +107,7 @@ class HomeState extends State<HomePage> {
                                             content: Consumer<WalletProvider>(
                                                 builder:
                                                     (context, value, child) =>
-                                                        Text(value.errorMessage
-                                                            .toString())),
+                                                        Text("asd".toString())),
                                           );
                                         })
                                   },
@@ -143,25 +145,25 @@ class HomeState extends State<HomePage> {
                                       future: value.getHistroy(
                                           "6428550c474acb036e24f579"),
                                       builder: (context, snapshot) {
-                                        if(snapshot.hasError){
-                                          return const Text("an error ocurred to get history");
-                                        }
-                                        
-                                        if (snapshot.hasData == false && snapshot.data == null) {
-                                          // TODO: progress indicator could be wraped in a custom widget
-                                          return  const Center(
-                                            child:  FractionallySizedBox(
+                                        if (snapshot.hasError) {
+                                          return const Text(
+                                              "an error ocurred to get history");
+                                        } else if (snapshot.hasData) {
+                                          return ListView(
+                                            children: listTransactios(snapshot
+                                                .data!.reversed
+                                                .toList()),
+                                          );
+                                        } else {
+                                          return const Center(
+                                            child: FractionallySizedBox(
                                               widthFactor: 0.3,
                                               heightFactor: 0.3,
-                                              child:  CircularProgressIndicator(),
+                                              child:
+                                                  CircularProgressIndicator(),
                                             ),
                                           );
                                         }
-                                
-                                        return ListView(
-                                          children:
-                                              listTransactios(snapshot.data!.reversed.toList()),
-                                        );
                                       },
                                     );
                                   },
