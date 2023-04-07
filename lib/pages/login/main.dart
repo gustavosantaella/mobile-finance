@@ -1,6 +1,9 @@
+import 'package:finance/providers/user_provider.dart';
+import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:finance/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);
@@ -17,6 +20,8 @@ class LoginWidgetState extends State<LoginWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<WalletProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -85,7 +90,10 @@ class LoginWidgetState extends State<LoginWidget> {
 
                                           dynamic error = await login(
                                               emailController.text,
-                                              passwordController.text);
+                                              passwordController.text,
+                                              walletProvider: provider,
+                                              userProvider: userProvider
+                                              );
                                           if (context.mounted && error != null) {
                                             SnackBarMessage(context, Colors.red,
                                                 Text(error));

@@ -1,45 +1,63 @@
 import 'package:finance/services/home.dart';
+import 'package:finance/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 
-
-class WalletDTO{
-List wallets = [];
-late List history = [];
-
-WalletDTO();
-
-}
-
 class WalletProvider extends ChangeNotifier {
-  dynamic walletS;
+  List wallets = [];
+  dynamic currentWallet;
   late List history = [];
-
+  bool loadingHistory = false;
+  bool loadingWallet = false;
 
   Future<dynamic> getHistroy(walletId) async {
     try {
       if (history.isNotEmpty) {
         return history;
       }
+
       await setRefreshHistory(walletId);
       return history;
     } catch (e) {
-      print(e.toString());
       rethrow;
+    }
+  }
+
+  Future<dynamic> getBalance(String walletId, BuildContext context) async {
+    try {
+       Map response = await getWalletBalance(walletId);
+       currentWallet = response;
+       loadingWallet = false;
+       notifyListeners();
+      return currentWallet;
+    } catch (e) {
+      SnackBarMessage(context, Colors.red, Text(e.toString()));
     }
   }
 
   Future<List> setRefreshHistory(String walletId) async {
     try {
-    
-      var history = await getHistory(walletId);;
-      this.history = history;
+      await Future.delayed(const Duration(seconds: 1));
+      var history = await getHistory(walletId);
+      this.history.clear();
+      this.history.addAll(history);
+      loadingHistory = false;
       notifyListeners();
 
       return this.history;
     } catch (e) {
-      print("error");
       rethrow;
     }
   }
 
+  Future<List> getWallets(userId, context) async {
+    try {
+      List wallets = await getAllWalletsByOwner(userId);
+      this.wallets = wallets;
+      notifyListeners();
+      return this.wallets;
+    } catch (e) {
+      SnackBarMessage(context, Colors.red, Text(e.toString()));
+      rethrow;
+    }
+  }
 }

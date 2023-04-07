@@ -1,45 +1,7 @@
-import 'dart:math';
-
+import 'package:flutter/material.dart';
 import 'package:finance/services/home.dart' as service;
 import 'package:finance/providers/wallet_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-class BottomSheetWiget extends StatelessWidget {
-  const BottomSheetWiget({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: Center(
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 30),
-          decoration: const BoxDecoration(),
-          child: IconButton(
-              onPressed: () async {
-                await showModalBottomSheet<void>(
-                  context: context,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  isScrollControlled: true,
-                  builder: (BuildContext context) {
-                    return const AddMovementWidget();
-                  },
-                );
-              },
-              icon: const Icon(
-                Icons.add_circle_rounded,
-                size: 60,
-                color: Colors.blue,
-              )),
-        ),
-      ),
-    );
-  }
-}
 
 class AddMovementWidget extends StatefulWidget {
   const AddMovementWidget({Key? key}) : super(key: key);
@@ -60,8 +22,6 @@ class _AddMovementState extends State<AddMovementWidget> {
       final data = await service.getCategoriest();
       return data;
     } catch (e) {
-      print('error');
-      print(e.toString());
       return [];
     }
   }
@@ -76,7 +36,7 @@ class _AddMovementState extends State<AddMovementWidget> {
   @override
   Widget build(BuildContext context) {
     final BuildContext ctx;
-    final provider = Provider.of<WalletProvider>(context);
+    final provider = Provider.of<WalletProvider>(context, listen: true);
     return Container(
         // height: MediaQuery.of(context).size.height  <= 700 == true ? MediaQuery.of(context).size.height /2.2 : MediaQuery.of(context).size.height /4,
         margin: const EdgeInsets.all(10),
@@ -224,15 +184,21 @@ class _AddMovementState extends State<AddMovementWidget> {
                               if (validation == false) {
                                 return;
                               }
-
+                              provider.loadingHistory = true;
+                              provider.loadingWallet = true;
                               await service.addTohistory(
                                   amountController.text,
                                   descriptionController.text,
                                   categorySelected,
-                                  isExpense);
-                              // TODO: remove hard-code
-                               provider.setRefreshHistory(
-                                  "6428550c474acb036e24f579");
+                                  isExpense,
+                                  provider.currentWallet['info']['walletId']);
+                              provider.getBalance(
+                                  provider.currentWallet['info']['walletId'],
+                                  context);
+                              provider.setRefreshHistory(
+                                  provider.currentWallet['info']['walletId']);
+
+                              provider.notifyListeners();
                               if (context.mounted) {
                                 Navigator.pop(context);
                               }
