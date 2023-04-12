@@ -9,13 +9,13 @@ class WalletProvider extends ChangeNotifier {
   bool loadingHistory = false;
   bool loadingWallet = false;
 
-  Future<dynamic> getHistroy(walletId) async {
+  Future<dynamic> getHistroy(walletId, context) async {
     try {
       if (history.isNotEmpty) {
         return history;
       }
 
-      await setRefreshHistory(walletId);
+      await setRefreshHistory(walletId, context);
       return history;
     } catch (e) {
       rethrow;
@@ -24,17 +24,19 @@ class WalletProvider extends ChangeNotifier {
 
   Future<dynamic> getBalance(String walletId, BuildContext context) async {
     try {
-       Map response = await getWalletBalance(walletId);
-       currentWallet = response;
-       loadingWallet = false;
-       notifyListeners();
+      await Future.delayed(const Duration(seconds: 1));
+
+      Map response = await getWalletBalance(walletId);
+      currentWallet = response;
+      loadingWallet = false;
+      notifyListeners();
       return currentWallet;
     } catch (e) {
       SnackBarMessage(context, Colors.red, Text(e.toString()));
     }
   }
 
-  Future<List> setRefreshHistory(String walletId) async {
+  Future<List> setRefreshHistory(String walletId, context) async {
     try {
       await Future.delayed(const Duration(seconds: 1));
       var history = await getHistory(walletId);
@@ -45,6 +47,8 @@ class WalletProvider extends ChangeNotifier {
 
       return this.history;
     } catch (e) {
+      SnackBarMessage(context, Colors.red, Text(e.toString()));
+
       rethrow;
     }
   }

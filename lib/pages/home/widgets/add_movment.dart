@@ -192,14 +192,15 @@ class _AddMovementState extends State<AddMovementWidget> {
                                   categorySelected,
                                   isExpense,
                                   provider.currentWallet['info']['walletId']);
-                              provider.getBalance(
-                                  provider.currentWallet['info']['walletId'],
-                                  context);
-                              provider.setRefreshHistory(
-                                  provider.currentWallet['info']['walletId']);
 
                               provider.notifyListeners();
                               if (context.mounted) {
+                                provider.getBalance(
+                                    provider.currentWallet['info']['walletId'],
+                                    context);
+                                provider.setRefreshHistory(
+                                    provider.currentWallet['info']['walletId'],
+                                    context);
                                 Navigator.pop(context);
                               }
                             },

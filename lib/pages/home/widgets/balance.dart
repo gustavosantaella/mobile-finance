@@ -25,7 +25,13 @@ class BalanceWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.all(10),
             child: provider.loadingWallet == true
-                ? const CircularProgressIndicator()
+                ? const Center(
+                    child: FractionallySizedBox(
+                      widthFactor: 0.2,
+                      heightFactor: 0.3,
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,7 +129,8 @@ class BalanceWidget extends StatelessWidget {
         walletProvider.loadingWallet = true;
         walletProvider.loadingHistory = true;
         walletProvider.getBalance(walletProvider.wallets[0]['_id'], context);
-        walletProvider.setRefreshHistory(walletProvider.wallets[0]['_id']);
+        walletProvider.setRefreshHistory(
+            walletProvider.wallets[0]['_id'], context);
       }
     }
     return Consumer(
@@ -138,8 +145,8 @@ class BalanceWidget extends StatelessWidget {
                   walletProvider.currentWallet['index'] = index;
                   walletProvider.loadingHistory = true;
                   walletProvider.notifyListeners();
-                  await walletProvider
-                      .setRefreshHistory(walletProvider.wallets[index]['_id']);
+                  await walletProvider.setRefreshHistory(
+                      walletProvider.wallets[index]['_id'], context);
                 }),
             items: walletProvider.wallets.map((wallet) {
               return Builder(

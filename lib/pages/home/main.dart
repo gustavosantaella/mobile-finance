@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
+  
   List<Widget> listTransactios(List data) {
     List<Widget> array = [];
     for (int i = 0; i < data.length; i++) {
@@ -138,8 +139,8 @@ class HomeState extends State<HomePage> {
                                     if (provider.loadingHistory == true) {
                                       return const Center(
                                         child: FractionallySizedBox(
-                                          widthFactor: 0.3,
-                                          heightFactor: 0.3,
+                                          widthFactor: 0.1,
+                                          heightFactor: 0.1,
                                           child: CircularProgressIndicator(),
                                         ),
                                       );

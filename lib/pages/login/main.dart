@@ -14,6 +14,7 @@ class LoginWidget extends StatefulWidget {
 class LoginWidgetState extends State<LoginWidget> {
   final _formKey = GlobalKey<FormState>();
   dynamic error;
+  bool loading = false;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -28,7 +29,7 @@ class LoginWidgetState extends State<LoginWidget> {
               height: MediaQuery.of(context).size.height,
               color: Colors.blue,
               child: FractionallySizedBox(
-                  heightFactor: 0.5,
+                  heightFactor: 0.4,
                   child: Wrap(
                     children: [
                       Container(
@@ -40,7 +41,9 @@ class LoginWidgetState extends State<LoginWidget> {
                           ),
                           child: Column(
                             children: [
-                              Row(
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 20),
+                                child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: const [
@@ -52,6 +55,7 @@ class LoginWidgetState extends State<LoginWidget> {
                                   ),
                                   Icon(Icons.wallet),
                                 ],
+                              ),
                               ),
                               Form(
                                 key: _formKey,
@@ -81,10 +85,19 @@ class LoginWidgetState extends State<LoginWidget> {
                                           border: OutlineInputBorder()),
                                     ),
                                     ElevatedButton(
-                                        onPressed: () async {
+                                        style:  ButtonStyle(
+                                          backgroundColor: loading  ? const MaterialStatePropertyAll(Colors.grey) : null
+                                        ),
+                                        onPressed: loading ? null :  ()  async {
+                                          setState(() {
+                                            loading = true;
+                                          });
                                           bool isValid = _formKey.currentState
                                               ?.validate() as bool;
                                           if (!isValid) {
+                                            setState(() {
+                                              loading = false;
+                                            });
                                             return;
                                           }
 
@@ -95,12 +108,18 @@ class LoginWidgetState extends State<LoginWidget> {
                                               userProvider: userProvider
                                               );
                                           if (context.mounted && error != null) {
+                                            setState(() {
+                                              loading = false;
+                                            });
                                             SnackBarMessage(context, Colors.red,
                                                 Text(error));
                                             return;
                                           }
 
                                           if(context.mounted && error == null){
+                                            setState(() {
+                                              loading = false;
+                                            });;
                                             await Navigator.pushNamed(context, '/home');
                                           }
                                         },
