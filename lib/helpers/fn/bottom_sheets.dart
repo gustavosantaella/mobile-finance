@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-bottomSheetAddMovement(context, widget) async {
+bottomSheetWafi(context, widget) async {
   await showModalBottomSheet<void>(
     context: context,
     shape: RoundedRectangleBorder(

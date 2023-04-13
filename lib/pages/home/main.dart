@@ -4,6 +4,7 @@ import 'package:finance/pages/home/widgets/balance.dart';
 import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
 import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
+import 'package:finance/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:finance/config/constanst.dart';
@@ -31,6 +32,7 @@ class HomeState extends State<HomePage> {
     return Consumer<WalletProvider>(
       builder: <WalletProvider>(context, value, child) {
         return Scaffold(
+          bottomNavigationBar: const NavigationBarWidget(),
             drawer: const NavigationDrawer(
               children: [
                 Text("In construction. Please wait to the next version."),
@@ -191,7 +193,7 @@ class HomeState extends State<HomePage> {
                         margin: const EdgeInsets.only(bottom: 30),
                         decoration: const BoxDecoration(),
                         child: IconButton(
-                            onPressed: () => bottomSheetAddMovement(
+                            onPressed: () => bottomSheetWafi(
                                 context, const AddMovementWidget()),
                             icon: const Icon(
                               Icons.add_circle_rounded,

@@ -119,8 +119,8 @@ class LoginWidgetState extends State<LoginWidget> {
                                           if(context.mounted && error == null){
                                             setState(() {
                                               loading = false;
-                                            });;
-                                            await Navigator.pushNamed(context, '/home');
+                                            });
+                                             Navigator.popAndPushNamed(context, '/home');
                                           }
                                         },
                                         child: const Text("Submit"))
