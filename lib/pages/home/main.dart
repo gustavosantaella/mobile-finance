@@ -95,26 +95,26 @@ class HomeState extends State<HomePage> {
                           // balance
                           const BalanceWidget(),
                           //  filters
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                  onPressed: () => {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext contex) {
-                                              return AlertDialog(
-                                                content: Text("asd".toString()),
-                                              );
-                                            })
-                                      },
-                                  icon: const Icon(
-                                    Icons.search_sharp,
-                                    color: Colors.white,
-                                  ))
-                            ],
-                          ),
+                          // Row(
+                          //   crossAxisAlignment: CrossAxisAlignment.end,
+                          //   mainAxisAlignment: MainAxisAlignment.end,
+                          //   children: [
+                          //     IconButton(
+                          //         onPressed: () => {
+                          //               showDialog(
+                          //                   context: context,
+                          //                   builder: (BuildContext contex) {
+                          //                     return AlertDialog(
+                          //                       content: Text("asd".toString()),
+                          //                     );
+                          //                   })
+                          //             },
+                          //         icon: const Icon(
+                          //           Icons.search_sharp,
+                          //           color: Colors.white,
+                          //         ))
+                          //   ],
+                          // ),
                           //  transactions
                           Expanded(
                             flex: 1,

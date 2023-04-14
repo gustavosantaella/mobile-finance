@@ -23,8 +23,10 @@ const Map<String, dynamic> definitions = {
   }
 };
 
-const String url = 'http://192.168.109.48:8000/api';
+const String url = 'http://10.0.2.2:8000/api';
 
 const String prefixKey = 'Wafi';
+
+const String ok = 'OK';
 
 
