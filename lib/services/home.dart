@@ -48,7 +48,7 @@ Future<bool> addTohistory(String amount, String description, String category,
   }
 }
 
-Future<List> getHistory(String walletId) async {
+Future<Map> getHistory(String walletId) async {
   try {
     String token = await getuserToken(formatted: true);
     final data =

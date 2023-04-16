@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import "package:finance/config/constanst.dart";
 import 'auth.dart';
 
-Future<List> getHistoryByDate(String walletId, DateTime date) async {
+Future<Map> getHistoryByDate(String walletId, DateTime date) async {
   try {
     final String token = await getuserToken(formatted: true);
     Response response = await get(

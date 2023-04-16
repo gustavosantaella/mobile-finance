@@ -5,6 +5,7 @@ import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:finance/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +28,8 @@ class CalendarState extends State<CalendarWidget> {
   DateTime firstDay = DateTime(1);
   bool loading = false;
   List days = [];
+  double summaryIncomes = 0;
+  double summaryExpenses = 0;
 
   @override
   void dispose() {
@@ -42,9 +45,9 @@ class CalendarState extends State<CalendarWidget> {
       try {
         await Future.delayed(const Duration(seconds: 3));
         String walletId = walletProvider.currentWallet['info']['walletId'];
-        List response =
+        Map response =
             await getHistoryByDate(walletId, date ?? DateTime.now());
-        List dates = response.map((item) {
+        List dates = response['history'].map((item) {
           var date = DateFormat("yyyy-MM-dd")
               .format(DateTime.parse(item['createdAt']));
           return date;
@@ -57,6 +60,8 @@ class CalendarState extends State<CalendarWidget> {
         });
         if (days.isEmpty || force) {
           setState(() {
+            summaryExpenses = response['metrics']['expenses'];
+            summaryIncomes = response['metrics']['incomes'];
             days = uniqueDates;
           });
         }
@@ -101,32 +106,42 @@ class CalendarState extends State<CalendarWidget> {
                                             widthFactor: 1,
                                             heightFactor: 1,
                                             child: Column(
-                                              children: [
-                                                const Text(
-                                                  "Ioncmes",
-                                                  style:
-                                                      TextStyle(fontSize: 20),
+                                              children:  [
+                                                TextField(
+                                                  onTap: (){
+                                                    print(423);
+                                                  },
                                                 ),
-                                                const Divider(),
+                                                 const Text(
+                                                 "Summary",
+                                                  style:
+                                                       TextStyle(fontSize: 20),
+                                                ),
+                                                const SizedBox(height: 10,),
                                                 Expanded(
                                                   child: PieChart(
-                                                    PieChartData(sections: [
+                                                    PieChartData(
+                                                      
+                                                      sections: [
                                                       PieChartSectionData(
-                                                        value: 20,
-                                                        color: getRandomColor(),
+                                                        titleStyle: const TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 17,
+                                                          color: Colors.white
+                                                        ),
+                                                        value: summaryExpenses,
+                                                        color: Colors.red,
                                                       ),
                                                       PieChartSectionData(
-                                                        value: 20,
-                                                        color: getRandomColor(),
+                                                         titleStyle: const TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 17,
+                                                          color: Colors.white
+                                                        ),
+                                                        value: summaryIncomes,
+                                                        color: Colors.green,
                                                       ),
-                                                      PieChartSectionData(
-                                                        value: 20,
-                                                        color: getRandomColor(),
-                                                      ),
-                                                      PieChartSectionData(
-                                                        value: 204,
-                                                        color: getRandomColor(),
-                                                      ),
+                                             
                                                     ]
                                                         // read about it in the PieChartData section
                                                         ),
@@ -141,51 +156,7 @@ class CalendarState extends State<CalendarWidget> {
                                               ],
                                             ),
                                           )),
-                                          Expanded(
-                                              child: FractionallySizedBox(
-                                            widthFactor: 1,
-                                            heightFactor: 1,
-                                            child: Column(
-                                              children: [
-                                                const Text(
-                                                  "Expenses",
-                                                  style:
-                                                      TextStyle(fontSize: 20),
-                                                ),
-                                                const Divider(),
-                                                Expanded(
-                                                  child: PieChart(
-                                                    PieChartData(sections: [
-                                                      PieChartSectionData(
-                                                        value: 20,
-                                                        color: getRandomColor(),
-                                                      ),
-                                                      PieChartSectionData(
-                                                        value: 20,
-                                                        color: getRandomColor(),
-                                                      ),
-                                                      PieChartSectionData(
-                                                        value: 20,
-                                                        color: getRandomColor(),
-                                                      ),
-                                                      PieChartSectionData(
-                                                        value: 204,
-                                                        color: getRandomColor(),
-                                                      ),
-                                                    ]
-                                                        // read about it in the PieChartData section
-                                                        ),
-                                                    swapAnimationDuration:
-                                                        Duration(
-                                                            milliseconds:
-                                                                150), // Optional
-                                                    swapAnimationCurve: Curves
-                                                        .linear, // Optional
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ))
+                                     
                                         ],
                                       ),
                                     ),
@@ -230,5 +201,7 @@ class CalendarState extends State<CalendarWidget> {
                             )
                           ],
                         ))))));
+  
+  
   }
 }

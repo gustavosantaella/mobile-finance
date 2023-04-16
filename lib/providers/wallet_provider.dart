@@ -39,13 +39,13 @@ class WalletProvider extends ChangeNotifier {
   Future<List> setRefreshHistory(String walletId, context) async {
     try {
       await Future.delayed(const Duration(seconds: 1));
-      var history = await getHistory(walletId);
-      this.history.clear();
-      this.history.addAll(history);
+      Map response = await getHistory(walletId);
+      history.clear();
+      history.addAll(response['history']);
       loadingHistory = false;
       notifyListeners();
 
-      return this.history;
+      return history;
     } catch (e) {
       SnackBarMessage(context, Colors.red, Text(e.toString()));
 
