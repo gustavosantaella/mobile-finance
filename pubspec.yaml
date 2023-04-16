@@ -15,6 +15,7 @@ dependencies:
   search_choices: ^2.2.5
   sqflite: 
   table_calendar: ^3.0.9
+  fl_chart:
 
 dev_dependencies:
   flutter_test:

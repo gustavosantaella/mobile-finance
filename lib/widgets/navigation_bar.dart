@@ -10,20 +10,37 @@ class NavigationBarWidget extends StatelessWidget {
       destinations: [
         IconButton(
             onPressed: () async {
-              print(ModalRoute.of(context)?.settings.name);
               await Navigator.popAndPushNamed(context, '/home');
             },
             icon: const Icon(Icons.home, color: Colors.white)),
         IconButton(
             onPressed: () async {
-              print(ModalRoute.of(context)?.settings.name);
               if (ModalRoute.of(context)?.settings.name == '/calendar') return;
 
-              await Navigator.popAndPushNamed(context, '/calendar');
-              print("im back");
+              await Navigator.pushNamed(context, '/calendar');
             },
             icon: const Icon(
               Icons.calendar_month,
+              color: Colors.white,
+            )),
+            IconButton(
+            onPressed: () async {
+              if (ModalRoute.of(context)?.settings.name == '/calendar') return;
+
+              await Navigator.pushNamed(context, '/calendar');
+            },
+            icon: const Icon(
+              Icons.graphic_eq,
+              color: Colors.white,
+            )),
+        IconButton(
+            onPressed: () async {
+              if (ModalRoute.of(context)?.settings.name == '/calendar') return;
+
+              await Navigator.pushNamed(context, '/calendar');
+            },
+            icon: const Icon(
+              Icons.person,
               color: Colors.white,
             ))
       ],
