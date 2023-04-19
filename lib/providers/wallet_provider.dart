@@ -8,6 +8,7 @@ class WalletProvider extends ChangeNotifier {
   late List history = [];
   bool loadingHistory = false;
   bool loadingWallet = false;
+  int currenIndex = 0;
 
   Future<dynamic> getHistroy(walletId, context) async {
     try {

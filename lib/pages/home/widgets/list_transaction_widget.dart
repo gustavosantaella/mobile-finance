@@ -23,6 +23,7 @@ class ListTransactionState extends State<ListTransactionWidget> {
 
   @override
   Widget build(BuildContext context) {
+ 
     return GestureDetector(
         onTap: () => changeColorCard(),
         onLongPressEnd: (details) => changeColorCard(),
@@ -36,7 +37,7 @@ class ListTransactionState extends State<ListTransactionWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                DateFormat('dd/MM/yyyy HH:mm:ss a').format(DateTime.parse(widget.data['createdAt'])) ?? "Without date",
+               widget.data['createdAt'] != null ? DateFormat('dd/MM/yyyy HH:mm:ss a').format(DateTime.parse(widget.data['createdAt'])) : "Without date",
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -55,12 +56,12 @@ class ListTransactionState extends State<ListTransactionWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Icon(
-                              definitions['history']['type']
+                              definitions['history']?['type']
                                       ?[widget.data['type']]?['icon'] ??
-                                  definitions['colors']['default'],
-                              color: definitions['history']['type']
+                                  definitions['colors']?['default'],
+                              color: definitions['history']?['type']
                                       ?[widget.data['type']]?['color'] ??
-                                  definitions['colors']['default'],
+                                  definitions['colors']?['default'],
                             ),
                             const SizedBox(
                               width: 10,

@@ -136,13 +136,14 @@ class BalanceWidget extends StatelessWidget {
     return Consumer(
         builder: (context, value, child) => CarouselSlider(
             options: CarouselOptions(
+              initialPage: walletProvider.currenIndex,
                 enableInfiniteScroll: false,
-                viewportFraction: 0.93,
+                viewportFraction: 0.95,
                 onPageChanged: (index, reason) async {
                   walletProvider.loadingWallet = true;
                   walletProvider.getBalance(
                       walletProvider.wallets[index]['_id'], context);
-                  walletProvider.currentWallet['index'] = index;
+                  walletProvider.currenIndex = index;
                   walletProvider.loadingHistory = true;
                   walletProvider.notifyListeners();
                   await walletProvider.setRefreshHistory(

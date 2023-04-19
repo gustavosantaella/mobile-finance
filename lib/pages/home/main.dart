@@ -94,35 +94,15 @@ class HomeState extends State<HomePage> {
                           ),
                           // balance
                           const BalanceWidget(),
-                          //  filters
-                          // Row(
-                          //   crossAxisAlignment: CrossAxisAlignment.end,
-                          //   mainAxisAlignment: MainAxisAlignment.end,
-                          //   children: [
-                          //     IconButton(
-                          //         onPressed: () => {
-                          //               showDialog(
-                          //                   context: context,
-                          //                   builder: (BuildContext contex) {
-                          //                     return AlertDialog(
-                          //                       content: Text("asd".toString()),
-                          //                     );
-                          //                   })
-                          //             },
-                          //         icon: const Icon(
-                          //           Icons.search_sharp,
-                          //           color: Colors.white,
-                          //         ))
-                          //   ],
-                          // ),
+                          
                           //  transactions
                           Expanded(
-                            flex: 1,
+                            // flex: 1,
                             child: FractionallySizedBox(
                                 widthFactor: 1,
-                                heightFactor: 1,
+                                // heightFactor: 1,
                                 child: Container(
-                                  height: MediaQuery.of(context).size.height,
+                                  // height: MediaQuery.of(context).size.height,
                                   margin: const EdgeInsets.all(10),
                                   decoration: const BoxDecoration(
                                     borderRadius:

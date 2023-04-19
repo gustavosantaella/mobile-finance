@@ -31,8 +31,12 @@ class CalendarState extends State<CalendarWidget> {
   bool loading = false;
   List days = [];
   List _historyByDate = [];
-  double summaryIncomes = 0;
-  double summaryExpenses = 0;
+  double summaryIncomes = 0.0;
+  double summaryExpenses = 0.0;
+  double incomes = 0.0;
+  double expenses = 0.0;
+  double total = 0.0;
+  bool newDate = false;
 
   @override
   void dispose() {
@@ -64,6 +68,9 @@ class CalendarState extends State<CalendarWidget> {
         });
         if (days.isEmpty || force) {
           setState(() {
+            incomes = response['incomes'];
+            expenses = response['expenses'];
+            total = response['total'];
             summaryExpenses = response['metrics']['expenses'];
             summaryIncomes = response['metrics']['incomes'];
             days = uniqueDates;
@@ -74,7 +81,7 @@ class CalendarState extends State<CalendarWidget> {
       }
     }
 
-    if (days.isEmpty) {
+    if (days.isEmpty && newDate == false) {
       historyByMonth(date: DateTime.now().month);
     }
 
@@ -122,6 +129,33 @@ class CalendarState extends State<CalendarWidget> {
                             ])),
                           ),
                         ),
+                        Container(
+                            margin: const EdgeInsets.all(10),
+                            child: 
+                               Wrap(
+                                
+                                alignment: WrapAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "$incomes\$",
+                                    style: const TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20),
+                                  ),
+                                  Text("${incomes - expenses}\$",
+                                      style: const TextStyle(
+                                          color: Colors.black45,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20)),
+                                  Text("$expenses\$",
+                                      style: const TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20)),
+                                ],
+                            
+                            )),
                         TableCalendar(
                           firstDay: firstDay,
                           lastDay: lastDay,
@@ -143,9 +177,8 @@ class CalendarState extends State<CalendarWidget> {
                             setState(() {
                               _selectedDay = selectedDay;
                               _focusedDay = focusedDay;
-                              // _historyByDate = [];
                             });
-                           await historyByDate();
+                            await historyByDate();
 
                             if (context.mounted) {
                               var hist = _historyByDate
@@ -156,13 +189,10 @@ class CalendarState extends State<CalendarWidget> {
                                   ListView(
                                     children: [Wrap(children: hist)],
                                   ));
-                           
                             }
                           },
                           onPageChanged: (focusedDay) async {
-                            setState(() {
-                              _historyByDate = [];
-                            });
+                            newDate = true;
                             await historyByMonth(
                                 date: focusedDay.month, force: true);
                             // No need to call `setState()` here
