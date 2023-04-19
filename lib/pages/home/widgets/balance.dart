@@ -13,16 +13,16 @@ class BalanceWidget extends StatelessWidget {
         child: Container(
             // height: 100,
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white,
-                boxShadow: const <BoxShadow>[
+                boxShadow:  <BoxShadow>[
                   BoxShadow(
-                    color: Color.fromRGBO(100, 100, 100, .2),
+                    color: Color.fromRGBO(255, 255, 255, 0.462),
                     blurRadius: 10.0,
                     spreadRadius: 2.0,
                   )
                 ],
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomLeft: Radius.circular(20), bottomRight:  Radius.circular(20))),
             margin: const EdgeInsets.all(10),
             child: provider.loadingWallet == true
                 ? const Center(

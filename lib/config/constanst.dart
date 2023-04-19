@@ -18,7 +18,8 @@ const Map<String, dynamic> definitions = {
   "colors":{
     "default": Colors.black,
     "background":{
-      "blue":Colors.blue
+      "blue":Colors.blue,
+      "app": Color.fromARGB(201, 0, 0, 0)
     }
   }
 };

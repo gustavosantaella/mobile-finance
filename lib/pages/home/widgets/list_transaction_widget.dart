@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:finance/config/constanst.dart';
+import 'package:intl/intl.dart';
 
 class ListTransactionWidget extends StatefulWidget {
   final int i;
@@ -35,7 +36,7 @@ class ListTransactionState extends State<ListTransactionWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.data['createdAt']?.toString() ?? "Without date",
+                DateFormat('dd/MM/yyyy HH:mm:ss a').format(DateTime.parse(widget.data['createdAt'])) ?? "Without date",
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

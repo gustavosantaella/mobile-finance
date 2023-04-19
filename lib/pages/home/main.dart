@@ -47,7 +47,7 @@ class HomeState extends State<HomePage> {
                       heightFactor: 1,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: definitions['colors']['background']['blue']),
+                            color: definitions['colors']['background']['app']),
                         child: Column(children: [
                           //   nav
                           Row(
@@ -126,11 +126,11 @@ class HomeState extends State<HomePage> {
                                   margin: const EdgeInsets.all(10),
                                   decoration: const BoxDecoration(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(20)),
                                     boxShadow: <BoxShadow>[
                                       BoxShadow(
                                         color:
-                                            Color.fromRGBO(100, 100, 100, .5),
+                                            Color.fromRGBO(255, 255, 255, 0.358),
                                         blurRadius: 10.0,
                                         spreadRadius: 2.0,
                                       )

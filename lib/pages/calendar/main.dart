@@ -1,6 +1,8 @@
+import 'package:finance/config/constanst.dart';
 import 'package:finance/helpers/fn/bottom_sheets.dart';
 import 'package:finance/helpers/fn/main.dart';
 import 'package:finance/pages/home/widgets/add_movment.dart';
+import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:finance/widgets/snack_bar.dart';
@@ -28,6 +30,7 @@ class CalendarState extends State<CalendarWidget> {
   DateTime firstDay = DateTime(1);
   bool loading = false;
   List days = [];
+  List _historyByDate = [];
   double summaryIncomes = 0;
   double summaryExpenses = 0;
 
@@ -41,12 +44,13 @@ class CalendarState extends State<CalendarWidget> {
   Widget build(BuildContext context) {
     WalletProvider walletProvider =
         Provider.of<WalletProvider>(context, listen: true);
+
     historyByMonth({dynamic date, bool force = false}) async {
       try {
-        await Future.delayed(const Duration(seconds: 3));
+        // await Future.delayed(const Duration(seconds: 3));
         String walletId = walletProvider.currentWallet['info']['walletId'];
-        Map response =
-            await getHistoryByDate(walletId, date ?? DateTime.now());
+        Map response = await getHistoryByDate(walletId,
+            date: date ?? DateTime.now(), field: 'month');
         List dates = response['history'].map((item) {
           var date = DateFormat("yyyy-MM-dd")
               .format(DateTime.parse(item['createdAt']));
@@ -70,138 +74,104 @@ class CalendarState extends State<CalendarWidget> {
       }
     }
 
+    if (days.isEmpty) {
+      historyByMonth(date: DateTime.now().month);
+    }
+
+    historyByDate() async {
+      Map response = await getHistoryByDate(
+          walletProvider.currentWallet['info']['walletId'],
+          date: DateFormat('yyyy-MM-dd').format(_selectedDay),
+          field: 'date');
+      setState(() {
+        _historyByDate = response['history'];
+      });
+    }
+
     return Scaffold(
         bottomNavigationBar: const NavigationBarWidget(),
         resizeToAvoidBottomInset: true,
         body: SafeArea(
-            child: FractionallySizedBox(
-                heightFactor: 1,
-                widthFactor: 1,
+          child: FractionallySizedBox(
+              widthFactor: 1,
+              heightFactor: 1,
+              child: Container(
+                color: definitions['colors']['background']['app'],
                 child: Container(
+                    margin: const EdgeInsets.all(10),
                     decoration: const BoxDecoration(
-                      color: Colors.blue,
-                    ),
-                    child: Container(
-                        margin: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: Colors.white,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                    child: SingleChildScrollView(
+                        // scrollDirection: Axis,
+                        child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(10),
+                          child: AspectRatio(
+                            aspectRatio: 2,
+                            child: PieChart(PieChartData(sections: [
+                              PieChartSectionData(
+                                  value: summaryIncomes,
+                                  title: "$summaryIncomes%",
+                                  color: Colors.green),
+                              PieChartSectionData(
+                                  value: summaryExpenses,
+                                  title: "$summaryExpenses%",
+                                  color: Colors.red),
+                            ])),
+                          ),
                         ),
-                        child: PageView(
-                          controller: _pageController,
-                          children: [
-                            FutureBuilder(
-                              future: historyByMonth(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  return Column(children: [
-                                    Expanded(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                              child: FractionallySizedBox(
-                                            widthFactor: 1,
-                                            heightFactor: 1,
-                                            child: Column(
-                                              children:  [
-                                                TextField(
-                                                  onTap: (){
-                                                    print(423);
-                                                  },
-                                                ),
-                                                 const Text(
-                                                 "Summary",
-                                                  style:
-                                                       TextStyle(fontSize: 20),
-                                                ),
-                                                const SizedBox(height: 10,),
-                                                Expanded(
-                                                  child: PieChart(
-                                                    PieChartData(
-                                                      
-                                                      sections: [
-                                                      PieChartSectionData(
-                                                        titleStyle: const TextStyle(
-                                                          fontWeight: FontWeight.bold,
-                                                          fontSize: 17,
-                                                          color: Colors.white
-                                                        ),
-                                                        value: summaryExpenses,
-                                                        color: Colors.red,
-                                                      ),
-                                                      PieChartSectionData(
-                                                         titleStyle: const TextStyle(
-                                                          fontWeight: FontWeight.bold,
-                                                          fontSize: 17,
-                                                          color: Colors.white
-                                                        ),
-                                                        value: summaryIncomes,
-                                                        color: Colors.green,
-                                                      ),
-                                             
-                                                    ]
-                                                        // read about it in the PieChartData section
-                                                        ),
-                                                    swapAnimationDuration:
-                                                        Duration(
-                                                            milliseconds:
-                                                                150), // Optional
-                                                    swapAnimationCurve: Curves
-                                                        .linear, // Optional
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          )),
-                                     
-                                        ],
-                                      ),
-                                    ),
-                                    TableCalendar(
-                                      firstDay: firstDay,
-                                      lastDay: lastDay,
-                                      focusedDay: _focusedDay,
-                                      calendarFormat: _calendarFormat,
-                                      selectedDayPredicate: (day) {
-                                        // Use `selectedDayPredicate` to determine which day is currently selected.
-                                        // If this s true, then `day` will be marked as selected.
+                        TableCalendar(
+                          firstDay: firstDay,
+                          lastDay: lastDay,
+                          focusedDay: _focusedDay,
+                          calendarFormat: _calendarFormat,
+                          selectedDayPredicate: (day) {
+                            // Use `selectedDayPredicate` to determine which day is currently selected.
+                            // If this s true, then `day` will be marked as selected.
 
-                                        // Using `isSameDay` is recommended to disregard
-                                        // the time-part of compared DateTime objects.
-                                        return isSameDay(_selectedDay, day)
-                                            ? isSameDay(_selectedDay, day)
-                                            : days.contains(
-                                                DateFormat('yyyy-MM-dd')
-                                                    .format(day));
-                                      },
-                                      onDaySelected: (selectedDay, focusedDay) {
-                                        // Call `setState()` when updating the selected day
-                                        setState(() {
-                                          _selectedDay = selectedDay;
-                                          _focusedDay = focusedDay;
-                                        });
-                                        bottomSheetWafi(
-                                            context, const AddMovementWidget());
-                                      },
-                                      onPageChanged: (focusedDay) async {
-                                        await historyByMonth(
-                                            date: focusedDay, force: true);
-                                        // No need to call `setState()` here
-                                        _focusedDay = focusedDay;
-                                      },
-                                    )
-                                  ]);
-                                } else {
-                                  return const Text("Loading");
-                                }
-                              },
-                            )
-                          ],
-                        ))))));
-  
-  
+                            // Using `isSameDay` is recommended to disregard
+                            // the time-part of compared DateTime objects.
+                            return isSameDay(_selectedDay, day)
+                                ? isSameDay(_selectedDay, day)
+                                : days.contains(
+                                    DateFormat('yyyy-MM-dd').format(day));
+                          },
+                          onDaySelected: (selectedDay, focusedDay) async {
+                            // Call `setState()` when updating the selected day
+                            setState(() {
+                              _selectedDay = selectedDay;
+                              _focusedDay = focusedDay;
+                              // _historyByDate = [];
+                            });
+                           await historyByDate();
+
+                            if (context.mounted) {
+                              var hist = _historyByDate
+                                  .map((item) => ListTransactionWidget(item))
+                                  .toList();
+                              bottomSheetWafi(
+                                  context,
+                                  ListView(
+                                    children: [Wrap(children: hist)],
+                                  ));
+                           
+                            }
+                          },
+                          onPageChanged: (focusedDay) async {
+                            setState(() {
+                              _historyByDate = [];
+                            });
+                            await historyByMonth(
+                                date: focusedDay.month, force: true);
+                            // No need to call `setState()` here
+                            _focusedDay = focusedDay;
+                          },
+                        ),
+                      ],
+                    ))),
+              )),
+        ));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:finance/config/constanst.dart';
 import 'package:flutter/material.dart';
 
 class NavigationBarWidget extends StatelessWidget {
@@ -6,7 +7,7 @@ class NavigationBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NavigationBar(
-      backgroundColor: Colors.blue,
+      backgroundColor: definitions['colors']['background']['app'],
       destinations: [
         IconButton(
             onPressed: () async {
