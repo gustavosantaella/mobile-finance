@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const Map<String, dynamic> definitions = {
@@ -19,12 +20,12 @@ const Map<String, dynamic> definitions = {
     "default": Colors.black,
     "background":{
       "blue":Colors.blue,
-      "app": Color.fromARGB(201, 0, 0, 0)
+      "app": Color.fromARGB(200, 235, 139, 14)
     }
   }
 };
 
-const String url = 'http://10.0.2.2:8000/api';
+const String url = !kReleaseMode ? 'http://10.0.2.2:8000/api' : '';
 
 const String prefixKey = 'Wafi';
 

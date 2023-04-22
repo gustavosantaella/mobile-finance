@@ -1,3 +1,6 @@
+import 'package:finance/helpers/fn/bottom_sheets.dart';
+import 'package:finance/widgets/history_detail.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:finance/config/constanst.dart';
 import 'package:intl/intl.dart';
@@ -25,7 +28,10 @@ class ListTransactionState extends State<ListTransactionWidget> {
   Widget build(BuildContext context) {
  
     return GestureDetector(
-        onTap: () => changeColorCard(),
+        onTap: (){
+          changeColorCard();
+          bottomSheetWafi(context, HistoryDetail(widget.data['_id']));
+        },
         onLongPressEnd: (details) => changeColorCard(),
         child: Container(
           decoration: BoxDecoration(

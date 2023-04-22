@@ -95,6 +95,28 @@ class CalendarState extends State<CalendarWidget> {
       });
     }
 
+    chart() {
+      if (expenses > 0 && incomes > 0) {
+        return Container(
+          margin: const EdgeInsets.all(10),
+          child: AspectRatio(
+            aspectRatio: 2,
+            child: PieChart(PieChartData(sections: [
+              PieChartSectionData(
+                  value: summaryIncomes,
+                  title: "$summaryIncomes%",
+                  color: Colors.green),
+              PieChartSectionData(
+                  value: summaryExpenses,
+                  title: "$summaryExpenses%",
+                  color: Colors.red),
+            ])),
+          ),
+        );
+      }
+      return Container();
+    }
+
     return Scaffold(
         bottomNavigationBar: const NavigationBarWidget(),
         resizeToAvoidBottomInset: true,
@@ -113,48 +135,32 @@ class CalendarState extends State<CalendarWidget> {
                         // scrollDirection: Axis,
                         child: Column(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.all(10),
-                          child: AspectRatio(
-                            aspectRatio: 2,
-                            child: PieChart(PieChartData(sections: [
-                              PieChartSectionData(
-                                  value: summaryIncomes,
-                                  title: "$summaryIncomes%",
-                                  color: Colors.green),
-                              PieChartSectionData(
-                                  value: summaryExpenses,
-                                  title: "$summaryExpenses%",
-                                  color: Colors.red),
-                            ])),
-                          ),
-                        ),
+                        chart(),
                         Container(
                             margin: const EdgeInsets.all(10),
-                            child: 
-                               Wrap(
-                                
-                                alignment: WrapAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "$incomes\$",
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "$incomes\$",
+                                  style: const TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20),
+                                ),
+                              const  SizedBox(width: 20, height: 20),
+                                Text("${incomes - expenses}\$",
                                     style: const TextStyle(
-                                        color: Colors.green,
+                                        color: Colors.black45,
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 20),
-                                  ),
-                                  Text("${incomes - expenses}\$",
-                                      style: const TextStyle(
-                                          color: Colors.black45,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 20)),
-                                  Text("$expenses\$",
-                                      style: const TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 20)),
-                                ],
-                            
+                                        fontSize: 20)),
+                              const  SizedBox(width: 20, height: 20),
+                                Text("$expenses\$",
+                                    style: const TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20)),
+                              ],
                             )),
                         TableCalendar(
                           firstDay: firstDay,

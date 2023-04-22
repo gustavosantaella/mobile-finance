@@ -15,7 +15,6 @@ class WalletProvider extends ChangeNotifier {
       if (history.isNotEmpty) {
         return history;
       }
-
       await setRefreshHistory(walletId, context);
       return history;
     } catch (e) {

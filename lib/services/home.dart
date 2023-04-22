@@ -55,11 +55,11 @@ Future<Map> getHistory(String walletId) async {
         await http.get(Uri.parse("$url/financial/history/$walletId"), headers: {
       "Authorization": token,
     });
-
     Map decode = jsonDecode(data.body);
     if (data.statusCode != 200) {
       throw decode['error'];
     }
+
     return decode['data'];
   } catch (e) {
     rethrow;
