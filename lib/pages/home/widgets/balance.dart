@@ -138,7 +138,7 @@ class BalanceWidget extends StatelessWidget {
             options: CarouselOptions(
               initialPage: walletProvider.currenIndex,
                 enableInfiniteScroll: false,
-                viewportFraction: 0.95,
+                viewportFraction: 0.93,
                 onPageChanged: (index, reason) async {
                   walletProvider.loadingWallet = true;
                   walletProvider.getBalance(

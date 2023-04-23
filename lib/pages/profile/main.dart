@@ -36,11 +36,11 @@ class UserProfileState extends State<UserProfile> {
             child: Container(
                 color: appProvider.currentBackground,
                 child: Container(
-                    margin: const EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(10),
                     child: Column(
                       children: [
                         Container(
-                          margin: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(1),
                           child: Row(
                             children: [
                               const Icon(
@@ -124,13 +124,13 @@ class UserProfileState extends State<UserProfile> {
                                                         EdgeInsets.all(10)),
                                                 backgroundColor:
                                                     MaterialStatePropertyAll(
-                                                        Color.fromARGB(255, 251, 132, 29),),
+                                                        Colors.red),
                                               ),
                                               onPressed: () {},
                                               child: const Text(
                                                 "Reset password",
                                                 style: TextStyle(
-                                                    color: Color.fromARGB(255, 0, 0, 0),
+                                                    color: Colors.white,
                                                     fontSize: 17),
                                               ))
                                         ],
