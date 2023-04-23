@@ -14,6 +14,8 @@ class NavigationBarWidget extends StatelessWidget {
       destinations: [
         IconButton(
             onPressed: () async {
+              if (ModalRoute.of(context)?.settings.name == '/home') return;
+
               await Navigator.popAndPushNamed(context, '/home');
             },
             icon: const Icon(Icons.home, color: Colors.white)),
@@ -27,16 +29,16 @@ class NavigationBarWidget extends StatelessWidget {
               Icons.calendar_month,
               color: Colors.white,
             )),
-            // IconButton(
-            // onPressed: () async {
-            //   if (ModalRoute.of(context)?.settings.name == '/calendar') return;
+        // IconButton(
+        // onPressed: () async {
+        //   if (ModalRoute.of(context)?.settings.name == '/calendar') return;
 
-            //   await Navigator.pushNamed(context, '/calendar');
-            // },
-            // icon: const Icon(
-            //   Icons.graphic_eq,
-            //   color: Colors.white,
-            // )),
+        //   await Navigator.pushNamed(context, '/calendar');
+        // },
+        // icon: const Icon(
+        //   Icons.graphic_eq,
+        //   color: Colors.white,
+        // )),
         IconButton(
             onPressed: () async {
               if (ModalRoute.of(context)?.settings.name == '/profile') return;
