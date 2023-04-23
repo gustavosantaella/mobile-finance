@@ -44,15 +44,15 @@ class BalanceWidget extends StatelessWidget {
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 30),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              print(2);
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          )
+                          // IconButton(
+                          //   onPressed: () {
+                          //     print(2);
+                          //   },
+                          //   icon: const Icon(
+                          //     Icons.delete,
+                          //     color: Colors.red,
+                          //   ),
+                          // )
                         ],
                       ),
                       const Text(

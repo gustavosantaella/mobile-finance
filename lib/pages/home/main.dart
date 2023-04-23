@@ -33,27 +33,27 @@ class HomeState extends State<HomePage> {
     return Consumer<WalletProvider>(
       builder: <WalletProvider>(context, value, child) {
         return Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: appProvider.currentBackground,
-              title: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Icon(
-                      Icons.settings,
-                      size: 30,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // appBar: AppBar(
+            //   elevation: 0,
+            //   backgroundColor: appProvider.currentBackground,
+            //   title: Container(
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.end,
+            //       children: const [
+            //         Icon(
+            //           Icons.settings,
+            //           size: 30,
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             bottomNavigationBar: const NavigationBarWidget(),
-            drawer: const NavigationDrawer(
-              children: [
-                Text("In construction. Please wait to the next version."),
-              ],
-            ),
+            // drawer: const NavigationDrawer(
+            //   children: [
+            //     Text("In construction. Please wait to the next version."),
+            //   ],
+            // ),
             resizeToAvoidBottomInset: true, // set it to false
 
             body: SafeArea(

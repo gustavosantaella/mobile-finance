@@ -8,7 +8,9 @@ import 'package:finance/config/constanst.dart';
 import 'package:finance/database/main.dart';
 import 'package:sqflite/sqflite.dart';
 
-Future<dynamic> login(String email, String password, { required WalletProvider  walletProvider, required  UserProvider userProvider }) async {
+Future<dynamic> login(String email, String password,
+    {required WalletProvider walletProvider,
+    required UserProvider userProvider}) async {
   try {
     dynamic response = await http.post(Uri.parse("$url/auth/login"),
         headers: {"Content-Type": "application/json"},
@@ -19,9 +21,8 @@ Future<dynamic> login(String email, String password, { required WalletProvider  
     }
     DB conn = DB();
     Database db = await conn.openDB();
-    await db.rawInsert("INSERT INTO user (token) VALUES (?)", [
-      response['data']['token']
-    ]);
+    await db.rawInsert(
+        "INSERT INTO user (token) VALUES (?)", [response['data']['token']]);
     userProvider.setUserId = response['data']['userId'];
     return null;
   } catch (e) {
@@ -34,14 +35,13 @@ Future<String> getuserToken({bool formatted = false}) async {
     DB conn = DB();
     Database db = await conn.openDB();
     List<Map> u = await db.rawQuery("select * from user");
-    if(u.isEmpty){
+    if (u.isEmpty) {
       throw "You can't do it";
     }
     String token = u[0]['token'];
-    if(formatted == true){
+    if (formatted == true) {
       token = formatBearerToken(token);
     }
-
     return token;
   } catch (e) {
     rethrow;

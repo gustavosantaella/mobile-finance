@@ -1,5 +1,7 @@
 import 'package:finance/providers/app_provider.dart';
+import 'package:finance/services/user.dart' as userService;
 import 'package:finance/widgets/navigation_bar.dart';
+import 'package:finance/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
@@ -19,8 +21,21 @@ class UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
+    getUser() async {
+      Map response = await userService.getUser();
+      print(response);
+      setState(() {
+        data = response;
+      });
 
+      _emailController.text = data['email'];
+    }
+
+    if (data.isEmpty) {
+      getUser();
+    }
+
+    AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -38,25 +53,6 @@ class UserProfileState extends State<UserProfile> {
                     margin: const EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.all(1),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.person,
-                                size: 50,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                data['name'] ?? 'Loading name...',
-                                style: const TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600),
-                              )
-                            ],
-                          ),
-                        ),
                         // here
                         Expanded(
                           child: Container(
@@ -83,7 +79,33 @@ class UserProfileState extends State<UserProfile> {
                                                   border:
                                                       const OutlineInputBorder())),
                                           ElevatedButton(
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                if (_emailController
+                                                    .value.text.isEmpty) {
+                                                  return;
+                                                }
+
+                                                String value =
+                                                    _emailController.value.text;
+
+                                                try {
+                                                  await userService
+                                                      .updateUserInfro(
+                                                          {"email": value});
+                                                  if (context.mounted) {
+                                                    SnackBarMessage(
+                                                        context,
+                                                        Colors.green,
+                                                        const Text(
+                                                            'Successfully'));
+                                                  }
+                                                } catch (e) {
+                                                  SnackBarMessage(
+                                                      context,
+                                                      Colors.red,
+                                                      Text(e.toString()));
+                                                }
+                                              },
                                               child: const Text('Submit'))
                                         ],
                                       ),
@@ -126,7 +148,76 @@ class UserProfileState extends State<UserProfile> {
                                                     MaterialStatePropertyAll(
                                                         Colors.red),
                                               ),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      final _passwordController =
+                                                          TextEditingController();
+                                                      return Dialog(
+                                                          child: Wrap(
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .all(10),
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                TextField(
+                                                                    controller:
+                                                                        _passwordController,
+                                                                    decoration: const InputDecoration(
+                                                                        label: Text(
+                                                                            "New password"),
+                                                                        border:
+                                                                            OutlineInputBorder())),
+                                                                ElevatedButton(
+                                                                    onPressed:
+                                                                        () async {
+                                                                      if (_passwordController
+                                                                          .value
+                                                                          .text
+                                                                          .isEmpty) {
+                                                                        return;
+                                                                      }
+
+                                                                      String
+                                                                          value =
+                                                                          _passwordController
+                                                                              .value
+                                                                              .text;
+
+                                                                      try {
+                                                                        await userService
+                                                                            .updateUserInfro({
+                                                                          "password":
+                                                                              value
+                                                                        });
+                                                                        if (context
+                                                                            .mounted) {
+                                                                              Navigator.pop(context);
+                                                                          SnackBarMessage(
+                                                                              context,
+                                                                              Colors.green,
+                                                                              const Text('Successfully'));
+                                                                        }
+                                                                      } catch (e) {
+                                                                        SnackBarMessage(
+                                                                            context,
+                                                                            Colors.red,
+                                                                            Text(e.toString()));
+                                                                      }
+                                                                    },
+                                                                    child: const Text(
+                                                                        'Submit'))
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ));
+                                                    });
+                                              },
                                               child: const Text(
                                                 "Reset password",
                                                 style: TextStyle(
