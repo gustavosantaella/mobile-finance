@@ -1,4 +1,3 @@
-import 'package:finance/config/constanst.dart';
 import 'package:finance/providers/app_provider.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +14,8 @@ class UserProfile extends StatefulWidget {
 
 class UserProfileState extends State<UserProfile> {
   late Map data = {};
-  Color _currentColor = Colors.red;
 
-  final TextEditingController _emailContronler = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +76,7 @@ class UserProfileState extends State<UserProfile> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           TextField(
+                                              controller: _emailController,
                                               decoration: InputDecoration(
                                                   hintText: data['email'] ?? '',
                                                   label: const Text("Email"),
