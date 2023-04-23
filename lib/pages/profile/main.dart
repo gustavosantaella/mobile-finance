@@ -25,6 +25,7 @@ class UserProfileState extends State<UserProfile> {
 
     return Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: const Text("Profile"),
           backgroundColor: appProvider.currentBackground,
         ),

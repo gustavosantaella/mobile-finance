@@ -17,7 +17,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
-  
   List<Widget> listTransactios(List data) {
     List<Widget> array = [];
     for (int i = 0; i < data.length; i++) {
@@ -30,11 +29,26 @@ class HomeState extends State<HomePage> {
   Widget build(BuildContext context) {
     final provider = Provider.of<WalletProvider>(context, listen: true);
     final appProvider = Provider.of<AppProvider>(context, listen: true);
-    
+
     return Consumer<WalletProvider>(
       builder: <WalletProvider>(context, value, child) {
         return Scaffold(
-          bottomNavigationBar: const NavigationBarWidget(),
+            appBar: AppBar(
+              elevation: 0,
+              backgroundColor: appProvider.currentBackground,
+              title: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    Icon(
+                      Icons.settings,
+                      size: 30,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            bottomNavigationBar: const NavigationBarWidget(),
             drawer: const NavigationDrawer(
               children: [
                 Text("In construction. Please wait to the next version."),
@@ -48,55 +62,12 @@ class HomeState extends State<HomePage> {
                   FractionallySizedBox(
                       heightFactor: 1,
                       child: Container(
-                        decoration: BoxDecoration(
-                            color: appProvider.currentBackground),
+                        decoration:
+                            BoxDecoration(color: appProvider.currentBackground),
                         child: Column(children: [
-                          //   nav
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: Container(
-                                margin: const EdgeInsets.only(
-                                    top: 10, left: 10, right: 10),
-                                child: Flex(
-                                  direction: Axis.horizontal,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    TextButton(
-                                        style: const ButtonStyle(),
-                                        onPressed: () => print(
-                                            MediaQuery.of(context).size.height),
-                                        child: Flex(
-                                          direction: Axis.horizontal,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: const [
-                                            Icon(
-                                              Icons.person_2_rounded,
-                                              size: 50,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              "Welcome, Gustavo Alejandro",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        )),
-                                    const Icon(
-                                      Icons.settings,
-                                      size: 30,
-                                    ),
-                                  ],
-                                ),
-                              ))
-                            ],
-                          ),
                           // balance
                           const BalanceWidget(),
-                          
+
                           //  transactions
                           Expanded(
                             // flex: 1,
@@ -111,8 +82,8 @@ class HomeState extends State<HomePage> {
                                         BorderRadius.all(Radius.circular(20)),
                                     boxShadow: <BoxShadow>[
                                       BoxShadow(
-                                        color:
-                                            Color.fromRGBO(255, 255, 255, 0.358),
+                                        color: Color.fromRGBO(
+                                            255, 255, 255, 0.358),
                                         blurRadius: 10.0,
                                         spreadRadius: 2.0,
                                       )
