@@ -25,7 +25,7 @@ const Map<String, dynamic> definitions = {
   }
 };
 
-const String url = !kReleaseMode ? 'http://10.0.2.2:8000/api' : '';
+const String url = !kReleaseMode ? 'http://10.0.2.2:8000/api' : 'https://finance-backend-klzw.onrender.com/api';
 
 const String prefixKey = 'Wafi';
 
