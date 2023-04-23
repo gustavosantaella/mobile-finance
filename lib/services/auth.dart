@@ -21,6 +21,10 @@ Future<dynamic> login(String email, String password,
     }
     DB conn = DB();
     Database db = await conn.openDB();
+    List<Map> u = await db.rawQuery("select * from user");
+    if(u.length > 1){
+      await db.rawQuery("delete from user");
+    }
     await db.rawInsert(
         "INSERT INTO user (token) VALUES (?)", [response['data']['token']]);
     userProvider.setUserId = response['data']['userId'];
@@ -35,6 +39,7 @@ Future<String> getuserToken({bool formatted = false}) async {
     DB conn = DB();
     Database db = await conn.openDB();
     List<Map> u = await db.rawQuery("select * from user");
+    print(u.length);
     if (u.isEmpty) {
       throw "You can't do it";
     }
