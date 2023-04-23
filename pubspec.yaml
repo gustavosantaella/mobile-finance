@@ -16,6 +16,7 @@ dependencies:
   sqflite: 
   table_calendar: ^3.0.9
   fl_chart:
+  flutter_circle_color_picker: ^0.3.0
 
 dev_dependencies:
   flutter_test:

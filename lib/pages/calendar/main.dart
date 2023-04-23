@@ -3,6 +3,7 @@ import 'package:finance/helpers/fn/bottom_sheets.dart';
 import 'package:finance/helpers/fn/main.dart';
 import 'package:finance/pages/home/widgets/add_movment.dart';
 import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
+import 'package:finance/providers/app_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:finance/widgets/snack_bar.dart';
@@ -48,6 +49,7 @@ class CalendarState extends State<CalendarWidget> {
   Widget build(BuildContext context) {
     WalletProvider walletProvider =
         Provider.of<WalletProvider>(context, listen: true);
+       AppProvider appProvider =  Provider.of<AppProvider>(context, listen: true);
 
     historyByMonth({dynamic date, bool force = false}) async {
       try {
@@ -125,7 +127,7 @@ class CalendarState extends State<CalendarWidget> {
               widthFactor: 1,
               heightFactor: 1,
               child: Container(
-                color: definitions['colors']['background']['app'],
+                color: appProvider.currentBackground,
                 child: Container(
                     margin: const EdgeInsets.all(10),
                     decoration: const BoxDecoration(

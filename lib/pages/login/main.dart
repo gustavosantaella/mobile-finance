@@ -1,3 +1,4 @@
+import 'package:finance/config/constanst.dart';
 import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/widgets/snack_bar.dart';
@@ -27,7 +28,7 @@ class LoginWidgetState extends State<LoginWidget> {
       body: SafeArea(
           child: Container(
               height: MediaQuery.of(context).size.height,
-              color: Colors.blue,
+              color: definitions['colors']['background']['app'],
               child: FractionallySizedBox(
                   heightFactor: 0.4,
                   child: Wrap(

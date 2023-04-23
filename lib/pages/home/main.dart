@@ -2,6 +2,7 @@ import 'package:finance/helpers/fn/bottom_sheets.dart';
 import 'package:finance/pages/home/widgets/add_movment.dart';
 import 'package:finance/pages/home/widgets/balance.dart';
 import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
+import 'package:finance/providers/app_provider.dart';
 import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/widgets/navigation_bar.dart';
@@ -28,6 +29,7 @@ class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<WalletProvider>(context, listen: true);
+    final appProvider = Provider.of<AppProvider>(context, listen: true);
     
     return Consumer<WalletProvider>(
       builder: <WalletProvider>(context, value, child) {
@@ -47,7 +49,7 @@ class HomeState extends State<HomePage> {
                       heightFactor: 1,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: definitions['colors']['background']['app']),
+                            color: appProvider.currentBackground),
                         child: Column(children: [
                           //   nav
                           Row(
