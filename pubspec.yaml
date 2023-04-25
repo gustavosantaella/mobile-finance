@@ -1,7 +1,7 @@
 name: finance
 description: A new Flutter project.
 publish_to: 'none'
-version: 1.1.0
+version: 2.0.0
 
 environment:
   sdk: '>=2.19.5 <3.0.0'
