@@ -38,6 +38,7 @@ class CalendarState extends State<CalendarWidget> {
   double expenses = 0.0;
   double total = 0.0;
   bool newDate = false;
+  late List _barChart = [];
 
   @override
   void dispose() {
@@ -49,7 +50,7 @@ class CalendarState extends State<CalendarWidget> {
   Widget build(BuildContext context) {
     WalletProvider walletProvider =
         Provider.of<WalletProvider>(context, listen: true);
-       AppProvider appProvider =  Provider.of<AppProvider>(context, listen: true);
+    AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
 
     historyByMonth({dynamic date, bool force = false}) async {
       try {
@@ -75,6 +76,7 @@ class CalendarState extends State<CalendarWidget> {
             total = response['total'];
             summaryExpenses = response['metrics']['expenses'];
             summaryIncomes = response['metrics']['incomes'];
+            _barChart = response['metrics']?['barchart'];
             days = uniqueDates;
           });
         }
@@ -102,7 +104,7 @@ class CalendarState extends State<CalendarWidget> {
         return Container(
           margin: const EdgeInsets.all(10),
           child: AspectRatio(
-            aspectRatio: 2,
+            aspectRatio: 1,
             child: PieChart(PieChartData(sections: [
               PieChartSectionData(
                   value: summaryIncomes,
@@ -116,6 +118,79 @@ class CalendarState extends State<CalendarWidget> {
           ),
         );
       }
+      return Container();
+    }
+
+    barchart() {
+      if (expenses > 0 && incomes > 0) {
+        List<BarChartGroupData> barChartGroupData = [];
+        int i = 1;
+        if (_barChart.isNotEmpty) {
+          _barChart.forEach((e) {
+            barChartGroupData.add(
+              BarChartGroupData(
+                x: e['index'],
+                barRods: [
+                  BarChartRodData(
+                    toY: e['metrics']['expense'] ?? 0.0,
+                    color: Colors.red,
+                  ),
+                  BarChartRodData(
+                    toY: e['metrics']?['income'] ?? 0.0,
+                    color: Colors.green,
+                  ),
+                ],
+              ),
+            );
+            i +=1;
+          });
+        }
+        return AspectRatio(
+          aspectRatio: 1,
+          child: BarChart(
+            BarChartData(
+              extraLinesData: ExtraLinesData(extraLinesOnTop: false),
+              gridData: FlGridData(show: false),
+              barGroups: barChartGroupData,
+              titlesData: FlTitlesData(
+                rightTitles: AxisTitles(axisNameWidget: Text('')),
+                topTitles: AxisTitles(axisNameWidget: Text('')),
+                bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (value, meta) {
+                    switch (value.toInt()) {
+                      case 0:
+                        return Text('Lun');
+                      case 1:
+                        return Text('Mar');
+                      case 2:
+                        return Text('Mier');
+                      case 3:
+                        return Text('Jue');
+                      case 4:
+                        return Text('Vie');
+                      case 5:
+                        return Text('Sab');
+                      case 6:
+                        return Text('Dom');
+                      default:
+                        return Text("....");
+                    }
+                  },
+                )),
+              ),
+              borderData: FlBorderData(
+                show: false,
+              ),
+              barTouchData: BarTouchData(
+                enabled: true,
+              ),
+            ),
+          ),
+        );
+      }
+
       return Container();
     }
 
@@ -137,33 +212,6 @@ class CalendarState extends State<CalendarWidget> {
                         // scrollDirection: Axis,
                         child: Column(
                       children: [
-                        chart(),
-                        Container(
-                            margin: const EdgeInsets.all(10),
-                            child: Wrap(
-                              alignment: WrapAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "$incomes\$",
-                                  style: const TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20),
-                                ),
-                              const  SizedBox(width: 20, height: 20),
-                                Text("${incomes - expenses}\$",
-                                    style: const TextStyle(
-                                        color: Colors.black45,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20)),
-                              const  SizedBox(width: 20, height: 20),
-                                Text("$expenses\$",
-                                    style: const TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20)),
-                              ],
-                            )),
                         TableCalendar(
                           firstDay: firstDay,
                           lastDay: lastDay,
@@ -207,6 +255,43 @@ class CalendarState extends State<CalendarWidget> {
                             _focusedDay = focusedDay;
                           },
                         ),
+                        Container(
+                            margin: const EdgeInsets.all(10),
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "$incomes\$",
+                                  style: const TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20),
+                                ),
+                                const SizedBox(width: 20, height: 20),
+                                Text("${incomes - expenses}\$",
+                                    style: const TextStyle(
+                                        color: Colors.black45,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20)),
+                                const SizedBox(width: 20, height: 20),
+                                Text("$expenses\$",
+                                    style: const TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20)),
+                              ],
+                            )),
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            FractionallySizedBox(
+                              widthFactor: 0.5,
+                              child: chart(),
+                            ),
+                            FractionallySizedBox( widthFactor: 1, child: barchart())
+                          ],
+                        )
                       ],
                     ))),
               )),

@@ -7,7 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 class BalanceWidget extends StatelessWidget {
   const BalanceWidget({Key? key}) : super(key: key);
 
-  Widget printWallets(Map wallet, WalletProvider provider) {
+  Widget printWallets(Map wallet, WalletProvider provider, context) {
     return FractionallySizedBox(
         widthFactor: 1,
         child: Container(
@@ -15,14 +15,18 @@ class BalanceWidget extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(
                 color: Colors.white,
-                boxShadow:  <BoxShadow>[
+                boxShadow: <BoxShadow>[
                   BoxShadow(
                     color: Color.fromRGBO(255, 255, 255, 0.462),
                     blurRadius: 10.0,
                     spreadRadius: 2.0,
                   )
                 ],
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomLeft: Radius.circular(20), bottomRight:  Radius.circular(20))),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20))),
             margin: const EdgeInsets.all(10),
             child: provider.loadingWallet == true
                 ? const Center(
@@ -53,6 +57,27 @@ class BalanceWidget extends StatelessWidget {
                           //     color: Colors.red,
                           //   ),
                           // )
+                          IconButton(
+                            onPressed: () async {
+                              provider.loadingHistory = true;
+                              provider.loadingWallet = true;
+                              if (context?.mounted) {
+                                print('loading....');
+                                provider.getBalance(
+                                    provider.currentWallet['info']['walletId'],
+                                    context);
+                                provider.setRefreshHistory(
+                                    provider.currentWallet['info']['walletId'],
+                                    context);
+                                provider.notifyListeners();
+                                print('ready');
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.refresh,
+                              color: Colors.grey,
+                            ),
+                          )
                         ],
                       ),
                       const Text(
@@ -136,7 +161,7 @@ class BalanceWidget extends StatelessWidget {
     return Consumer(
         builder: (context, value, child) => CarouselSlider(
             options: CarouselOptions(
-              initialPage: walletProvider.currenIndex,
+                initialPage: walletProvider.currenIndex,
                 enableInfiniteScroll: false,
                 viewportFraction: 0.90,
                 onPageChanged: (index, reason) async {
@@ -152,7 +177,7 @@ class BalanceWidget extends StatelessWidget {
             items: walletProvider.wallets.map((wallet) {
               return Builder(
                 builder: (context) {
-                  return printWallets(wallet, walletProvider);
+                  return printWallets(wallet, walletProvider, context);
                 },
               );
             }).toList()));

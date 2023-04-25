@@ -7,6 +7,7 @@ environment:
   sdk: '>=2.19.5 <3.0.0'
 
 dependencies:
+  flutter_launcher_icons: ^0.9.2
   carousel_slider: ^4.2.1
   flutter:
     sdk: flutter
@@ -26,3 +27,22 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+flutter_icons:
+  image_path: "assets/app_icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  resize_behavior: shrink_only
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/app_icon.png"
+  android_icons:
+    - icon: "assets/app_icon.png"
+      size: "192x192"
+      density: "3.0"
+    - icon: "assets/app_icon.png"
+      size: "512x512"
+      density: "4.0"
+  ios_icons:
+    - icon: "assets/app_icon.png"
+      size: "1024x1024"

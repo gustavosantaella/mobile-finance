@@ -25,7 +25,8 @@ const Map<String, dynamic> definitions = {
   }
 };
 
-const String url = !kReleaseMode ? 'http://10.0.2.2:8000/api' : 'https://finance-backend-klzw.onrender.com/api';
+// const String url = !kReleaseMode ? 'http://10.0.2.2:8000/api' : 'https://finance-backend-klzw.onrender.com/api';
+const String url = !kReleaseMode ? 'https://531b-190-79-162-128.ngrok.io/api' : 'https://finance-backend-klzw.onrender.com/api';
 
 const String prefixKey = 'Wafi';
 
