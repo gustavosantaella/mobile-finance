@@ -187,7 +187,7 @@ class RegisterState extends State<RegisterWidget> {
                                             SizedBox(
                                               width: double.infinity,
                                               child: TextButton(
-                                                onPressed: () async {
+                                                onPressed: _loading == true ? null : () async {
                                                   setState(() {
                                                     _loading = true;
                                                   });
@@ -215,6 +215,9 @@ class RegisterState extends State<RegisterWidget> {
                                                       setState(() {
                                                         _loading = false;
                                                       });
+                                                      setState(() {
+                                                        _loading = false;
+                                                      });
                                                       Navigator.popAndPushNamed(
                                                           context, '/login');
                                                     }
@@ -239,7 +242,7 @@ class RegisterState extends State<RegisterWidget> {
                                                                 18.0), // Aquí se establece el radio del borde
                                                       ),
                                                     ),
-                                                    backgroundColor: MaterialStateProperty
+                                                    backgroundColor: _loading == true ? MaterialStateProperty.all(Colors.grey) : MaterialStateProperty
                                                         .all(colorFromHexString(
                                                             definitions['colors']
                                                                         [
