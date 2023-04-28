@@ -36,8 +36,11 @@ class LoginWidgetState extends State<LoginWidget> {
             color: definitions['colors']['background']['app'],
             child: Container(
               margin: const EdgeInsets.all(10),
-              child: SingleChildScrollView(
+              child: Center(child:  SingleChildScrollView(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       appName.toUpperCase(),
@@ -203,7 +206,9 @@ class LoginWidgetState extends State<LoginWidget> {
                             ))),
                   ],
                 ),
+                      
               ),
+            )
             )),
       ),
     ));

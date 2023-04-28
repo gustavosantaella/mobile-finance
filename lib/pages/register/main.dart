@@ -75,7 +75,8 @@ class RegisterState extends State<RegisterWidget> {
                 child: Container(
                     color: Color(int.parse("#38b6ff".substring(1), radix: 16) +
                         0xff000000),
-                    child: SingleChildScrollView(
+                    child: Center(
+                        child: SingleChildScrollView(
                       child: Container(
                         margin: const EdgeInsets.all(20),
                         child: Center(
@@ -211,9 +212,9 @@ class RegisterState extends State<RegisterWidget> {
                                                     await registerUser(
                                                         _formData);
                                                     if (context.mounted) {
-                                                    setState(() {
-                                                      _loading = false;
-                                                    });
+                                                      setState(() {
+                                                        _loading = false;
+                                                      });
                                                       Navigator.popAndPushNamed(
                                                           context, '/login');
                                                     }
@@ -287,6 +288,6 @@ class RegisterState extends State<RegisterWidget> {
                           ),
                         ),
                       ),
-                    )))));
+                    ))))));
   }
 }
