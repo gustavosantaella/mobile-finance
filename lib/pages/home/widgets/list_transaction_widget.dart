@@ -1,9 +1,16 @@
+import 'package:finance/helpers/fn/bottom_sheets.dart';
+import 'package:finance/widgets/history_detail.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:finance/config/constanst.dart';
+import 'package:intl/intl.dart';
 
 class ListTransactionWidget extends StatefulWidget {
   final int i;
+  final Map data;
 
-  const ListTransactionWidget({Key? key, this.i = 0}) : super(key: key);
+  const ListTransactionWidget(this.data, {Key? key, this.i = 0})
+      : super(key: key);
   @override
   ListTransactionState createState() => ListTransactionState();
 }
@@ -19,16 +26,16 @@ class ListTransactionState extends State<ListTransactionWidget> {
 
   @override
   Widget build(BuildContext context) {
+ 
     return GestureDetector(
-        onTap: () => changeColorCard(),
+        onTap: (){
+          changeColorCard();
+          bottomSheetWafi(context, HistoryDetail(widget.data['_id']));
+        },
         onLongPressEnd: (details) => changeColorCard(),
         child: Container(
           decoration: BoxDecoration(
-              color: active == true
-                  ? widget.i % 2 == 0
-                      ? Colors.green[100]
-                      : Colors.red[100]
-                  : null,
+              color: active == true ? Colors.grey[200] : null, 
               borderRadius: BorderRadius.circular(10)),
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -36,7 +43,7 @@ class ListTransactionState extends State<ListTransactionWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                DateTime.now().toString(),
+               widget.data['createdAt'] != null ? DateFormat('dd/MM/yyyy HH:mm:ss a').format(DateTime.parse(widget.data['createdAt'])) : "Without date",
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -44,7 +51,7 @@ class ListTransactionState extends State<ListTransactionWidget> {
                 ),
               ),
               Container(
-                // decoration: BoxDecoration(),
+                decoration: const BoxDecoration(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -55,25 +62,30 @@ class ListTransactionState extends State<ListTransactionWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Icon(
-                              widget.i % 2 == 0 ? Icons.check : Icons.error,
-                              color:
-                                  widget.i % 2 == 0 ? Colors.green : Colors.red,
+                              definitions['history']?['type']
+                                      ?[widget.data['type']]?['icon'] ??
+                                  definitions['colors']?['default'],
+                              color: definitions['history']?['type']
+                                      ?[widget.data['type']]?['color'] ??
+                                  definitions['colors']?['default'],
                             ),
                             const SizedBox(
                               width: 10,
                             ),
-                            const Text(
-                              '2323423434',
-                              style: TextStyle(
+                            Text(
+                              widget.data['historyId'] ?? '',
+                              style: const TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 18),
                             ),
                           ]),
                     ),
                     Text(
-                      '\$.89729',
+                      "\$.${widget.data['value']}",
                       style: TextStyle(
                         fontSize: 18,
-                        color: widget.i % 2 == 0 ? Colors.green : Colors.red,
+                        color: definitions['history']['type']
+                                ?[widget.data['type']]?['color'] ??
+                            definitions['colors']['default']
                       ),
                     ),
                   ],

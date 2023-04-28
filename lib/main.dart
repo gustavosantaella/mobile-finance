@@ -1,6 +1,15 @@
+import 'package:finance/pages/calendar/main.dart';
+import 'package:finance/pages/login/main.dart';
 import 'package:finance/pages/home/main.dart';
+import 'package:finance/pages/profile/main.dart';
+import 'package:finance/pages/register/main.dart';
+import 'package:finance/providers/app_provider.dart';
+import 'package:finance/providers/user_provider.dart';
+import 'package:finance/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:finance/database/main.dart';
 
 void main() {
   runApp(const App());
@@ -16,29 +25,35 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   void initState() {
-    // TODO: implement initState
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive,);
-SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-  statusBarColor: Colors.blue
-));
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.black87));
     super.initState();
   }
 
-  //  @override
-  // void dispose() {
-  //   super.dispose();
-
-  //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);  // to re-show bars
-
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        "/": (context) =>  HomePage(),
-        "/details": (context) =>  HomePage()
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppProvider>(
+          create: (context) => AppProvider(),
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider<WalletProvider>(
+          create: (context) => WalletProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        initialRoute: '/login',
+        routes: {
+          "/login": (context) => const LoginWidget(),
+          "/register": (context) => const RegisterWidget(),
+          "/home": (context) => const HomePage(),
+          "/calendar": (context) => const CalendarWidget(),
+          "/profile": (context) => const UserProfile(),
+        },
+      ),
     );
   }
 }
