@@ -1,7 +1,7 @@
 name: finance
 description: Finance Application
 publish_to: 'Gustavo Alejandro Santaella Machado'
-version: 1.1.0+2
+version: 2.0.0+3
 
 environment:
   sdk: '>=2.19.5 <3.0.0'
@@ -36,7 +36,7 @@ flutter_icons:
   ios: true
   remove_alpha_ios: true
   resize_behavior: shrink_only
-  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_background: "#38b6ff"
   adaptive_icon_foreground: "assets/app_icon.png"
   android_icons:
     - icon: "assets/app_icon.png"
