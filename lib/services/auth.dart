@@ -22,7 +22,7 @@ Future<dynamic> login(String email, String password,
     DB conn = DB();
     Database db = await conn.openDB();
     List<Map> u = await db.rawQuery("select * from user");
-    if(u.length > 1){
+    if (u.length > 1) {
       await db.rawQuery("delete from user");
     }
     await db.rawInsert(
@@ -34,12 +34,32 @@ Future<dynamic> login(String email, String password,
   }
 }
 
+Future<void> registerUser(payload) async {
+  try {
+    String jsonencode = jsonEncode(payload);
+
+    http.Response response =
+        await http.post(Uri.parse('$url/auth/register'), body: jsonencode, headers: {
+          "Content-Type": "application/json"
+        });
+    Map res = jsonDecode(response.body);
+    if (res['ok'] != ok) {
+      throw Exception(res['error'] ?? 'An error ocurred');
+    }
+
+    if (res['data'] != true) {
+      throw Exception('Different than true');
+    }
+  } catch (e) {
+    rethrow;
+  }
+}
+
 Future<String> getuserToken({bool formatted = false}) async {
   try {
     DB conn = DB();
     Database db = await conn.openDB();
     List<Map> u = await db.rawQuery("select * from user");
-    print(u.length);
     if (u.isEmpty) {
       throw "You can't do it";
     }

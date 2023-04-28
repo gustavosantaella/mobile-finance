@@ -1,7 +1,7 @@
 name: finance
-description: A new Flutter project.
-publish_to: 'none'
-version: 0.1.1
+description: Finance Application
+publish_to: 'Gustavo Alejandro Santaella Machado'
+version: 1.1.0+2
 
 environment:
   sdk: '>=2.19.5 <3.0.0'
@@ -27,6 +27,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - "assets/app_icon.png"
 
 flutter_icons:
   image_path: "assets/app_icon.png"
