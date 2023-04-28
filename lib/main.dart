@@ -23,7 +23,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(
@@ -34,22 +33,27 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers:  [
-        ChangeNotifierProvider<AppProvider>(create: (context) =>  AppProvider(),),
-        ChangeNotifierProvider<UserProvider>(create: (context) =>  UserProvider(),),
-        ChangeNotifierProvider<WalletProvider>(create: (context) =>  WalletProvider(),),
+      providers: [
+        ChangeNotifierProvider<AppProvider>(
+          create: (context) => AppProvider(),
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider<WalletProvider>(
+          create: (context) => WalletProvider(),
+        ),
       ],
       child: MaterialApp(
+        initialRoute: '/login',
         routes: {
-          "/": (context) => const  RegisterWidget(),
-          "/login": (context) => const  LoginWidget(),
-          "/home": (context) => const  HomePage(),
-          "/calendar": (context) => const  CalendarWidget(),
-          "/profile": (context) => const  UserProfile(),
+          "/login": (context) => const LoginWidget(),
+          "/register": (context) => const RegisterWidget(),
+          "/home": (context) => const HomePage(),
+          "/calendar": (context) => const CalendarWidget(),
+          "/profile": (context) => const UserProfile(),
         },
       ),
     );
   }
 }
-
-

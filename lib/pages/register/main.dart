@@ -16,31 +16,37 @@ class RegisterWidget extends StatefulWidget {
 
 class RegisterState extends State<RegisterWidget> {
   final _formKey = GlobalKey<FormState>();
+  bool _loading = false;
   Map _formData = {"password": "", "email": "", "country": ""};
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _countryController = TextEditingController();
-  late Future<List<dynamic>> _countriesFuture;
   late List<dynamic> _countries = [];
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
-    _countriesFuture = getCountriesKeys();
+    if (_countries.isEmpty) {
+      countries();
+    }
+  }
+
+  countries() async {
+    try {
+      List response = await getCountriesKeys();
+      setState(() {
+        _countries = response;
+      });
+    } catch (error) {
+      SnackBarMessage(context, Colors.red, Text(error.toString()));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     Widget buildDropdown() {
-      _countriesFuture.then((response) {
-        _countries = response.map<String>((item) {
-          return item;
-        }).toList();
-      }).catchError((error) {
-        SnackBarMessage(context, Colors.red, Text(error.toString()));
-      });
       return DropdownButtonFormField(
           items: _countries
               .map((item) => DropdownMenuItem(
@@ -84,7 +90,8 @@ class RegisterState extends State<RegisterWidget> {
                                   Text(appName.toString().toUpperCase(),
                                       style: const TextStyle(
                                           fontSize: 43.0,
-                                          fontFamily: fontFamily,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 10,
                                           color: Colors.white)),
                                   const SizedBox(
                                     width: 20,
@@ -180,6 +187,11 @@ class RegisterState extends State<RegisterWidget> {
                                               width: double.infinity,
                                               child: TextButton(
                                                 onPressed: () async {
+                                                  setState(() {
+                                                    _loading = true;
+                                                  });
+                                                  await Future.delayed(
+                                                      Duration(seconds: 1));
                                                   _formData
                                                       .forEach((key, value) {
                                                     if (_formData[key]
@@ -189,6 +201,9 @@ class RegisterState extends State<RegisterWidget> {
                                                           Colors.red,
                                                           Text(
                                                               'Invalid input for $key'));
+                                                      setState(() {
+                                                        _loading = false;
+                                                      });
                                                       return;
                                                     }
                                                   });
@@ -196,14 +211,22 @@ class RegisterState extends State<RegisterWidget> {
                                                     await registerUser(
                                                         _formData);
                                                     if (context.mounted) {
+                                                    setState(() {
+                                                      _loading = false;
+                                                    });
                                                       Navigator.popAndPushNamed(
                                                           context, '/login');
                                                     }
                                                   } catch (e) {
-                                                    SnackBarMessage(
-                                                        context,
-                                                        Colors.red,
-                                                        Text(e.toString()));
+                                                    setState(() {
+                                                      _loading = false;
+                                                    });
+                                                    if (context.mounted) {
+                                                      SnackBarMessage(
+                                                          context,
+                                                          Colors.red,
+                                                          Text(e.toString()));
+                                                    }
                                                   }
                                                 },
                                                 style: ButtonStyle(

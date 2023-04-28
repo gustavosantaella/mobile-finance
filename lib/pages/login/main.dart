@@ -1,4 +1,5 @@
 import 'package:finance/config/constanst.dart';
+import 'package:finance/helpers/fn/main.dart';
 import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/widgets/snack_bar.dart';
@@ -17,121 +18,194 @@ class LoginWidgetState extends State<LoginWidget> {
   dynamic error;
   bool loading = false;
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  Map _formData = {"email": '', "password": ''};
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<WalletProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
-      body: SafeArea(
-          child: Container(
-              height: MediaQuery.of(context).size.height,
-              color: definitions['colors']['background']['app'],
-              child: FractionallySizedBox(
-                  heightFactor: 0.4,
-                  child: Wrap(
-                    children: [
-                      Container(
-                          margin: const EdgeInsets.all(10),
-                          padding: const EdgeInsets.all(20),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 20),
-                                child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    "WAFI",
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold),
+        body: SafeArea(
+      child: FractionallySizedBox(
+        heightFactor: 1,
+        widthFactor: 1,
+        child: Container(
+            color: definitions['colors']['background']['app'],
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text(
+                      appName.toUpperCase(),
+                      style: const TextStyle(
+                          fontSize: 43,
+                          letterSpacing: 10,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
+                    const SizedBox(height: 30,),
+                    Image.asset(
+                      'assets/app_icon.png',
+                      width: 145,
+                      height: 145,
+                    ),
+                    const SizedBox(height: 40,),
+                    Form(
+                        key: _formKey,
+                        child: SingleChildScrollView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            child: Container(
+                              decoration: const BoxDecoration(),
+                              height: 350,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  TextFormField(
+                                    controller: _emailController,
+                                    onChanged: (value) => setState(() {
+                                      _formData['email'] = value;
+                                    }),
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: const InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))),
+                                      labelText: 'Email',
+                                    ),
+                                    // initialValue: ,
                                   ),
-                                  Icon(Icons.wallet),
-                                ],
-                              ),
-                              ),
-                              Form(
-                                key: _formKey,
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                      controller: emailController,
-                                      validator: (value) {
-                                        if (value != null &&
-                                            !value.contains('@')) {
-                                          return "Invalid Email";
-                                        }
-                                        return null;
-                                      },
-                                      keyboardType: TextInputType.emailAddress,
-                                      decoration: const InputDecoration(
-                                          label: Text("Username"),
-                                          border: OutlineInputBorder()),
+                                  TextFormField(
+                                    controller: _passwordController,
+                                    onChanged: (value) => setState(() {
+                                      _formData['password'] = value;
+                                    }),
+                                    keyboardType: TextInputType.text,
+                                    obscureText: true,
+                                    decoration: const InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))),
+                                      labelText: 'Password',
                                     ),
-                                    const Divider(),
-                                    TextFormField(
-                                      keyboardType: TextInputType.text,
-                                      obscureText: true,
-                                      controller: passwordController,
-                                      decoration: const InputDecoration(
-                                          label: Text("Password"),
-                                          border: OutlineInputBorder()),
-                                    ),
-                                    ElevatedButton(
-                                        style:  ButtonStyle(
-                                          backgroundColor: loading  ? const MaterialStatePropertyAll(Colors.grey) : null
-                                        ),
-                                        onPressed: loading ? null :  ()  async {
-                                          setState(() {
-                                            loading = true;
-                                          });
-                                          bool isValid = _formKey.currentState
-                                              ?.validate() as bool;
-                                          if (!isValid) {
-                                            setState(() {
-                                              loading = false;
-                                            });
+                                    // initialValue: '',
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: TextButton(
+                                      onPressed: loading == true ? null : () async {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        await Future.delayed(Duration(seconds: 1));
+                                        bool hasError = false;
+                                        _formData.forEach((key, value) {
+                                          if (_formData[key].isEmpty) {
+                                            SnackBarMessage(context, Colors.red,
+                                                Text('Invalid input for $key'));
+                                                hasError = true;
+                                                
                                             return;
                                           }
-
+                                        });
+                                        if(hasError){
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          return;
+                                        }
+                                        try {
                                           dynamic error = await login(
-                                              emailController.text,
-                                              passwordController.text,
+                                              _emailController.text,
+                                              _passwordController.text,
                                               walletProvider: provider,
                                               userProvider: userProvider
                                               );
-                                          if (context.mounted && error != null) {
-                                            setState(() {
-                                              loading = false;
-                                            });
-                                            SnackBarMessage(context, Colors.red,
-                                                Text(error));
-                                            return;
-                                          }
-
-                                          if(context.mounted && error == null){
-                                            setState(() {
-                                              loading = false;
-                                            });
-                                             Navigator.popAndPushNamed(context, '/home');
-                                          }
-                                        },
-                                        child: const Text("Submit"))
-                                  ],
-                                ),
-                              )
-                            ],
-                          ))
-                    ],
-                  )))),
-    );
+                                            if(error != null){
+                                              if(context.mounted){
+                                                  SnackBarMessage(context, Colors.red,
+                                              Text(error));
+                                              }
+                                            }
+                                            if(context.mounted && error == null){
+                                              setState(() {
+                                                loading = false;
+                                              });
+                                              Navigator.popAndPushNamed(
+                                                context, '/home');
+                                            }
+                                  
+                                        } catch (e) {
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          SnackBarMessage(context, Colors.red,
+                                              Text(e.toString()));
+                                        }
+                                      },
+                                      style: ButtonStyle(
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                  18.0), // Aquí se establece el radio del borde
+                                            ),
+                                          ),
+                                          backgroundColor: loading == true ? MaterialStateProperty.all(Colors.grey) :
+                                              MaterialStateProperty.all(
+                                                  colorFromHexString(
+                                                      definitions['colors']
+                                                                  ['background']
+                                                              ['hexadecimal']
+                                                          ['cobalto']))),
+                                      child: const Text(
+                                        'Sign In',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        "Register now",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.popAndPushNamed(
+                                                context, '/register');
+                                          },
+                                          child: const Text(
+                                            "Sign up",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                            ),
+                                          ))
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ))),
+                  ],
+                ),
+              ),
+            )),
+      ),
+    ));
   }
 }
