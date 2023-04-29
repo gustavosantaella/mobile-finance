@@ -184,7 +184,6 @@ class _AddMovementState extends State<AddMovementWidget> {
                               if (validation == false) {
                                 return;
                               }
-                              provider.loadingHistory = true;
                               provider.loadingWallet = true;
                               await service.addTohistory(
                                   amountController.text,

@@ -36,7 +36,7 @@ class HomeState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     Text(appName.toUpperCase()),
+                    Text(appName.toUpperCase()),
                     Image.asset(
                       'assets/app_icon.png',
                       height: 30,
@@ -55,6 +55,8 @@ class HomeState extends State<HomePage> {
             resizeToAvoidBottomInset: true, // set it to false
 
             body: SafeArea(
+                child: Container(
+              // margin: const EdgeInsets.only(top: 10),
               child: Stack(
                 children: [
                   FractionallySizedBox(
@@ -66,17 +68,63 @@ class HomeState extends State<HomePage> {
                         child: SizedBox(
                           child: SingleChildScrollView(
                             child: Column(children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    top: 10, left: 30, right: 30, bottom: 30),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          'Hi, Gustavo',
+                                          style: TextStyle(
+                                              fontSize: 26, color: Colors.grey),
+                                        ),
+                                        Text(
+                                          'Welcome back to WAFI',
+                                          style: TextStyle(
+                                              fontSize: 18, color: Colors.grey),
+                                        )
+                                      ],
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color.fromARGB(
+                                                  43, 28, 26, 26)),
+                                          color: const Color.fromARGB(
+                                              86, 158, 158, 158),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(100))),
+                                      child: IconButton(
+                                          // icon
+                                          alignment: Alignment.center,
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            Icons.person,
+                                          )),
+                                    )
+                                  ],
+                                ),
+                              ),
                               // balance
                               const BalanceWidget(),
                               const TransactionContainer(),
-                              MetricsContainer(
-                                summaryExpenses:
-                                    provider.metrics['expenses'] ?? 0,
-                                summaryIncomes:
-                                    provider.metrics['incomes'] ?? 0,
-                                barchart: provider!.metrics?['barchart'] ?? [],
-                                piechart: provider.metrics['piechart'] ?? {},
-                              )
+                              // MetricsContainer(
+                              //   summaryExpenses:
+                              //       provider.metrics['expenses'] ?? 0,
+                              //   summaryIncomes:
+                              //       provider.metrics['incomes'] ?? 0,
+                              //   barchart: provider!.metrics?['barchart'] ?? [],
+                              //   piechart: provider.metrics['piechart'] ?? {},
+                              // )
                               //  transactions
                             ]),
                           ),
@@ -84,7 +132,7 @@ class HomeState extends State<HomePage> {
                       )),
                 ],
               ),
-            ));
+            )));
       },
     );
   }

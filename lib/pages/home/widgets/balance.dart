@@ -1,8 +1,21 @@
+import 'package:finance/config/constanst.dart';
 import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+getValue(dynamic num) {
+  if (num != null) {
+    if (num > 0.001) {
+      return num;
+    }
+  }
+
+  return 0;
+}
 
 class BalanceWidget extends StatelessWidget {
   const BalanceWidget({Key? key}) : super(key: key);
@@ -10,145 +23,223 @@ class BalanceWidget extends StatelessWidget {
   Widget printWallets(Map wallet, WalletProvider provider, context) {
     return FractionallySizedBox(
         widthFactor: 1,
+        heightFactor: 1,
         child: Container(
-            // height: 100,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(1),
             decoration: const BoxDecoration(
                 color: Colors.white,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Color.fromRGBO(255, 255, 255, 0.462),
-                    blurRadius: 10.0,
-                    spreadRadius: 2.0,
-                  )
-                ],
+                boxShadow: normalShadow,
                 borderRadius: BorderRadius.all(Radius.circular(15))),
-            margin: const EdgeInsets.all(10),
-            child: provider.loadingWallet == true
-                ? const Center(
-                    child: FractionallySizedBox(
-                      widthFactor: 0.2,
-                      heightFactor: 0.3,
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: SingleChildScrollView(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      IconButton(
+                          onPressed: () async {
+                            provider.loadingWallet = true;
+                            provider.getBalance(
+                                provider.currentWallet['info']["walletId"],
+                                context);
+                            provider.notifyListeners();
+                          },
+                          icon: Icon(Icons.refresh)),
+                      IconButton(
+                          onPressed: () async {
+                            provider.loadingWallet = true;
+                            provider.getBalance(
+                                provider.currentWallet['info']["walletId"],
+                                context);
+                            provider.notifyListeners();
+                          },
+                          icon: Icon(Icons.settings)),
+                      IconButton(
+                          onPressed: () async {
+                            provider.loadingWallet = true;
+                            provider.getBalance(
+                                provider.currentWallet['info']["walletId"],
+                                context);
+                            provider.notifyListeners();
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Stack(
+                        fit: StackFit.loose,
+                        alignment: Alignment.center,
                         children: [
-                          Text(
-                            provider.currentWallet['info']['currency'],
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400, fontSize: 30),
-                          ),
-                          // IconButton(
-                          //   onPressed: () {
-                          //     print(2);
-                          //   },
-                          //   icon: const Icon(
-                          //     Icons.delete,
-                          //     color: Colors.red,
-                          //   ),
-                          // )
-                          IconButton(
-                            onPressed: () async {
-                              provider.loadingHistory = true;
-                              provider.loadingWallet = true;
-                              if (context?.mounted) {
-                                print('loading....');
-                                provider.getBalance(
-                                    provider.currentWallet['info']['walletId'],
-                                    context);
-                                provider.setRefreshHistory(
-                                    provider.currentWallet['info']['walletId'],
-                                    context);
-                                provider.notifyListeners();
-                                print('ready');
-                              }
+                          LayoutBuilder(
+                            builder: (BuildContext context,
+                                BoxConstraints constraints) {
+                              return AspectRatio(
+                                aspectRatio: 1.5,
+                                child: PieChart(
+                                  PieChartData(sections: [
+                                    PieChartSectionData(
+                                        titleStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                        value: getValue(provider
+                                                        .metrics['incomes'])
+                                                    .toInt() <=
+                                                0
+                                            ? 0.001
+                                            : getValue(
+                                                provider.metrics['incomes']),
+                                        title:
+                                            "${getValue(provider.metrics['incomes'])}%",
+                                        color: Colors.blue),
+                                    PieChartSectionData(
+                                        titleStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                        value: getValue(provider
+                                                        .metrics['expenses'])
+                                                    .toInt() <=
+                                                0
+                                            ? 0.001
+                                            : getValue(
+                                                provider.metrics['expenses']),
+                                        title:
+                                            "${getValue(provider.metrics['expenses'])}%",
+                                        color: Colors.red),
+                                  ]),
+                                ),
+                              );
                             },
-                            icon: const Icon(
-                              Icons.refresh,
-                              color: Colors.grey,
+                          ),
+                          SizedBox(
+                            width: 130,
+                            child: Wrap(
+                              direction: Axis.horizontal,
+                              alignment: WrapAlignment.center,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              runAlignment: WrapAlignment.center,
+                              children: [
+                                Text(
+                                  "${provider.currentWallet?["info"]?["currency"] ?? "Loading..."}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                Text(
+                                    "\$.${provider.currentWallet?["balance"] ?? 0}",
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 23)),
+                                const Text("Balance",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                              ],
                             ),
                           )
                         ],
+                      )),
+                      const SizedBox(
+                        width: 0,
                       ),
-                      const Text(
-                        'Balance',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w200),
-                      ),
-                      Text(
-                        "\$.${provider.currentWallet['balance'].toString()}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'Incomes',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w200),
-                              ),
-                              Text(
-                                '\$.${provider.currentWallet["incomes"]}',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w200,
-                                    color: Colors.green),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'Expenses',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w200),
-                              ),
-                              Text(
-                                '\$.${provider.currentWallet["expenses"]}',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w200,
-                                    color: Colors.red),
-                              ),
-                            ],
-                          )
-                        ],
+                      SizedBox(
+                        width: 140,
+                        child: Column(
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.arrow_downward_outlined,
+                                      color: Colors.red,
+                                    ),
+                                    Text(
+                                      "Expenses",
+                                      style: TextStyle(
+                                          fontSize: 18, color: Colors.red),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                    width: 100,
+                                    child: Text(
+                                        '\$.${provider.currentWallet?["expenses"] ?? 0}',
+                                        overflow: TextOverflow.fade,
+                                        style: const TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20))),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.arrow_upward_outlined,
+                                      color: Colors.green,
+                                    ),
+                                    Text(
+                                      "Expenses",
+                                      style: TextStyle(
+                                          fontSize: 18, color: Colors.green),
+                                      textAlign: TextAlign.center,
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                    width: 100,
+                                    child: Text(
+                                        '\$.${provider.currentWallet?["incomes"] ?? 0}',
+                                        overflow: TextOverflow.fade,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20))),
+                              ],
+                            ),
+                          ],
+                        ),
                       )
                     ],
-                  )));
+                  )
+                ],
+              ),
+            )));
   }
 
   @override
   Widget build(BuildContext context) {
     final walletProvider = Provider.of<WalletProvider>(context, listen: true);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (walletProvider.wallets.isEmpty && context.mounted) {
       walletProvider.getWallets(context);
     }
     if (context.mounted && walletProvider.currentWallet == null) {
       if (walletProvider.wallets.isNotEmpty) {
-        walletProvider.loadingWallet = true;
-        walletProvider.loadingHistory = true;
         walletProvider.getBalance(walletProvider.wallets[0]['_id'], context);
         walletProvider.setRefreshHistory(
             walletProvider.wallets[0]['_id'], context);
@@ -165,7 +256,6 @@ class BalanceWidget extends StatelessWidget {
                   walletProvider.getBalance(
                       walletProvider.wallets[index]['_id'], context);
                   walletProvider.currenIndex = index;
-                  walletProvider.loadingHistory = true;
                   walletProvider.notifyListeners();
                   await walletProvider.setRefreshHistory(
                       walletProvider.wallets[index]['_id'], context);

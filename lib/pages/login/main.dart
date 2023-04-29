@@ -114,7 +114,8 @@ class LoginWidgetState extends State<LoginWidget> {
                                                     loading = true;
                                                   });
                                                   await Future.delayed(
-                                                const      Duration(seconds: 1));
+                                                      const Duration(
+                                                          seconds: 1));
                                                   bool hasError = false;
                                                   _formData
                                                       .forEach((key, value) {
@@ -145,6 +146,9 @@ class LoginWidgetState extends State<LoginWidget> {
                                                             userProvider);
                                                     if (error != null) {
                                                       if (context.mounted) {
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
                                                         SnackBarMessage(
                                                             context,
                                                             Colors.red,

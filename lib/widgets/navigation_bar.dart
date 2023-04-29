@@ -10,7 +10,7 @@ class NavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of(context);
     return NavigationBar(
-      backgroundColor: appProvider.currentBackground,
+      backgroundColor: Colors.blue,
       destinations: [
         IconButton(
             onPressed: () async {

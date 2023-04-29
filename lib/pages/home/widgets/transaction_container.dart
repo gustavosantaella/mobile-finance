@@ -25,6 +25,7 @@ class TransactionContainer extends StatelessWidget {
     return Container(
       margin: marginAll,
       decoration: const BoxDecoration(
+        boxShadow: normalShadow,
           color: Colors.white, borderRadius: borderRadiusAll),
       height: MediaQuery.of(context).size.height / 2.5,
       child: Stack(
