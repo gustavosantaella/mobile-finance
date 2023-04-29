@@ -12,11 +12,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+      - name: Build with Gradle
+        uses: gradle-build-action@v1
+        with:
+          gradle-version: 7.2.0
       - name: Set up Flutter
         uses: subosito/flutter-action@v2.10.0
         with:
-              flutter-version: '3.0.0'
+              flutter-version: '3.7.8'
               channel: 'stable'
 
       - name: Install dependencies
