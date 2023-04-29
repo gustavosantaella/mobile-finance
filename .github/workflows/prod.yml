@@ -1,0 +1,57 @@
+name: Build and Deploy to Google Play
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v1.7.0
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build AAB
+        run: flutter build appbundle --release
+
+      - name: Upload AAB to Google Play
+        uses: r0adkll/upload-google-play@v1.1.0
+        with:
+          serviceAccountJson: ${{ secrets.GOOGLE_CLOUD_SERVICE_CREDENTIALS }}
+          packageName: com.example.myapp
+          track: ${{ env.TRACK }}
+          releaseNotes: |
+            This is a new release!
+          appBundlePath: build/app/outputs/bundle/release/app-release.aab
+
+      - name: Set track based on commit message
+        run: |
+          if [[ "$GITHUB_REF" == "refs/heads/dev" ]]; then
+            if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+              if [[ "$GITHUB_EVENT_REF" == "refs/heads/dev" ]]; then
+                if [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == *"[internal]"* ]]; then
+                  echo "Setting track to internal"
+                  echo "TRACK=internal" >> $GITHUB_ENV
+                elif [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == *"[alpha]"* ]]; then
+                  echo "Setting track to alpha"
+                  echo "TRACK=alpha" >> $GITHUB_ENV
+                elif [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == *"[beta]"* ]]; then
+                  echo "Setting track to beta"
+                  echo "TRACK=beta" >> $GITHUB_ENV
+                elif [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == *"[production]"* ]]; then
+                  echo "Setting track to production"
+                  echo "TRACK=production" >> $GITHUB_ENV
+                else
+                  echo "No track specified in commit message, defaulting to internal"
+                  echo "TRACK=internal" >> $GITHUB_ENV
+                fi
+              fi
+            fi
+          fi
