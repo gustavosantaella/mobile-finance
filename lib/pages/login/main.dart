@@ -145,6 +145,9 @@ class LoginWidgetState extends State<LoginWidget> {
                                                             userProvider);
                                                     if (error != null) {
                                                       if (context.mounted) {
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
                                                         SnackBarMessage(
                                                             context,
                                                             Colors.red,
