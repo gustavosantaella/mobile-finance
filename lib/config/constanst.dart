@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
       },
     }
   },
+
   "colors": {
     "default": Colors.black,
     "background": {
@@ -24,8 +25,9 @@ import 'package:flutter/material.dart';
         "cobalto":"#004aad"
       },
       "blue": Colors.blue,
-      "app": colorFromHexString("#38b6ff")
-    }
+      "app": colorFromHexString("#38b6ff"),
+    },
+      "cobalto":colorFromHexString("#004aad")
   }
 };
 
@@ -52,3 +54,8 @@ Function GeneralInputStyle =  ( {labelText = '', border }) =>  InputDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20))),
   labelText: labelText,
 );
+
+
+const borderRadiusAll =  BorderRadius.all(Radius.circular(15));
+
+const marginAll =  EdgeInsets.all(20);

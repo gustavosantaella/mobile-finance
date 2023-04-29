@@ -59,17 +59,16 @@ Future<Map> getHistory(String walletId) async {
     if (data.statusCode != 200) {
       throw decode['error'];
     }
-
     return decode['data'];
   } catch (e) {
     rethrow;
   }
 }
 
-Future<List> getAllWalletsByOwner(String userId) async {
+Future<List> getAllWalletsByOwner() async {
   try {
     String token = await getuserToken(formatted: true);
-    dynamic response = await http.get(Uri.parse("$url/wallet/by-owner/$userId"), headers: {
+    dynamic response = await http.get(Uri.parse("$url/wallet/by-owner"), headers: {
       "Authorization": token
     } );
      response = jsonDecode(response.body);

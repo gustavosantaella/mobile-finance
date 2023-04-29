@@ -5,6 +5,7 @@ import 'package:finance/pages/home/widgets/add_movment.dart';
 import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
 import 'package:finance/providers/app_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
+import 'package:finance/widgets/metric_container.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:finance/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class CalendarState extends State<CalendarWidget> {
   double total = 0.0;
   bool newDate = false;
   late List _barChart = [];
+  late Map _piechart = {};
 
   @override
   void dispose() {
@@ -76,7 +78,8 @@ class CalendarState extends State<CalendarWidget> {
             total = response['total'];
             summaryExpenses = response['metrics']['expenses'];
             summaryIncomes = response['metrics']['incomes'];
-            _barChart = response['metrics']?['barchart'];
+            _barChart = response['metrics']['barchart'];
+            _piechart = response['metrics']['piechart'];
             days = uniqueDates;
           });
         }
@@ -99,202 +102,78 @@ class CalendarState extends State<CalendarWidget> {
       });
     }
 
-    chart() {
-      if (expenses > 0 && incomes > 0) {
-        return Container(
-          margin: const EdgeInsets.all(10),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: PieChart(PieChartData(sections: [
-              PieChartSectionData(
-                  value: summaryIncomes,
-                  title: "$summaryIncomes%",
-                  color: Colors.green),
-              PieChartSectionData(
-                  value: summaryExpenses,
-                  title: "$summaryExpenses%",
-                  color: Colors.red),
-            ])),
-          ),
-        );
-      }
-      return Container();
-    }
-
-    barchart() {
-      if (expenses > 0 && incomes > 0) {
-        List<BarChartGroupData> barChartGroupData = [];
-        int i = 1;
-        if (_barChart.isNotEmpty) {
-          _barChart.forEach((e) {
-            barChartGroupData.add(
-              BarChartGroupData(
-                x: e['index'],
-                barRods: [
-                  BarChartRodData(
-                    toY: e['metrics']['expense'] ?? 0.0,
-                    color: Colors.red,
-                  ),
-                  BarChartRodData(
-                    toY: e['metrics']?['income'] ?? 0.0,
-                    color: Colors.green,
-                  ),
-                ],
-              ),
-            );
-            i +=1;
-          });
-        }
-        return AspectRatio(
-          aspectRatio: 1,
-          child: BarChart(
-            BarChartData(
-              extraLinesData: ExtraLinesData(extraLinesOnTop: false),
-              gridData: FlGridData(show: false),
-              barGroups: barChartGroupData,
-              titlesData: FlTitlesData(
-                rightTitles: AxisTitles(axisNameWidget: Text('')),
-                topTitles: AxisTitles(axisNameWidget: Text('')),
-                bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                  showTitles: true,
-                  getTitlesWidget: (value, meta) {
-                    switch (value.toInt()) {
-                      case 0:
-                        return Text('Lun');
-                      case 1:
-                        return Text('Mar');
-                      case 2:
-                        return Text('Mier');
-                      case 3:
-                        return Text('Jue');
-                      case 4:
-                        return Text('Vie');
-                      case 5:
-                        return Text('Sab');
-                      case 6:
-                        return Text('Dom');
-                      default:
-                        return Text("....");
-                    }
-                  },
-                )),
-              ),
-              borderData: FlBorderData(
-                show: false,
-              ),
-              barTouchData: BarTouchData(
-                enabled: true,
-              ),
-            ),
-          ),
-        );
-      }
-
-      return Container();
-    }
-
     return Scaffold(
         bottomNavigationBar: const NavigationBarWidget(),
         resizeToAvoidBottomInset: true,
         body: SafeArea(
-          child: FractionallySizedBox(
-              widthFactor: 1,
-              heightFactor: 1,
+            child: FractionallySizedBox(
+          widthFactor: 1,
+          heightFactor: 1,
+          child: SingleChildScrollView(
               child: Container(
-                color: appProvider.currentBackground,
-                child: Container(
-                    margin: const EdgeInsets.all(10),
+            color: appProvider.currentBackground,
+            child: SizedBox(
+              child: Column(
+                children: [
+                  Container(
+                    margin: marginAll,
                     decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    child: SingleChildScrollView(
-                        // scrollDirection: Axis,
-                        child: Column(
-                      children: [
-                        TableCalendar(
-                          firstDay: firstDay,
-                          lastDay: lastDay,
-                          focusedDay: _focusedDay,
-                          calendarFormat: _calendarFormat,
-                          selectedDayPredicate: (day) {
-                            // Use `selectedDayPredicate` to determine which day is currently selected.
-                            // If this s true, then `day` will be marked as selected.
+                      borderRadius: borderRadiusAll,
+                      color: Colors.white,
+                    ),
+                    child: TableCalendar(
+                      firstDay: firstDay,
+                      lastDay: lastDay,
+                      focusedDay: _focusedDay,
+                      calendarFormat: _calendarFormat,
+                      selectedDayPredicate: (day) {
+                        // Use `selectedDayPredicate` to determine which day is currently selected.
+                        // If this s true, then `day` will be marked as selected.
 
-                            // Using `isSameDay` is recommended to disregard
-                            // the time-part of compared DateTime objects.
-                            return isSameDay(_selectedDay, day)
-                                ? isSameDay(_selectedDay, day)
-                                : days.contains(
-                                    DateFormat('yyyy-MM-dd').format(day));
-                          },
-                          onDaySelected: (selectedDay, focusedDay) async {
-                            // Call `setState()` when updating the selected day
-                            setState(() {
-                              _selectedDay = selectedDay;
-                              _focusedDay = focusedDay;
-                            });
-                            await historyByDate();
+                        // Using `isSameDay` is recommended to disregard
+                        // the time-part of compared DateTime objects.
+                        return isSameDay(_selectedDay, day)
+                            ? isSameDay(_selectedDay, day)
+                            : days
+                                .contains(DateFormat('yyyy-MM-dd').format(day));
+                      },
+                      onDaySelected: (selectedDay, focusedDay) async {
+                        // Call `setState()` when updating the selected day
+                        setState(() {
+                          _selectedDay = selectedDay;
+                          _focusedDay = focusedDay;
+                        });
+                        await historyByDate();
 
-                            if (context.mounted) {
-                              var hist = _historyByDate
-                                  .map((item) => ListTransactionWidget(item))
-                                  .toList();
-                              bottomSheetWafi(
-                                  context,
-                                  ListView(
-                                    children: [Wrap(children: hist)],
-                                  ));
-                            }
-                          },
-                          onPageChanged: (focusedDay) async {
-                            newDate = true;
-                            await historyByMonth(
-                                date: focusedDay.month, force: true);
-                            // No need to call `setState()` here
-                            _focusedDay = focusedDay;
-                          },
-                        ),
-                        Container(
-                            margin: const EdgeInsets.all(10),
-                            child: Wrap(
-                              alignment: WrapAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "$incomes\$",
-                                  style: const TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20),
-                                ),
-                                const SizedBox(width: 20, height: 20),
-                                Text("${incomes - expenses}\$",
-                                    style: const TextStyle(
-                                        color: Colors.black45,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20)),
-                                const SizedBox(width: 20, height: 20),
-                                Text("$expenses\$",
-                                    style: const TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20)),
-                              ],
-                            )),
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            FractionallySizedBox(
-                              widthFactor: 0.5,
-                              child: chart(),
-                            ),
-                            FractionallySizedBox( widthFactor: 1, child: barchart())
-                          ],
-                        )
-                      ],
-                    ))),
-              )),
-        ));
+                        if (context.mounted) {
+                          var hist = _historyByDate
+                              .map((item) => ListTransactionWidget(item))
+                              .toList();
+                          bottomSheetWafi(
+                              context,
+                              ListView(
+                                children: [Wrap(children: hist)],
+                              ));
+                        }
+                      },
+                      onPageChanged: (focusedDay) async {
+                        newDate = true;
+                        await historyByMonth(
+                            date: focusedDay.month, force: true);
+                        // No need to call `setState()` here
+                        _focusedDay = focusedDay;
+                      },
+                    ),
+                  ),
+                  MetricsContainer(
+                      barchart: _barChart,
+                      piechart: _piechart,
+                      summaryIncomes: incomes,
+                      summaryExpenses: expenses)
+                ],
+              ),
+            ),
+          )),
+        )));
   }
 }

@@ -22,11 +22,7 @@ class BalanceWidget extends StatelessWidget {
                     spreadRadius: 2.0,
                   )
                 ],
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20))),
+                borderRadius: BorderRadius.all(Radius.circular(15))),
             margin: const EdgeInsets.all(10),
             child: provider.loadingWallet == true
                 ? const Center(
@@ -147,7 +143,7 @@ class BalanceWidget extends StatelessWidget {
     final walletProvider = Provider.of<WalletProvider>(context, listen: true);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (walletProvider.wallets.isEmpty && context.mounted) {
-      walletProvider.getWallets(userProvider.userId, context);
+      walletProvider.getWallets(context);
     }
     if (context.mounted && walletProvider.currentWallet == null) {
       if (walletProvider.wallets.isNotEmpty) {

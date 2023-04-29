@@ -6,6 +6,7 @@ class WalletProvider extends ChangeNotifier {
   List wallets = [];
   dynamic currentWallet;
   late List history = [];
+  Map metrics = {};
   bool loadingHistory = false;
   bool loadingWallet = false;
   int currenIndex = 0;
@@ -42,6 +43,7 @@ class WalletProvider extends ChangeNotifier {
       Map response = await getHistory(walletId);
       history.clear();
       history.addAll(response['history']);
+      metrics = response['metrics'];
       loadingHistory = false;
       notifyListeners();
 
@@ -53,9 +55,9 @@ class WalletProvider extends ChangeNotifier {
     }
   }
 
-  Future<List> getWallets(userId, context) async {
+  Future<List> getWallets(context) async {
     try {
-      List wallets = await getAllWalletsByOwner(userId);
+      List wallets = await getAllWalletsByOwner();
       this.wallets = wallets;
       notifyListeners();
       return this.wallets;

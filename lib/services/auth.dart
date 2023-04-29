@@ -2,15 +2,13 @@ import 'dart:convert';
 
 import 'package:finance/helpers/fn/main.dart';
 import 'package:finance/providers/user_provider.dart';
-import 'package:finance/providers/wallet_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:finance/config/constanst.dart';
 import 'package:finance/database/main.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<dynamic> login(String email, String password,
-    {required WalletProvider walletProvider,
-    required UserProvider userProvider}) async {
+    {required UserProvider userProvider}) async {
   try {
     dynamic response = await http.post(Uri.parse("$url/auth/login"),
         headers: {"Content-Type": "application/json"},
@@ -38,10 +36,8 @@ Future<void> registerUser(payload) async {
   try {
     String jsonencode = jsonEncode(payload);
 
-    http.Response response =
-        await http.post(Uri.parse('$url/auth/register'), body: jsonencode, headers: {
-          "Content-Type": "application/json"
-        });
+    http.Response response = await http.post(Uri.parse('$url/auth/register'),
+        body: jsonencode, headers: {"Content-Type": "application/json"});
     Map res = jsonDecode(response.body);
     if (res['ok'] != ok) {
       throw Exception(res['error'] ?? 'An error ocurred');

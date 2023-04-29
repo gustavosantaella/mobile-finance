@@ -18,6 +18,8 @@ dependencies:
   table_calendar: ^3.0.9
   fl_chart:
   flutter_circle_color_picker: ^0.3.0
+  pie_chart: ^5.3.2
+  syncfusion_flutter_charts:
 
 dev_dependencies:
   flutter_test:

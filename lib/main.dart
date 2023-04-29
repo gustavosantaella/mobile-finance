@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:finance/config/constanst.dart';
 import 'package:finance/pages/calendar/main.dart';
 import 'package:finance/pages/login/main.dart';
 import 'package:finance/pages/home/main.dart';
@@ -6,23 +8,31 @@ import 'package:finance/pages/register/main.dart';
 import 'package:finance/providers/app_provider.dart';
 import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
-import 'package:flutter/material.dart';
+import 'package:finance/services/auth.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:finance/database/main.dart';
 
-void main() {
-  runApp(const App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  String token = await getuserToken();
+  runApp(App(token: token,));
 }
 
 class App extends StatefulWidget {
-  const App({super.key});
+
+  final String token;
+
+  const App({this.token ='', super.key});
 
   @override
   State<App> createState() => _AppState();
 }
 
 class _AppState extends State<App> {
+  bool loading = false;
+  bool hasToken = false;
+
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(
@@ -32,27 +42,29 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AppProvider>(
-          create: (context) => AppProvider(),
-        ),
-        ChangeNotifierProvider<UserProvider>(
-          create: (context) => UserProvider(),
-        ),
-        ChangeNotifierProvider<WalletProvider>(
-          create: (context) => WalletProvider(),
-        ),
-      ],
-      child: MaterialApp(
-        initialRoute: '/login',
-        routes: {
-          "/login": (context) => const LoginWidget(),
-          "/register": (context) => const RegisterWidget(),
-          "/home": (context) => const HomePage(),
-          "/calendar": (context) => const CalendarWidget(),
-          "/profile": (context) => const UserProfile(),
-        },
+    return SizedBox(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AppProvider>(
+            create: (context) => AppProvider(),
+          ),
+          ChangeNotifierProvider<UserProvider>(
+            create: (context) => UserProvider(),
+          ),
+          ChangeNotifierProvider<WalletProvider>(
+            create: (context) => WalletProvider(),
+          ),
+        ],
+        child:  MaterialApp(
+                initialRoute: widget.token.isEmpty ? '/login' :'/home',
+                routes: {
+                  "/login": (context) => const LoginWidget(),
+                  "/register": (context) => const RegisterWidget(),
+                  "/home": (context) => const HomePage(),
+                  "/calendar": (context) => const CalendarWidget(),
+                  "/profile": (context) => const UserProfile(),
+                },
+              ),
       ),
     );
   }
