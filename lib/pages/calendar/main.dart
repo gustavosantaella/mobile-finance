@@ -109,71 +109,71 @@ class CalendarState extends State<CalendarWidget> {
             child: FractionallySizedBox(
           widthFactor: 1,
           heightFactor: 1,
-          child: SingleChildScrollView(
-              child: Container(
-            color: appProvider.currentBackground,
-            child: SizedBox(
-              child: Column(
-                children: [
-                  Container(
-                    margin: marginAll,
-                    decoration: const BoxDecoration(
-                      borderRadius: borderRadiusAll,
-                      color: Colors.white,
-                    ),
-                    child: TableCalendar(
-                      firstDay: firstDay,
-                      lastDay: lastDay,
-                      focusedDay: _focusedDay,
-                      calendarFormat: _calendarFormat,
-                      selectedDayPredicate: (day) {
-                        // Use `selectedDayPredicate` to determine which day is currently selected.
-                        // If this s true, then `day` will be marked as selected.
+          child: Container(
+              color: appProvider.currentBackground,
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: marginAll,
+                        decoration: const BoxDecoration(
+                          borderRadius: borderRadiusAll,
+                          color: Colors.white,
+                        ),
+                        child: TableCalendar(
+                          firstDay: firstDay,
+                          lastDay: lastDay,
+                          focusedDay: _focusedDay,
+                          calendarFormat: _calendarFormat,
+                          selectedDayPredicate: (day) {
+                            // Use `selectedDayPredicate` to determine which day is currently selected.
+                            // If this s true, then `day` will be marked as selected.
 
-                        // Using `isSameDay` is recommended to disregard
-                        // the time-part of compared DateTime objects.
-                        return isSameDay(_selectedDay, day)
-                            ? isSameDay(_selectedDay, day)
-                            : days
-                                .contains(DateFormat('yyyy-MM-dd').format(day));
-                      },
-                      onDaySelected: (selectedDay, focusedDay) async {
-                        // Call `setState()` when updating the selected day
-                        setState(() {
-                          _selectedDay = selectedDay;
-                          _focusedDay = focusedDay;
-                        });
-                        await historyByDate();
+                            // Using `isSameDay` is recommended to disregard
+                            // the time-part of compared DateTime objects.
+                            return isSameDay(_selectedDay, day)
+                                ? isSameDay(_selectedDay, day)
+                                : days.contains(
+                                    DateFormat('yyyy-MM-dd').format(day));
+                          },
+                          onDaySelected: (selectedDay, focusedDay) async {
+                            // Call `setState()` when updating the selected day
+                            setState(() {
+                              _selectedDay = selectedDay;
+                              _focusedDay = focusedDay;
+                            });
+                            await historyByDate();
 
-                        if (context.mounted) {
-                          var hist = _historyByDate
-                              .map((item) => ListTransactionWidget(item))
-                              .toList();
-                          bottomSheetWafi(
-                              context,
-                              ListView(
-                                children: [Wrap(children: hist)],
-                              ));
-                        }
-                      },
-                      onPageChanged: (focusedDay) async {
-                        newDate = true;
-                        await historyByMonth(
-                            date: focusedDay.month, force: true);
-                        // No need to call `setState()` here
-                        _focusedDay = focusedDay;
-                      },
-                    ),
+                            if (context.mounted) {
+                              var hist = _historyByDate
+                                  .map((item) => ListTransactionWidget(item))
+                                  .toList();
+                              bottomSheetWafi(
+                                  context,
+                                  ListView(
+                                    children: [Wrap(children: hist)],
+                                  ));
+                            }
+                          },
+                          onPageChanged: (focusedDay) async {
+                            newDate = true;
+                            await historyByMonth(
+                                date: focusedDay.month, force: true);
+                            // No need to call `setState()` here
+                            _focusedDay = focusedDay;
+                          },
+                        ),
+                      ),
+                      MetricsContainer(
+                          barchart: _barChart,
+                          piechart: _piechart,
+                          summaryIncomes: incomes,
+                          summaryExpenses: expenses)
+                    ],
                   ),
-                  MetricsContainer(
-                      barchart: _barChart,
-                      piechart: _piechart,
-                      summaryIncomes: incomes,
-                      summaryExpenses: expenses)
-                ],
-              ),
-            ),
-          )),
+                ),
+              )),
         )));
   }
 }

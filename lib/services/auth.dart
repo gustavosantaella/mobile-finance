@@ -65,6 +65,7 @@ Future<String> getuserToken({bool formatted = false}) async {
     }
     return token;
   } catch (e) {
+    print("error to get token");
     rethrow;
   }
 }

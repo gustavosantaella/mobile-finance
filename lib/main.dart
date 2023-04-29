@@ -13,10 +13,14 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  try{
+    WidgetsFlutterBinding.ensureInitialized();
 
   String token = await getuserToken();
   runApp(App(token: token,));
+  }catch(e){
+  runApp(const App());
+  }
 }
 
 class App extends StatefulWidget {
