@@ -1,4 +1,4 @@
-name: Build and Deploy to Google Play
+name: Build and Deploy to Google Play Console
 
 on:
   push:
