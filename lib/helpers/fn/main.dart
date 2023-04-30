@@ -16,3 +16,9 @@ Color getRandomColor() {
 Color colorFromHexString(String color) {
   return Color(int.parse(color.substring(1), radix: 16) + 0xff000000);
 }
+
+Map toMap(data) {
+  Map map = {};
+  data?.forEach((key, value) => map[key] = value);
+  return map;
+}

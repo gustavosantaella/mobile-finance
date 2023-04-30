@@ -8,9 +8,8 @@ class NavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of(context);
     return NavigationBar(
-      backgroundColor: Colors.blue,
+      backgroundColor: const Color.fromARGB(160, 33, 149, 243),
       destinations: [
         IconButton(
             onPressed: () async {
@@ -23,7 +22,7 @@ class NavigationBarWidget extends StatelessWidget {
             onPressed: () async {
               if (ModalRoute.of(context)?.settings.name == '/calendar') return;
 
-              await Navigator.pushNamed(context, '/calendar');
+              await Navigator.popAndPushNamed(context, '/calendar');
             },
             icon: const Icon(
               Icons.calendar_month,
@@ -43,7 +42,7 @@ class NavigationBarWidget extends StatelessWidget {
             onPressed: () async {
               if (ModalRoute.of(context)?.settings.name == '/profile') return;
 
-              await Navigator.pushNamed(context, '/profile');
+              await Navigator.popAndPushNamed(context, '/profile');
             },
             icon: const Icon(
               Icons.person,
@@ -51,5 +50,6 @@ class NavigationBarWidget extends StatelessWidget {
             ))
       ],
     );
+ 
   }
 }

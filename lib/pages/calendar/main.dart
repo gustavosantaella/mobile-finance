@@ -53,7 +53,6 @@ class CalendarState extends State<CalendarWidget> {
     WalletProvider walletProvider =
         Provider.of<WalletProvider>(context, listen: true);
     AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
-
     historyByMonth({dynamic date, bool force = false}) async {
       try {
         // await Future.delayed(const Duration(seconds: 3));
@@ -76,6 +75,7 @@ class CalendarState extends State<CalendarWidget> {
             incomes = response['incomes'];
             expenses = response['expenses'];
             total = response['total'];
+            loading = false;
             summaryExpenses = response['metrics']['expenses'];
             summaryIncomes = response['metrics']['incomes'];
             _barChart = response['metrics']['barchart'];
@@ -89,6 +89,10 @@ class CalendarState extends State<CalendarWidget> {
     }
 
     if (days.isEmpty && newDate == false) {
+      
+      setState(() {
+        loading = true;
+      });
       historyByMonth(date: DateTime.now().month);
     }
 

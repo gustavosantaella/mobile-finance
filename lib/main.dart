@@ -1,3 +1,5 @@
+import 'package:finance/database/main.dart';
+import 'package:finance/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:finance/config/constanst.dart';
 import 'package:finance/pages/calendar/main.dart';
@@ -11,23 +13,30 @@ import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/services/auth.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 void main() async {
-  try{
-    WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
-  String token = await getuserToken();
-  runApp(App(token: token,));
-  }catch(e){
-  runApp(const App());
+  Database db = await DB().openDB();
+  await DB().createTables(db, 1);
+  await db.close();
+  runApp(const SplashScreen());
+  await Future.delayed(const Duration(seconds: 5));
+  try {
+    String token = await getuserToken();
+    runApp(App(
+      token: token,
+    ));
+  } catch (e) {
+    runApp(const App());
   }
 }
 
 class App extends StatefulWidget {
-
   final String token;
 
-  const App({this.token ='', super.key});
+  const App({this.token = '', super.key});
 
   @override
   State<App> createState() => _AppState();
@@ -59,16 +68,16 @@ class _AppState extends State<App> {
             create: (context) => WalletProvider(),
           ),
         ],
-        child:  MaterialApp(
-                initialRoute: widget.token.isEmpty ? '/login' :'/home',
-                routes: {
-                  "/login": (context) => const LoginWidget(),
-                  "/register": (context) => const RegisterWidget(),
-                  "/home": (context) => const HomePage(),
-                  "/calendar": (context) => const CalendarWidget(),
-                  "/profile": (context) => const UserProfile(),
-                },
-              ),
+        child: MaterialApp(
+          initialRoute: widget.token.isEmpty ? '/login' : '/home',
+          routes: {
+            "/login": (context) => const LoginWidget(),
+            "/register": (context) => const RegisterWidget(),
+            "/home": (context) => const HomePage(),
+            "/calendar": (context) => const CalendarWidget(),
+            "/profile": (context) => const UserProfile(),
+          },
+        ),
       ),
     );
   }

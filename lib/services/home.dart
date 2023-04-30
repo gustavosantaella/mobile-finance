@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:finance/config/constanst.dart';
+import 'package:finance/database/main.dart';
+import 'package:finance/helpers/fn/main.dart';
 import 'package:http/http.dart' as http;
+import 'package:sqflite/sqflite.dart';
 import 'auth.dart';
 
 Future<List> getCategoriest() async {
@@ -65,13 +68,12 @@ Future<Map> getHistory(String walletId) async {
   }
 }
 
-Future<List> getAllWalletsByOwner() async {
+Future<List> getAllWalletsByOwner({bool force = false}) async {
   try {
     String token = await getuserToken(formatted: true);
-    dynamic response = await http.get(Uri.parse("$url/wallet/by-owner"), headers: {
-      "Authorization": token
-    } );
-     response = jsonDecode(response.body);
+    dynamic response = await http.get(Uri.parse("$url/wallet/by-owner"),
+        headers: {"Authorization": token});
+    response = jsonDecode(response.body);
     if (response['status'] != 200) {
       throw "Error to get wallets";
     }
@@ -81,21 +83,35 @@ Future<List> getAllWalletsByOwner() async {
   }
 }
 
+Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
+  try {
+    Database db = await DB().openDB();
+    Map data = {};
+    List wallet = await db
+        .rawQuery('select data from wallets where walletId=?', [walletId]);
+    if (wallet.isNotEmpty && !force) {
+      
+      data = json.decode(wallet[0]['data']);
+    } else {
+      String token = await getuserToken(formatted: true);
+      dynamic response = await http.get(Uri.parse("$url/wallet/$walletId"),
+          headers: {"Authorization": token});
+      response = jsonDecode(response.body) as Map;
+      if (response['status'] != 200) {
+        throw response['error'];
+      }
 
-Future<Map> getWalletBalance(String walletId) async {
-  try{
-    String token = await getuserToken(formatted: true);
-    dynamic response = await http.get(Uri.parse("$url/wallet/$walletId"), headers: {
-
-      "Authorization": token
-    });
-    response = jsonDecode(response.body) as Map;
-    if(response['status'] != 200){
-      throw response['error'];
+      data = response['data'];
+      try {
+        await db.rawInsert('insert into wallets(walletId, data) values (?,?)',
+            [walletId, json.encode(data)]);
+      } catch (e) {
+        print('error to insert');
+      }
     }
 
-    return response['data'];
-  }catch(e){
+    return data;
+  } catch (e) {
     rethrow;
   }
 }

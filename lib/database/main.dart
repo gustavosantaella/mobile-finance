@@ -17,7 +17,12 @@ class DB {
 
   createTables(Database db, int version) async {
     await db.transaction((txn) async {
-        await txn.execute('CREATE TABLE IF NOT EXISTS user(token TEXT)');
+      print('creating...');
+      await txn.execute('CREATE TABLE IF NOT EXISTS user(token TEXT)');
+      await txn.execute('CREATE TABLE IF NOT EXISTS wallets(walletId TEXT, data JSON)');
+      print('created');
     });
   }
+
+  Future<Database> get conn async => await openDB();
 }
