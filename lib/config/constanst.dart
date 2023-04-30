@@ -31,7 +31,7 @@ import 'package:flutter/material.dart';
   }
 };
 
-const String url = !kReleaseMode ? 'https://b1e4-190-79-162-128.ngrok.io/api' : 'https://finance-backend-klzw.onrender.com/api';
+const String url = !kReleaseMode ? 'https://7acc-201-208-118-67.ngrok.io/api' : 'https://finance-backend-klzw.onrender.com/api';
 
 // Just if your use ngrok [RECOMENDED]
 // const String url = !kReleaseMode
@@ -44,7 +44,7 @@ const String appName = 'Wafi';
 
 const String ok = 'OK';
 
-Function GeneralInputStyle =  ( {labelText = '', border }) =>  InputDecoration(
+Function generalInputStyle =  ( {labelText = '', border }) =>  InputDecoration(
   fillColor: Colors.white,
   filled: true,
 
