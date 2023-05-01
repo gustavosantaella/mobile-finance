@@ -10,6 +10,7 @@ import 'package:sqflite/sqflite.dart';
 Future<dynamic> login(String email, String password,
     {required UserProvider userProvider}) async {
   try {
+    print(url);
     dynamic response = await http.post(Uri.parse("$url/auth/login"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"email": email, "password": password}));
@@ -28,6 +29,7 @@ Future<dynamic> login(String email, String password,
     userProvider.setUserId = response['data']['userId'];
     return null;
   } catch (e) {
+
     return e.toString();
   }
 }

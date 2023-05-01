@@ -202,7 +202,9 @@ class HomeState extends State<HomePage> {
                                       child: IconButton(
                                           // icon
                                           alignment: Alignment.center,
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.popAndPushNamed(context, '/profile');
+                                          },
                                           icon: const Icon(
                                             Icons.person,
                                           )),

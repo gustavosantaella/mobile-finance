@@ -40,7 +40,7 @@ class UserProfileState extends State<UserProfile> {
         appBar: AppBar(
           elevation: 0,
           title: const Text("Profile"),
-          backgroundColor: appProvider.currentBackground,
+          backgroundColor: Colors.blue,
         ),
         bottomNavigationBar: const NavigationBarWidget(),
         body: SafeArea(

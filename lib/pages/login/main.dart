@@ -20,7 +20,7 @@ class LoginWidgetState extends State<LoginWidget> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Map _formData = {"email": '', "password": ''};
+  final Map _formData = {"email": '', "password": ''};
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class LoginWidgetState extends State<LoginWidget> {
         heightFactor: 1,
         widthFactor: 1,
         child: Container(
-            color: definitions['colors']['background']['app'],
+            color: Colors.blue,
             child: Container(
                 margin: const EdgeInsets.all(10),
                 child: Center(
@@ -138,12 +138,15 @@ class LoginWidgetState extends State<LoginWidget> {
                                                     return;
                                                   }
                                                   try {
+                                                    print('loading');
                                                     dynamic error = await login(
                                                         _emailController.text,
                                                         _passwordController
                                                             .text,
                                                         userProvider:
                                                             userProvider);
+                                                            print(error);
+                                                            print('yes');
                                                     if (error != null) {
                                                       if (context.mounted) {
                                                         setState(() {
@@ -167,12 +170,12 @@ class LoginWidgetState extends State<LoginWidget> {
                                                     setState(() {
                                                       loading = false;
                                                     });
-                                                    // if(context.mounted){
-                                                    //   SnackBarMessage(
-                                                    //     context,
-                                                    //     Colors.red,
-                                                    //     Text(e.toString()));
-                                                    // }
+                                                    if(context.mounted){
+                                                      SnackBarMessage(
+                                                        context,
+                                                        Colors.red,
+                                                        Text(e.toString()));
+                                                    }
                                                   }
                                                 },
                                           style: ButtonStyle(

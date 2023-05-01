@@ -9,7 +9,7 @@ class NavigationBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NavigationBar(
-      backgroundColor: const Color.fromARGB(160, 33, 149, 243),
+      backgroundColor:  Colors.blue,
       destinations: [
         IconButton(
             onPressed: () async {
@@ -38,16 +38,7 @@ class NavigationBarWidget extends StatelessWidget {
         //   Icons.graphic_eq,
         //   color: Colors.white,
         // )),
-        IconButton(
-            onPressed: () async {
-              if (ModalRoute.of(context)?.settings.name == '/profile') return;
 
-              await Navigator.popAndPushNamed(context, '/profile');
-            },
-            icon: const Icon(
-              Icons.person,
-              color: Colors.white,
-            ))
       ],
     );
  

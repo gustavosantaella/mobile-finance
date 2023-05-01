@@ -17,11 +17,10 @@ class RegisterWidget extends StatefulWidget {
 class RegisterState extends State<RegisterWidget> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
-  Map _formData = {"password": "", "email": "", "country": ""};
+  final Map _formData = {"password": "", "email": "", "country": ""};
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _countryController = TextEditingController();
   late List<dynamic> _countries = [];
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
@@ -73,8 +72,7 @@ class RegisterState extends State<RegisterWidget> {
                 heightFactor: 1,
                 widthFactor: 1,
                 child: Container(
-                    color: Color(int.parse("#38b6ff".substring(1), radix: 16) +
-                        0xff000000),
+                    color: Colors.blue,
                     child: Center(
                         child: SingleChildScrollView(
                       child: Container(

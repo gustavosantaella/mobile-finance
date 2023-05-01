@@ -33,7 +33,7 @@ Map<String, dynamic> definitions = {
 };
 
 const String url = !kReleaseMode
-    ? 'https://47f7-201-208-118-67.ngrok.io/api'
+    ? 'http://10.0.2.2:8000/api'
     : 'https://finance-backend-klzw.onrender.com/api';
 
 // Just if your use ngrok [RECOMENDED]
