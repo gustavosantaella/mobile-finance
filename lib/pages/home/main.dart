@@ -179,7 +179,7 @@ class HomeState extends State<HomePage> {
                                           CrossAxisAlignment.start,
                                       children: const [
                                         Text(
-                                          'Hi, Gustavo',
+                                          'Hi!',
                                           style: TextStyle(
                                               fontSize: 26, color: Colors.grey),
                                         ),
