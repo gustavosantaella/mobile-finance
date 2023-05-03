@@ -1,5 +1,6 @@
 import 'package:finance/config/constanst.dart';
 import 'package:finance/helpers/fn/bottom_sheets.dart';
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/pages/home/widgets/add_movment.dart';
 import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
 import 'package:finance/providers/wallet_provider.dart';
@@ -25,6 +26,7 @@ class TransactionContainer extends StatelessWidget {
     return Container(
       margin: marginAll,
       decoration: const BoxDecoration(
+        boxShadow: normalShadow,
           color: Colors.white, borderRadius: borderRadiusAll),
       height: MediaQuery.of(context).size.height / 2.5,
       child: Stack(
@@ -55,9 +57,9 @@ class TransactionContainer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
-                          'New movement',
-                          style: TextStyle(
+                         Text(
+                          lang('New movement'),
+                          style:const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
@@ -71,9 +73,9 @@ class TransactionContainer extends StatelessWidget {
                             onPressed: () {
                               bottomSheetWafi(context, const AddMovementWidget());
                             },
-                            child: const Text(
-                              "Add",
-                              style: TextStyle(
+                            child:  Text(
+                              lang('add'),
+                              style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),

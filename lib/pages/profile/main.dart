@@ -1,3 +1,4 @@
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/providers/app_provider.dart';
 import 'package:finance/services/user.dart' as userService;
 import 'package:finance/widgets/navigation_bar.dart';
@@ -39,8 +40,8 @@ class UserProfileState extends State<UserProfile> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: const Text("Profile"),
-          backgroundColor: appProvider.currentBackground,
+          title:  Text(lang("Profile")),
+          backgroundColor: Colors.blue,
         ),
         bottomNavigationBar: const NavigationBarWidget(),
         body: SafeArea(
@@ -106,7 +107,7 @@ class UserProfileState extends State<UserProfile> {
                                                       Text(e.toString()));
                                                 }
                                               },
-                                              child: const Text('Submit'))
+                                              child:  Text(lang('Submit')))
                                         ],
                                       ),
                                       const SizedBox(
@@ -117,7 +118,7 @@ class UserProfileState extends State<UserProfile> {
                                           Row(
                                             children: const [
                                               Text(
-                                                'Choice background',
+                                                'Color de fondo',
                                                 style: TextStyle(fontSize: 20),
                                               ),
                                             ],
@@ -152,7 +153,7 @@ class UserProfileState extends State<UserProfile> {
                                                 showDialog(
                                                     context: context,
                                                     builder: (context) {
-                                                      final _passwordController =
+                                                      final passwordController =
                                                           TextEditingController();
                                                       return Dialog(
                                                           child: Wrap(
@@ -166,7 +167,7 @@ class UserProfileState extends State<UserProfile> {
                                                               children: [
                                                                 TextField(
                                                                     controller:
-                                                                        _passwordController,
+                                                                        passwordController,
                                                                     decoration: const InputDecoration(
                                                                         label: Text(
                                                                             "New password"),
@@ -175,7 +176,7 @@ class UserProfileState extends State<UserProfile> {
                                                                 ElevatedButton(
                                                                     onPressed:
                                                                         () async {
-                                                                      if (_passwordController
+                                                                      if (passwordController
                                                                           .value
                                                                           .text
                                                                           .isEmpty) {
@@ -184,7 +185,7 @@ class UserProfileState extends State<UserProfile> {
 
                                                                       String
                                                                           value =
-                                                                          _passwordController
+                                                                          passwordController
                                                                               .value
                                                                               .text;
 
@@ -200,7 +201,7 @@ class UserProfileState extends State<UserProfile> {
                                                                           SnackBarMessage(
                                                                               context,
                                                                               Colors.green,
-                                                                              const Text('Successfully'));
+                                                                               Text(lang('Successfully')));
                                                                         }
                                                                       } catch (e) {
                                                                         SnackBarMessage(
@@ -209,8 +210,8 @@ class UserProfileState extends State<UserProfile> {
                                                                             Text(e.toString()));
                                                                       }
                                                                     },
-                                                                    child: const Text(
-                                                                        'Submit'))
+                                                                    child:  Text(
+                                                                        lang('Submit')))
                                                               ],
                                                             ),
                                                           ),
@@ -218,9 +219,9 @@ class UserProfileState extends State<UserProfile> {
                                                       ));
                                                     });
                                               },
-                                              child: const Text(
-                                                "Reset password",
-                                                style: TextStyle(
+                                              child:  Text(
+                                                lang("Reset password"),
+                                                style:const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 17),
                                               ))
