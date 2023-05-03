@@ -2,15 +2,13 @@ import 'dart:convert';
 
 import 'package:finance/helpers/fn/main.dart';
 import 'package:finance/providers/user_provider.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:finance/config/constanst.dart';
-import 'package:finance/database/main.dart';
-import 'package:sqflite/sqflite.dart';
 
 Future<dynamic> login(String email, String password,
     {required UserProvider userProvider}) async {
   try {
-    print(url);
     dynamic response = await http.post(Uri.parse("$url/auth/login"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"email": email, "password": password}));
@@ -18,18 +16,14 @@ Future<dynamic> login(String email, String password,
     if (response['status'] != 200) {
       return response['error'];
     }
-    DB conn = DB();
-    Database db = await conn.openDB();
-    List<Map> u = await db.rawQuery("select * from user");
-    if (u.length > 1) {
-      await db.rawQuery("delete from user");
+    Box userCollection = await Hive.openBox('user');
+
+    if (userCollection.isEmpty) {
+      userCollection.put('token', response['data']['token']);
     }
-    await db.rawInsert(
-        "INSERT INTO user (token) VALUES (?)", [response['data']['token']]);
     userProvider.setUserId = response['data']['userId'];
     return null;
   } catch (e) {
-
     return e.toString();
   }
 }
@@ -55,13 +49,13 @@ Future<void> registerUser(payload) async {
 
 Future<String> getuserToken({bool formatted = false}) async {
   try {
-    DB conn = DB();
-    Database db = await conn.openDB();
-    List<Map> u = await db.rawQuery("select * from user");
-    if (u.isEmpty) {
+    Box userCollection = await Hive.openBox('user');
+    String token = '';
+    if (userCollection.isNotEmpty) {
+      token = userCollection.get('token').toString();
+    } else {
       throw "You can't do it";
     }
-    String token = u[0]['token'];
     if (formatted == true) {
       token = formatBearerToken(token);
     }

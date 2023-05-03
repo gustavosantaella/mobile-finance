@@ -1,4 +1,5 @@
 import 'package:finance/config/constanst.dart';
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/pages/home/widgets/balance.dart';
 import 'package:finance/pages/home/widgets/transaction_container.dart';
 import 'package:finance/providers/app_provider.dart';
@@ -52,7 +53,7 @@ class HomeState extends State<HomePage> {
                 SizedBox(
                   child: SfCircularChart(
                     title: ChartTitle(
-                      text: "Incomes",
+                      text: lang('incomes'),
                       textStyle: const TextStyle(color: Colors.green),
                     ),
                     legend: Legend(
@@ -94,7 +95,7 @@ class HomeState extends State<HomePage> {
                   SizedBox(
                     child: SfCircularChart(
                       title: ChartTitle(
-                        text: "Expenses",
+                        text: lang('expenses'),
                         textStyle: const TextStyle(color: Colors.red),
                       ),
                       legend: Legend(
@@ -137,9 +138,7 @@ class HomeState extends State<HomePage> {
 
     return Builder(
       builder: (context) {
-        if (provider.wallets.isEmpty) {
-          provider.getWallets(context);
-        }
+
 
         return Scaffold(
             bottomNavigationBar: const NavigationBarWidget(),
@@ -166,7 +165,7 @@ class HomeState extends State<HomePage> {
                             child: Column(children: [
                               Container(
                                 margin: const EdgeInsets.only(
-                                    top: 10, left: 30, right: 30, bottom: 30),
+                                    top: 30, left: 30, right: 30, bottom: 30),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -177,15 +176,15 @@ class HomeState extends State<HomePage> {
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: const [
+                                      children:  [
                                         Text(
-                                          'Hi!',
-                                          style: TextStyle(
+                                          '${lang("hi")}!',
+                                          style: const TextStyle(
                                               fontSize: 26, color: Colors.grey),
                                         ),
                                         Text(
-                                          'Welcome back to WAFI',
-                                          style: TextStyle(
+                                          lang('Welcome back'),
+                                          style: const TextStyle(
                                               fontSize: 18, color: Colors.grey),
                                         )
                                       ],

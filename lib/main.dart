@@ -12,23 +12,37 @@ import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/services/auth.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+
+Future<void> _requestPermission() async {
+  final status = await Permission.storage.request();
+  if (status != PermissionStatus.granted) {
+    print('nor');
+    throw Exception('Permission not granted');
+  }
+}
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  Database db = await DB().openDB();
-  await DB().createTables(db, 1);
-  await db.close();
-  runApp(const SplashScreen());
-  await Future.delayed(const Duration(seconds: 5));
   try {
+    WidgetsFlutterBinding.ensureInitialized();
+    runApp(const SplashScreen());
+    // await _requestPermission();
+    final appDocumentDirectory =
+        await path_provider.getApplicationDocumentsDirectory();
+    // Database db = await DB().openDB();
+    Hive.init(appDocumentDirectory.path);
+    // await DB().createTables(db, 1);
+    // await db.close();
+    await Future.delayed(const Duration(seconds: 5));
     String token = await getuserToken();
     runApp(App(
       token: token,
     ));
   } catch (e) {
+    print(e.toString());
     runApp(const App());
   }
 }

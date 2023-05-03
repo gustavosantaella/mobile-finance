@@ -1,8 +1,11 @@
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:finance/services/home.dart' as service;
 import 'package:finance/providers/wallet_provider.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
+Logger logger = Logger();
 class AddMovementWidget extends StatefulWidget {
   const AddMovementWidget({Key? key}) : super(key: key);
 
@@ -12,6 +15,7 @@ class AddMovementWidget extends StatefulWidget {
 
 class _AddMovementState extends State<AddMovementWidget> {
   static bool isExpense = false;
+  bool loading = false;
   final amountController = TextEditingController();
   final descriptionController = TextEditingController();
   late Future<List> categories;
@@ -54,10 +58,10 @@ class _AddMovementState extends State<AddMovementWidget> {
                         Center(
                           child: Container(
                             margin: const EdgeInsets.all(10),
-                            child: const Text(
-                              "ADD MOVEMENT",
+                            child:  Text(
+                              lang("ADD MOVEMENT"),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w200),
                             ),
                           ),
@@ -178,10 +182,20 @@ class _AddMovementState extends State<AddMovementWidget> {
                           ],
                         ),
                         ElevatedButton(
-                            onPressed: () async {
+                          style: ButtonStyle(
+                            backgroundColor: loading == true ? const MaterialStatePropertyAll(Colors.grey) : null
+                          ),
+                            onPressed:loading == true ? null : () async {
+                              try{
+                                setState(() {
+                                loading = true;
+                              });
                               bool validation =
                                   _formKey.currentState?.validate() as bool;
                               if (validation == false) {
+                                setState(() {
+                                  loading = false;
+                                });
                                 return;
                               }
                               provider.loadingWallet = true;
@@ -194,6 +208,9 @@ class _AddMovementState extends State<AddMovementWidget> {
 
                               provider.notifyListeners();
                               if (context.mounted) {
+                                setState(() {
+                                  loading = false;
+                                });
                                 provider.getBalance(
                                     provider.currentWallet['info']['walletId'],
                                     context);
@@ -202,8 +219,14 @@ class _AddMovementState extends State<AddMovementWidget> {
                                     context);
                                 Navigator.pop(context);
                               }
+                              }catch(e){
+                                setState(() {
+                                  loading = false;
+                                  logger.e(e.toString());
+                                });
+                              }
                             },
-                            child: const Text("Send"))
+                            child:  Text(lang('Submit')))
                       ],
                     ),
                   ],

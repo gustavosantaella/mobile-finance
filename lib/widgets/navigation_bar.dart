@@ -9,6 +9,7 @@ class NavigationBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NavigationBar(
+      height: MediaQuery.of(context).size.height / 15,
       backgroundColor:  Colors.blue,
       destinations: [
         IconButton(

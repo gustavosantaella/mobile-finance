@@ -22,12 +22,12 @@ class WalletProvider extends ChangeNotifier {
     }
   }
 
-  Future<dynamic> getBalance(String walletId, BuildContext context) async {
+  Future<dynamic> getBalance(String walletId, BuildContext context, { bool force = false}) async {
     try {
       loadingWallet = true;
       await Future.delayed(const Duration(seconds: 1));
 
-      Map response = await getWalletBalance(walletId);
+      Map response = await getWalletBalance(walletId, force: force);
       currentWallet = response;
       loadingWallet = false;
       notifyListeners();

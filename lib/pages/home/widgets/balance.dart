@@ -1,5 +1,7 @@
+import 'dart:ui';
 
 import 'package:finance/config/constanst.dart';
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,7 @@ class BalanceWidget extends StatelessWidget {
                           provider.loadingWallet = true;
                           provider.getBalance(
                               provider.currentWallet['info']["walletId"],
-                              context);
+                              context, force: true);
                           provider.notifyListeners();
                         },
                         icon: const Icon(Icons.refresh)),
@@ -74,7 +76,7 @@ class BalanceWidget extends StatelessWidget {
                           builder: (BuildContext context,
                               BoxConstraints constraints) {
                             return AspectRatio(
-                              aspectRatio: 1.5,
+                              aspectRatio: 1,
                               child: PieChart(
                                 PieChartData(sections: [
                                   PieChartSectionData(
@@ -153,14 +155,15 @@ class BalanceWidget extends StatelessWidget {
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
+                                children: [
+                                  const Icon(
                                     Icons.arrow_downward_outlined,
                                     color: Colors.red,
                                   ),
                                   Text(
-                                    "Expenses",
-                                    style: TextStyle(
+                                    lang('expenses'),
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(
                                         fontSize: 18, color: Colors.red),
                                   )
                                 ],
@@ -173,6 +176,7 @@ class BalanceWidget extends StatelessWidget {
                                   child: Text(
                                       '\$.${provider.currentWallet?["expenses"] ?? 0}',
                                       overflow: TextOverflow.fade,
+                                      textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           color: Colors.black54,
                                           fontWeight: FontWeight.bold,
@@ -186,14 +190,14 @@ class BalanceWidget extends StatelessWidget {
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
+                                children: [
+                                  const Icon(
                                     Icons.arrow_upward_outlined,
                                     color: Colors.green,
                                   ),
                                   Text(
-                                    "Expenses",
-                                    style: TextStyle(
+                                    lang('incomes'),
+                                    style: const TextStyle(
                                         fontSize: 18, color: Colors.green),
                                     textAlign: TextAlign.center,
                                   )
@@ -237,34 +241,38 @@ class BalanceWidget extends StatelessWidget {
             walletProvider.wallets[0]['_id'], context);
       }
     }
-    return Consumer(
-        builder: (context, value, child) => Container(
-            margin: marginAll,
-            padding: const EdgeInsets.all(1),
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                boxShadow: normalShadow,
-                borderRadius: BorderRadius.all(Radius.circular(15))),
-            child: CarouselSlider(
-                options: CarouselOptions(
-                    initialPage: walletProvider.currenIndex,
-                    enableInfiniteScroll: false,
-                    viewportFraction: 0.90,
-                    onPageChanged: (index, reason) async {
-                      walletProvider.loadingWallet = true;
-                      walletProvider.getBalance(
-                          walletProvider.wallets[index]['_id'], context);
-                      walletProvider.currenIndex = index;
-                      walletProvider.notifyListeners();
-                      await walletProvider.setRefreshHistory(
-                          walletProvider.wallets[index]['_id'], context);
-                    }),
-                items: walletProvider.wallets.map((wallet) {
-                  return Builder(
-                    builder: (context) {
-                      return printWallets(wallet, walletProvider, context);
-                    },
-                  );
-                }).toList())));
+    return Container(
+        margin: marginAll,
+        height: MediaQuery.of(context).size.width /1.5,
+        padding: const EdgeInsets.all(1),
+         constraints: const BoxConstraints(
+              minHeight: 1.0,
+            ),
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: normalShadow,
+            borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: CarouselSlider(
+            options: CarouselOptions(
+                initialPage: walletProvider.currenIndex,
+                enableInfiniteScroll: false,
+                viewportFraction: 1,
+                height: MediaQuery.of(context).size.height / 2.5,
+                onPageChanged: (index, reason) async {
+                  walletProvider.loadingWallet = true;
+                  walletProvider.getBalance(
+                      walletProvider.wallets[index]['_id'], context);
+                  walletProvider.currenIndex = index;
+                  walletProvider.notifyListeners();
+                  await walletProvider.setRefreshHistory(
+                      walletProvider.wallets[index]['_id'], context);
+                }),
+            items: walletProvider.wallets.map((wallet) {
+              return Builder(
+                builder: (context) {
+                  return printWallets(wallet, walletProvider, context);
+                },
+              );
+            }).toList()));
   }
 }

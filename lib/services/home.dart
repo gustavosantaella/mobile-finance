@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:finance/config/constanst.dart';
-import 'package:finance/database/main.dart';
-import 'package:finance/helpers/fn/main.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:sqflite/sqflite.dart';
+import 'package:logger/logger.dart';
 import 'auth.dart';
+
+Logger logger = Logger();
 
 Future<List> getCategoriest() async {
   try {
@@ -28,6 +29,16 @@ Future<bool> addTohistory(String amount, String description, String category,
     dynamic type, String walletId,
     {String provider = 'WAFI'}) async {
   try {
+    Box historyCollection = await Hive.openBox('history');
+    bool updateHistory = false;
+    if (historyCollection.isNotEmpty) {
+      int index = historyCollection.values
+          .toList()
+          .indexWhere((element) => element['walletId'] == walletId);
+      if (index > -1) {
+        updateHistory = true;
+      }
+    }
     String token = await getuserToken(formatted: true);
 
     final jsonBody = {
@@ -45,14 +56,33 @@ Future<bool> addTohistory(String amount, String description, String category,
     await http.post(Uri.parse("$url/financial/history/"),
         headers: {"Authorization": token, "Content-Type": "application/json"},
         body: jsonEncode(jsonBody));
+    if (updateHistory) {
+      List<Future> futures = [
+        getWalletBalance(walletId, force: true),
+        getHistory(walletId, force: true),
+       ].toList();
+      
+      await Future.wait(futures);
+    }
     return true;
   } catch (e) {
     rethrow;
   }
 }
 
-Future<Map> getHistory(String walletId) async {
+Future<Map> getHistory(String walletId, {bool force = false}) async {
   try {
+    Box historyCollection = await Hive.openBox('history');
+    dynamic index;
+    if (historyCollection.isNotEmpty) {
+      index = historyCollection.values
+          .toList()
+          .indexWhere((element) => element['walletId'] == walletId);
+      if (index > -1 && force == false) {
+        logger.i('offline history');
+        return historyCollection.getAt(index);
+      }
+    }
     String token = await getuserToken(formatted: true);
     final data =
         await http.get(Uri.parse("$url/financial/history/$walletId"), headers: {
@@ -62,6 +92,12 @@ Future<Map> getHistory(String walletId) async {
     if (data.statusCode != 200) {
       throw decode['error'];
     }
+
+    if (index != null) {
+      historyCollection.putAt(index, decode['data']);
+    } else {
+      historyCollection.add(decode['data']);
+    }
     return decode['data'];
   } catch (e) {
     rethrow;
@@ -70,13 +106,20 @@ Future<Map> getHistory(String walletId) async {
 
 Future<List> getAllWalletsByOwner({bool force = false}) async {
   try {
+    Box walletCollection = await Hive.openBox('wallets');
+    if (walletCollection.isNotEmpty && force == false) {
+      var w = walletCollection.values.toList();
+      return w;
+    }
     String token = await getuserToken(formatted: true);
+    logger.i("online wallets");
     dynamic response = await http.get(Uri.parse("$url/wallet/by-owner"),
         headers: {"Authorization": token});
     response = jsonDecode(response.body);
     if (response['status'] != 200) {
       throw "Error to get wallets";
     }
+    await walletCollection.addAll(response['data']);
     return response['data'];
   } catch (e) {
     rethrow;
@@ -85,30 +128,38 @@ Future<List> getAllWalletsByOwner({bool force = false}) async {
 
 Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
   try {
-    Database db = await DB().openDB();
+    Box walletCollection = await Hive.openBox('wallets');
     Map data = {};
-    List wallet = await db
-        .rawQuery('select data from wallets where walletId=?', [walletId]);
-    if (wallet.isNotEmpty && !force) {
-      
-      data = json.decode(wallet[0]['data']);
-    } else {
-      String token = await getuserToken(formatted: true);
-      dynamic response = await http.get(Uri.parse("$url/wallet/$walletId"),
-          headers: {"Authorization": token});
-      response = jsonDecode(response.body) as Map;
-      if (response['status'] != 200) {
-        throw response['error'];
-      }
-
-      data = response['data'];
-      try {
-        await db.rawInsert('insert into wallets(walletId, data) values (?,?)',
-            [walletId, json.encode(data)]);
-      } catch (e) {
-        print('error to insert');
+    dynamic wallet;
+    dynamic index;
+    if (walletCollection.isNotEmpty) {
+      index = walletCollection.values
+          .toList()
+          .indexWhere((element) => element['_id'] == walletId);
+      wallet = walletCollection.get(index);
+      if (wallet['balance'] != 0 && force == false) {
+        logger.i('offline balance');
+        return wallet['balance'];
       }
     }
+    String token = await getuserToken(formatted: true);
+    dynamic response = await http.get(Uri.parse("$url/wallet/$walletId"),
+        headers: {"Authorization": token});
+    response = jsonDecode(response.body) as Map;
+    if (response['status'] != 200) {
+      throw response['error'];
+    }
+    data = response['data'];
+
+    if (index != null && wallet != null) {
+      walletCollection.putAt(index, {
+        ...wallet,
+        'balance': data,
+      });
+    }
+
+    index = null;
+    wallet = null;
 
     return data;
   } catch (e) {

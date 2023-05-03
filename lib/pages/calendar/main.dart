@@ -1,5 +1,9 @@
+import 'dart:ui';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:finance/config/constanst.dart';
 import 'package:finance/helpers/fn/bottom_sheets.dart';
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/helpers/fn/main.dart';
 import 'package:finance/pages/home/widgets/add_movment.dart';
 import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
@@ -42,6 +46,9 @@ class CalendarState extends State<CalendarWidget> {
   bool finished = false;
   late List _barChart = [];
   late Map _piechart = {};
+  double _metricsExpenses = 0.0;
+  double _metricsIncomes = 0.0;
+  dynamic _localeCalendar;
 
   @override
   void dispose() {
@@ -56,6 +63,9 @@ class CalendarState extends State<CalendarWidget> {
     AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
     historyByMonth({dynamic date, bool force = false}) async {
       try {
+        setState(() {
+          loading = true;
+        });
         // await Future.delayed(const Duration(seconds: 3));
         String walletId = walletProvider.currentWallet['info']['walletId'];
         Map response = await getHistoryByDate(walletId,
@@ -80,6 +90,8 @@ class CalendarState extends State<CalendarWidget> {
             summaryIncomes = response['metrics']['incomes'];
             _barChart = response['metrics']['barchart'];
             _piechart = response['metrics']['piechart'];
+            _metricsIncomes = response['metrics']['incomes'];
+            _metricsExpenses = response['metrics']['expenses'];
             days = uniqueDates;
           });
           setState(() {
@@ -88,9 +100,13 @@ class CalendarState extends State<CalendarWidget> {
           });
         }
       } catch (e) {
+        setState(() {
+          loading = false;
+        });
         SnackBarMessage(context, Colors.red, Text(e.toString()));
       }
     }
+
     if (days.isEmpty && newDate == false && finished == false) {
       setState(() {
         loading = true;
@@ -105,6 +121,14 @@ class CalendarState extends State<CalendarWidget> {
           field: 'date');
       setState(() {
         _historyByDate = response['history'];
+      });
+    }
+
+    if (window.locale.languageCode == 'en') {
+      initializeDateFormatting('es_ES', null).then((value) {
+        setState(() {
+          _localeCalendar = 'es_ES';
+        });
       });
     }
 
@@ -130,10 +154,15 @@ class CalendarState extends State<CalendarWidget> {
                         child: loading
                             ? const Text('loading...')
                             : TableCalendar(
+                                locale: _localeCalendar,
                                 firstDay: firstDay,
                                 lastDay: lastDay,
                                 focusedDay: _focusedDay,
                                 calendarFormat: _calendarFormat,
+                                availableCalendarFormats: const {
+                                  CalendarFormat.month: 'Month',
+                                  CalendarFormat.week: 'Week',
+                                },
                                 selectedDayPredicate: (day) {
                                   // Use `selectedDayPredicate` to determine which day is currently selected.
                                   // If this s true, then `day` will be marked as selected.
@@ -174,11 +203,54 @@ class CalendarState extends State<CalendarWidget> {
                                 },
                               ),
                       ),
-                      MetricsContainer(
-                          barchart: _barChart,
-                          piechart: _piechart,
-                          summaryIncomes: incomes,
-                          summaryExpenses: expenses)
+
+                      Container(
+                        decoration: const BoxDecoration(
+                            borderRadius: borderRadiusAll,
+                            color: Colors.white,
+                            boxShadow: normalShadow),
+                        margin: marginAll,
+                        child: Column(
+                          children: [
+                            donutChart(
+                                summaryExpenses: _metricsExpenses,
+                                summaryIncomes: _metricsIncomes),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        decoration: const BoxDecoration(
+                            borderRadius: borderRadiusAll,
+                            color: Colors.white,
+                            boxShadow: normalShadow),
+                        margin: marginAll,
+                        child: Column(
+                          children: [
+                            piechart(data: _piechart),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        decoration: const BoxDecoration(
+                            borderRadius: borderRadiusAll,
+                            color: Colors.white,
+                            boxShadow: normalShadow),
+                        margin: marginAll,
+                        padding: marginAll,
+                        child: Column(
+                          children: [
+                            Text(lang('Dayli metric')),
+                            barChart(_barChart),
+                          ],
+                        ),
+                      )
+                      // MetricsContainer(
+                      //     barchart: _barChart,
+                      //     piechart: _piechart,
+                      //     summaryIncomes: _metricsIncomes,
+                      //     summaryExpenses: _metricsExpenses)
                     ],
                   ),
                 ),
