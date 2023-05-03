@@ -1,4 +1,5 @@
 import 'package:finance/config/constanst.dart';
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/helpers/fn/main.dart';
 import 'package:finance/providers/user_provider.dart';
 import 'package:finance/widgets/snack_bar.dart';
@@ -77,13 +78,13 @@ class LoginWidgetState extends State<LoginWidget> {
                                         }),
                                         keyboardType:
                                             TextInputType.emailAddress,
-                                        decoration: const InputDecoration(
+                                        decoration:  InputDecoration(
                                           fillColor: Colors.white,
                                           filled: true,
-                                          border: OutlineInputBorder(
+                                          border: const OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(20))),
-                                          labelText: 'Email',
+                                          labelText: lang('Email'),
                                         ),
                                         // initialValue: ,
                                       ),
@@ -94,13 +95,13 @@ class LoginWidgetState extends State<LoginWidget> {
                                         }),
                                         keyboardType: TextInputType.text,
                                         obscureText: true,
-                                        decoration: const InputDecoration(
+                                        decoration:  InputDecoration(
                                           fillColor: Colors.white,
                                           filled: true,
-                                          border: OutlineInputBorder(
+                                          border: const OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(20))),
-                                          labelText: 'Password',
+                                          labelText: lang('Password'),
                                         ),
                                         // initialValue: '',
                                       ),
@@ -145,8 +146,8 @@ class LoginWidgetState extends State<LoginWidget> {
                                                             .text,
                                                         userProvider:
                                                             userProvider);
-                                                            print(error);
-                                                            print('yes');
+                                                    print(error);
+                                                    print('yes');
                                                     if (error != null) {
                                                       if (context.mounted) {
                                                         setState(() {
@@ -170,11 +171,11 @@ class LoginWidgetState extends State<LoginWidget> {
                                                     setState(() {
                                                       loading = false;
                                                     });
-                                                    if(context.mounted){
+                                                    if (context.mounted) {
                                                       SnackBarMessage(
-                                                        context,
-                                                        Colors.red,
-                                                        Text(e.toString()));
+                                                          context,
+                                                          Colors.red,
+                                                          Text(e.toString()));
                                                     }
                                                   }
                                                 },
@@ -197,9 +198,9 @@ class LoginWidgetState extends State<LoginWidget> {
                                                                   [
                                                                   'hexadecimal']
                                                               ['cobalto']))),
-                                          child: const Text(
-                                            'Sign In',
-                                            style: TextStyle(
+                                          child:  Text(
+                                            lang('Sign In'),
+                                            style:const TextStyle(
                                                 fontSize: 20,
                                                 color: Colors.white),
                                           ),
@@ -209,9 +210,9 @@ class LoginWidgetState extends State<LoginWidget> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const Text(
-                                            "Register now",
-                                            style: TextStyle(
+                                          Text(
+                                            lang("Register now"),
+                                            style: const TextStyle(
                                               fontWeight: FontWeight.w500,
                                               color: Colors.black,
                                               fontSize: 20,
@@ -222,9 +223,9 @@ class LoginWidgetState extends State<LoginWidget> {
                                                 Navigator.popAndPushNamed(
                                                     context, '/register');
                                               },
-                                              child: const Text(
-                                                "Sign up",
-                                                style: TextStyle(
+                                              child:  Text(
+                                                lang("Sign Up"),
+                                                style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                 ),

@@ -1,9 +1,18 @@
 import 'dart:ui';
-import 'package:logger/logger.dart';
 
 String lang(String key, {String defaultTransalation = 'Without transalation'}) {
   Map<String, Map<String, String>> languages = {
     "es": {
+      "You can to manage your finnaces with me": 'Empieza a manejar tus finanzas conmigo',
+      "Register now":"Registrate ahora",
+      "Just one step for you to start managing your finance":
+          "A un solo paso de poder gestionar tus finanzas",
+      "Country": 'Pais',
+      "Password": 'Clave',
+      "Email": "Correo",
+      "Sign In": "Registrarse",
+      "Sign Up": "Inciar sesion",
+      "Have an account?": "Tienes una cuenta?",
       "Reset password": "Restablecer clave",
       "metrics": "metricas",
       "expenses": "egresos",
