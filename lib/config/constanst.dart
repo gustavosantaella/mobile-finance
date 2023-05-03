@@ -47,14 +47,9 @@ const String appName = 'Wafi';
 
 const String ok = 'OK';
 
-Function GeneralInputStyle = ({labelText = '', border}) => InputDecoration(
-      fillColor: Colors.white,
-      filled: true,
-      border: border ??
-          const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-      labelText: labelText,
-    );
+Function generalInputStyle =  ( {labelText = '', border }) =>  const InputDecoration(
+  fillColor: Colors.white,
+  filled: true,);
 
 const borderRadiusAll = BorderRadius.all(Radius.circular(15));
 

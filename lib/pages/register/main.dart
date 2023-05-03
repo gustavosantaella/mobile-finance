@@ -56,7 +56,7 @@ class RegisterState extends State<RegisterWidget> {
                     ),
                   ))
               .toList(),
-          decoration: GeneralInputStyle(),
+          decoration: generalInputStyle(),
           hint: const Text('Country'),
           onChanged: (country) {
             setState(() {
