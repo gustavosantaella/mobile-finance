@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -53,6 +54,7 @@ class CalendarState extends State<CalendarWidget> {
   @override
   void dispose() {
     _pageController.dispose();
+
     super.dispose();
   }
 
@@ -63,9 +65,6 @@ class CalendarState extends State<CalendarWidget> {
     AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
     historyByMonth({dynamic date, bool force = false}) async {
       try {
-        setState(() {
-          loading = true;
-        });
         // await Future.delayed(const Duration(seconds: 3));
         String walletId = walletProvider.currentWallet['info']['walletId'];
         Map response = await getHistoryByDate(walletId,
@@ -82,7 +81,10 @@ class CalendarState extends State<CalendarWidget> {
           }
         });
         if (days.isEmpty || force) {
+          print(_focusedDay);
           setState(() {
+            loading = false;
+            finished = true;
             incomes = response['incomes'];
             expenses = response['expenses'];
             total = response['total'];
@@ -94,23 +96,24 @@ class CalendarState extends State<CalendarWidget> {
             _metricsExpenses = response['metrics']['expenses'];
             days = uniqueDates;
           });
-          setState(() {
-            loading = false;
-            finished = true;
-          });
         }
       } catch (e) {
         setState(() {
           loading = false;
+          finished = true;
         });
         SnackBarMessage(context, Colors.red, Text(e.toString()));
       }
     }
 
-    if (days.isEmpty && newDate == false && finished == false) {
+    if (days.isEmpty &&
+        newDate == false &&
+        finished == false &&
+        loading == false) {
       setState(() {
         loading = true;
       });
+      print(234);
       historyByMonth(date: DateTime.now().month);
     }
 
@@ -124,7 +127,7 @@ class CalendarState extends State<CalendarWidget> {
       });
     }
 
-    if (window.locale.languageCode == 'en') {
+    if (window.locale.languageCode == 'es') {
       initializeDateFormatting('es_ES', null).then((value) {
         setState(() {
           _localeCalendar = 'es_ES';
@@ -145,65 +148,104 @@ class CalendarState extends State<CalendarWidget> {
                 child: SizedBox(
                   child: Column(
                     children: [
-                      Container(
-                        margin: marginAll,
-                        decoration: const BoxDecoration(
-                          borderRadius: borderRadiusAll,
-                          color: Colors.white,
-                        ),
-                        child: loading
-                            ? const Text('loading...')
-                            : TableCalendar(
-                                locale: _localeCalendar,
-                                firstDay: firstDay,
-                                lastDay: lastDay,
-                                focusedDay: _focusedDay,
-                                calendarFormat: _calendarFormat,
-                                availableCalendarFormats: const {
-                                  CalendarFormat.month: 'Month',
-                                  CalendarFormat.week: 'Week',
-                                },
-                                selectedDayPredicate: (day) {
-                                  // Use `selectedDayPredicate` to determine which day is currently selected.
-                                  // If this s true, then `day` will be marked as selected.
+                      LayoutBuilder(
+                        builder:
+                            (BuildContext context, BoxConstraints constraints) {
+                          double maxHeight = constraints.minHeight;
 
-                                  // Using `isSameDay` is recommended to disregard
-                                  // the time-part of compared DateTime objects.
-                                  return isSameDay(_selectedDay, day)
-                                      ? isSameDay(_selectedDay, day)
-                                      : days.contains(
-                                          DateFormat('yyyy-MM-dd').format(day));
-                                },
-                                onDaySelected: (selectedDay, focusedDay) async {
-                                  // Call `setState()` when updating the selected day
-                                  setState(() {
-                                    _selectedDay = selectedDay;
-                                    _focusedDay = focusedDay;
-                                  });
-                                  await historyByDate();
-
-                                  if (context.mounted) {
-                                    var hist = _historyByDate
-                                        .map((item) =>
-                                            ListTransactionWidget(item))
-                                        .toList();
-                                    bottomSheetWafi(
-                                        context,
-                                        ListView(
-                                          children: [Wrap(children: hist)],
-                                        ));
-                                  }
-                                },
-                                onPageChanged: (focusedDay) async {
-                                  newDate = true;
-                                  await historyByMonth(
-                                      date: focusedDay.month, force: true);
-                                  // No need to call `setState()` here
-                                  _focusedDay = focusedDay;
-                                },
+                          return Container(
+                              margin: marginAll,
+                              decoration: const BoxDecoration(
+                                borderRadius: borderRadiusAll,
+                                color: Colors.white,
                               ),
-                      ),
+                              child: Stack(
+                                children: [
+                                  TableCalendar(
+                                    locale: _localeCalendar,
+                                    firstDay: firstDay,
+                                    lastDay: lastDay,
+                                    focusedDay: _focusedDay,
+                                    calendarFormat: _calendarFormat,
+                                    availableCalendarFormats: const {
+                                      CalendarFormat.month: 'Month',
+                                      CalendarFormat.week: 'Week',
+                                    },
+                                    selectedDayPredicate: (day) {
+                                      // Use `selectedDayPredicate` to determine which day is currently selected.
+                                      // If this s true, then `day` will be marked as selected.
 
+                                      // Using `isSameDay` is recommended to disregard
+                                      // the time-part of compared DateTime objects.
+                                      return isSameDay(_selectedDay, day)
+                                          ? isSameDay(_selectedDay, day)
+                                          : days.contains(
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(day));
+                                    },
+                                    onDaySelected:
+                                        (selectedDay, focusedDay) async {
+                                      // Call `setState()` when updating the selected day
+                                      setState(() {
+                                        _selectedDay = selectedDay;
+                                        _focusedDay = focusedDay;
+                                      });
+                                      await historyByDate();
+
+                                      if (context.mounted) {
+                                        var hist = _historyByDate
+                                            .map((item) =>
+                                                ListTransactionWidget(item))
+                                            .toList();
+                                        bottomSheetWafi(
+                                            context,
+                                            ListView(
+                                              children: [Wrap(children: hist)],
+                                            ));
+                                      }
+                                    },
+                                    onPageChanged: (focusedDay) async {
+                                      Timer(Duration(seconds: 1), () async {
+                                        setState(() {
+                                          loading = true;
+                                          newDate = true;
+                                          _focusedDay = focusedDay;
+                                        });
+
+                                        await historyByMonth(
+                                            date: focusedDay.month,
+                                            force: true);
+                                        setState(() {
+                                          newDate = false;
+                                        });
+                                        // No need to call `setState()` here
+                                      });
+                                    },
+                                  ),
+                                  if (loading)
+                                    Positioned(
+                                        top: 0,
+                                        left: 0,
+                                        bottom: 0,
+                                        right: 0,
+                                        child: FractionallySizedBox(
+                                            widthFactor: 1,
+                                            heightFactor: 1,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: borderRadiusAll,
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                              ),
+                                              child: const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            )))
+                                ],
+                              ));
+                        },
+                      ),
                       Container(
                         decoration: const BoxDecoration(
                             borderRadius: borderRadiusAll,

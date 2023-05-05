@@ -36,10 +36,6 @@ const String url = !kReleaseMode
     ? 'http://10.0.2.2:8000/api'
     : 'https://finance-backend-klzw.onrender.com/api';
 
-// Just if your use ngrok [RECOMENDED]
-// const String url = !kReleaseMode
-//     ? 'https://ecab-190-79-162-128.ngrok.io/api'
-//     : 'https://finance-backend-klzw.onrender.com/api';
 
 const String prefixKey = 'Wafi';
 
