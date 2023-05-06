@@ -89,7 +89,7 @@ class HistoryDetailState extends State<HistoryDetail> {
                   children: [
                      Text(lang("Type"), style: const TextStyle(fontSize: 17)),
                     Text(
-                      "${data['type']}",
+                      "${lang(data['type'])}",
                       style: TextStyle(
                           fontSize: 20,
                           color: data['type'] == 'expense'

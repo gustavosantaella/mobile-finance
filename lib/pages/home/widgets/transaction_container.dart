@@ -26,8 +26,9 @@ class TransactionContainer extends StatelessWidget {
     return Container(
       margin: marginAll,
       decoration: const BoxDecoration(
-        boxShadow: normalShadow,
-          color: Colors.white, borderRadius: borderRadiusAll),
+          boxShadow: normalShadow,
+          color: Colors.white,
+          borderRadius: borderRadiusAll),
       height: MediaQuery.of(context).size.height / 2.5,
       child: Stack(
         // alignment: AlignmentDirectional.bottomStart,
@@ -57,9 +58,9 @@ class TransactionContainer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                         Text(
+                        Text(
                           lang('New movement'),
-                          style:const TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
@@ -71,15 +72,21 @@ class TransactionContainer extends StatelessWidget {
                                 backgroundColor: MaterialStatePropertyAll(
                                     Color.fromARGB(255, 10, 179, 208))),
                             onPressed: () {
-                              bottomSheetWafi(context, const AddMovementWidget());
+                              bottomSheetWafi(
+                                  context,
+                                  const Scaffold(
+                                    persistentFooterAlignment:AlignmentDirectional.topEnd,
+                                    body: AddMovementWidget(),
+                                  )
+                                 );
                             },
-                            child:  Text(
+                            child: Text(
                               lang('add'),
                               style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
-                            ))
+                            )),
                       ],
                     ),
                   )),
@@ -87,7 +94,7 @@ class TransactionContainer extends StatelessWidget {
               )),
         ],
       ),
-          
     );
+  
   }
 }

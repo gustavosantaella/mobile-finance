@@ -3,6 +3,11 @@ import 'dart:ui';
 String lang(String key, {String defaultTransalation = 'Without transalation'}) {
   Map<String, Map<String, String>> languages = {
     "es": {
+      "income":"Ingresos",
+      "expense":"Egresos",
+      "Movements": "Movimientos",
+      "Incomes": "Ingresos",
+      "Expenses": "Egresos",
       "Amount":"Monto",
       "Type":"Tipo",
       "Category":"Categoria",

@@ -82,9 +82,9 @@ class _AddMovementState extends State<AddMovementWidget> {
                                 },
                                 keyboardType: TextInputType.number,
                                 controller: amountController,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Amount',
+                                decoration:  InputDecoration(
+                                  border:const OutlineInputBorder(),
+                                  labelText: lang('Amount'),
                                 ),
                               ),
                             )
@@ -100,9 +100,9 @@ class _AddMovementState extends State<AddMovementWidget> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.text,
                                   controller: descriptionController,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Description',
+                                  decoration:  InputDecoration(
+                                    border: const OutlineInputBorder(),
+                                    labelText: lang('Description'),
                                   ),
                                 ),
                               ),
@@ -130,7 +130,7 @@ class _AddMovementState extends State<AddMovementWidget> {
                                     child: FutureBuilder(
                                       future: categories,
                                       builder: (context, snapshot) {
-                                        if (snapshot.hasError) {
+                                        if (snapshot.hasError || snapshot.connectionState != ConnectionState.done) {
                                           return Container();
                                         }
 

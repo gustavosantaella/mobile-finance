@@ -1,3 +1,5 @@
+import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
+import 'package:finance/pages/list/main.dart';
 import 'package:finance/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:finance/config/constanst.dart';
@@ -75,6 +77,7 @@ class _AppState extends State<App> {
             "/home": (context) => const HomePage(),
             "/calendar": (context) => const CalendarWidget(),
             "/profile": (context) => const UserProfile(),
+            "/list": (context) => const ListTransactionsWidget(),
           },
         ),
       ),
