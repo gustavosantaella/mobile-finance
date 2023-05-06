@@ -15,6 +15,7 @@ dependencies:
   http: ^0.13.5
   provider: ^6.0.5
   search_choices: ^2.2.5
+  dropdown_search: 5.0.6
   sqflite: 
   table_calendar: ^3.0.9
   fl_chart:

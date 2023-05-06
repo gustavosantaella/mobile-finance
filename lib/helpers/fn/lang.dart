@@ -20,6 +20,7 @@ String lang(String key, {String defaultTransalation = 'Without transalation'}) {
       "Reset password": "Restablecer clave",
       "metrics": "metricas",
       "expenses": "egresos",
+      "ADD MOVEMENT":"AGREGAR NUEVO MOVIMIENTO",
       "incomes": "ingresos",
       "New movement": "nuevo movimiento",
       "add": 'agregar',

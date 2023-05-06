@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/services/history.dart';
-import 'package:finance/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,7 +62,8 @@ class HistoryDetailState extends State<HistoryDetail> {
                         )),
                     Text(
                       "#${data['historyId']}",
-                      style: const TextStyle(fontSize: 20, color: Color.fromARGB(164, 57, 57, 57)),
+                      style: const TextStyle(
+                          fontSize: 20, color: Color.fromARGB(164, 57, 57, 57)),
                     )
                   ],
                 ),
@@ -72,13 +73,11 @@ class HistoryDetailState extends State<HistoryDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Amount", style: TextStyle(fontSize: 17)),
+                     Text(lang("Amount"), style: const TextStyle(fontSize: 17)),
                     Text(
                       "\$.${data['value']}",
                       style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                      ),
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -88,7 +87,7 @@ class HistoryDetailState extends State<HistoryDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Type", style: TextStyle(fontSize: 17)),
+                     Text(lang("Type"), style: const TextStyle(fontSize: 17)),
                     Text(
                       "${data['type']}",
                       style: TextStyle(
@@ -105,12 +104,12 @@ class HistoryDetailState extends State<HistoryDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Provider", style: TextStyle(fontSize: 17)),
+                     Text(lang("Provider"), style: const TextStyle(fontSize: 17)),
                     Text(
                       "${data['gateway']['provider']}",
                       style: const TextStyle(
-                          fontSize: 20,
-                     ),
+                        fontSize: 20,
+                      ),
                     )
                   ],
                 ),
@@ -120,13 +119,11 @@ class HistoryDetailState extends State<HistoryDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Category", style: TextStyle(fontSize: 17)),
+                     Text(lang("Category"), style: const TextStyle(fontSize: 17)),
                     Text(
                       "${data['categories']['name']}",
                       style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
-                     ),
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),

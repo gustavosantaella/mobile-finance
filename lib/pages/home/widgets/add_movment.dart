@@ -145,13 +145,18 @@ class _AddMovementState extends State<AddMovementWidget> {
                                             ),
                                           ));
                                         });
+                                        var indexName = snapshot.data?.indexWhere((element) => element['id'] == categorySelected );
+                                        String name = lang('Category');
+                                        if(indexName != null &&  !indexName.isNegative){
+                                            name = snapshot.data?[indexName]?['label'];
+                                        }
                                         return DropdownButton(
                                             items: items,
                                             isDense: true,
                                             isExpanded: true,
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            hint: Text(categorySelected),
+                                            hint: Text(name),
                                             onChanged: (categoryId) {
                                               setState(() {
                                                 categorySelected = categoryId;
@@ -192,12 +197,13 @@ class _AddMovementState extends State<AddMovementWidget> {
                               });
                               bool validation =
                                   _formKey.currentState?.validate() as bool;
-                              if (validation == false) {
+                              if (validation == false || categorySelected.isEmpty) {
                                 setState(() {
                                   loading = false;
                                 });
                                 return;
                               }
+                          
                               provider.loadingWallet = true;
                               await service.addTohistory(
                                   amountController.text,

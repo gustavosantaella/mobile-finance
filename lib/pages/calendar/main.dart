@@ -113,7 +113,6 @@ class CalendarState extends State<CalendarWidget> {
       setState(() {
         loading = true;
       });
-      print(234);
       historyByMonth(date: DateTime.now().month);
     }
 
@@ -205,7 +204,7 @@ class CalendarState extends State<CalendarWidget> {
                                       }
                                     },
                                     onPageChanged: (focusedDay) async {
-                                      Timer(Duration(seconds: 1), () async {
+                                      // Timer(const Duration(seconds: 1), () async {
                                         setState(() {
                                           loading = true;
                                           newDate = true;
@@ -219,7 +218,7 @@ class CalendarState extends State<CalendarWidget> {
                                           newDate = false;
                                         });
                                         // No need to call `setState()` here
-                                      });
+                                      // });
                                     },
                                   ),
                                   if (loading)
