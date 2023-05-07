@@ -1,10 +1,9 @@
-import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
 import 'package:finance/pages/list/main.dart';
 import 'package:finance/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:finance/config/constanst.dart';
 import 'package:finance/pages/calendar/main.dart';
 import 'package:finance/pages/login/main.dart';
+import 'dart:ui';
 import 'package:finance/pages/home/main.dart';
 import 'package:finance/pages/profile/main.dart';
 import 'package:finance/pages/register/main.dart';
@@ -14,12 +13,17 @@ import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/services/auth.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
+Logger logger = Logger();
 void main() async {
   try {
+    logger.v("lang: ${window.locale.languageCode}");
+
     WidgetsFlutterBinding.ensureInitialized();
+
     runApp(const SplashScreen());
     final appDocumentDirectory =
         await path_provider.getApplicationDocumentsDirectory();

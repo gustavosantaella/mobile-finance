@@ -40,47 +40,107 @@ class ListTransactionState extends State<ListTransactionsWidget> {
       }
 
       data = dataMovements.map((element) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width / 1.5,
-              decoration: const BoxDecoration(
-                  borderRadius: borderRadiusAll,
-                  color: Colors.white,
-                  boxShadow: normalShadow),
-              child: Column(children: [
-                FractionallySizedBox(
-                  widthFactor: 1,
-                  child: Container(
-                    padding: marginAll,
-                    decoration: BoxDecoration(
-                        color: Colors.black54.withOpacity(0.1),
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            topRight: Radius.circular(15))),
-                    child: Text(lang(element['type']).toUpperCase(), textAlign: TextAlign.center, style: const TextStyle(
-                      fontWeight: FontWeight.bold
-                    ),),
+        double totalValue = 0;
+        element['data']?.forEach((e) {
+          totalValue += e['value'];
+        });
+        return Stack(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width /
+                    (dataMovements.length > 1 ? 1.5 : 1),
+                decoration: const BoxDecoration(
+                    borderRadius: borderRadiusAll,
+                    color: Colors.white,
+                    boxShadow: normalShadow),
+                child: Column(children: [
+                  FractionallySizedBox(
+                    widthFactor: 1,
+                    child: Container(
+                      padding: marginAll,
+                      decoration: BoxDecoration(
+                          color: Colors.black54.withOpacity(0.1),
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15))),
+                      child: Text(
+                        lang(element['type']).toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  decoration: const BoxDecoration(),
-                  child: Column(
-                    children: printCards(element['data']),
+                  const SizedBox(
+                    height: 20,
                   ),
-                )
-              ]),
-            ),
-            const SizedBox(
-              width: 20,
-            )
-          ],
-        );
+                  Container(
+                      margin: EdgeInsets.only(bottom: 50),
+                      decoration: const BoxDecoration(),
+                      constraints: BoxConstraints.tightForFinite(
+                          height: MediaQuery.of(context).size.height / 1.7),
+                      child: FractionallySizedBox(
+                        heightFactor: 1,
+                        child: ListView(
+                          children: [
+                            ...printCards(element['data']),
+                            ...printCards(element['data']),
+                            ...printCards(element['data'])
+                          ],
+                        ),
+                      )),
+                ]),
+              ),
+              const SizedBox(
+                width: 20,
+              )
+            ],
+          ),
+          Positioned(
+              bottom: 0,
+              child: Container(
+                padding: marginAll,
+                decoration: BoxDecoration(
+                    color: definitions['colors']['cobalto'],
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15))),
+                constraints: BoxConstraints.tightForFinite(
+                    width: MediaQuery.of(context).size.width /
+                        (dataMovements.length > 1 ? 1.5 : 1)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(
+                      child: Text(
+                        'TOTAL',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 4 ,
+                    ),
+                    Expanded(
+                        child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        "\$.$totalValue",
+                        maxLines: 1,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ))
+                  ],
+                ),
+              )),
+        ]);
       }).toList();
       return data;
     }
@@ -116,34 +176,41 @@ class CardWidget extends StatefulWidget {
 class CardState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
-    return TextButton(onPressed: (){
-      bottomSheetWafi(context,  HistoryDetail(widget.data['_id']));
-    }, child: Container(
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Colors.white,
-          boxShadow: normalShadow),
-      padding: marginAll,
-      margin: const EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 10),
-      child: Column(
-        children: [
-          Row(
+    return TextButton(
+        onPressed: () {
+          bottomSheetWafi(context, HistoryDetail(widget.data['_id']));
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: Colors.white,
+              boxShadow: normalShadow),
+          padding: marginAll,
+          margin:
+              const EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 10),
+          child: Column(
             children: [
-              Text(widget.data['historyId'])
-              
-              ],
+              Row(
+                children: [Text(widget.data['historyId'])],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.data['categoryName'],
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                    Text(
+                      "${widget.data['value']}",
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                  ])
+            ],
           ),
-          const SizedBox(height: 10,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children:[
-                 Text(widget.data['categoryName'], style: const TextStyle(fontSize: 10),),
-                 Text("${widget.data['value']}", style: const TextStyle(fontWeight: FontWeight.w700),),
-            ]
-          )
-        ],
-      ),
-    ));
+        ));
   }
 }

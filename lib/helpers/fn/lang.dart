@@ -9,6 +9,7 @@ String lang(String key, {String defaultTransalation = 'Without transalation'}) {
       "Incomes": "Ingresos",
       "Expenses": "Egresos",
       "Amount":"Monto",
+      "Calendar": "Calendario",
       "Type":"Tipo",
       "Category":"Categoria",
       "Provider":"Proveedor",

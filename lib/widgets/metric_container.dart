@@ -1,6 +1,5 @@
 import 'package:finance/helpers/fn/lang.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart' as fl;
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ChartData {

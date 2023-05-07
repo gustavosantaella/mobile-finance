@@ -1,12 +1,9 @@
-import 'dart:async';
 import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:finance/config/constanst.dart';
 import 'package:finance/helpers/fn/bottom_sheets.dart';
 import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/helpers/fn/main.dart';
-import 'package:finance/pages/home/widgets/add_movment.dart';
 import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
 import 'package:finance/providers/app_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
@@ -14,12 +11,9 @@ import 'package:finance/widgets/metric_container.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:finance/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
 import "package:finance/services/calendar.dart";
-import 'package:fl_chart/fl_chart.dart';
 
 class CalendarWidget extends StatefulWidget {
   const CalendarWidget({super.key});
@@ -135,6 +129,7 @@ class CalendarState extends State<CalendarWidget> {
     }
 
     return Scaffold(
+      appBar: AppBar(title: Text(lang('Calendar')),),
         bottomNavigationBar: const NavigationBarWidget(),
         resizeToAvoidBottomInset: true,
         body: SafeArea(
@@ -147,6 +142,90 @@ class CalendarState extends State<CalendarWidget> {
                 child: SizedBox(
                   child: Column(
                     children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 20, left: 15, right: 15),
+                        child: Wrap(
+                          spacing: 10,
+                          children: [
+                            FractionallySizedBox(
+                              widthFactor: .3,
+                              child: Container(
+                                height: 70,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                                    boxShadow: normalShadow),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                     Container(
+                                      width: 5,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.green,
+                                      
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10,),
+                                    Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Text('\$.$incomes', style: const TextStyle(fontSize: 16, fontWeight:FontWeight.w300),)),)
+                                  ],
+                                ),
+                              ),
+                            ),
+                             FractionallySizedBox(
+                              widthFactor: .3,
+                              child: Container(
+                                height: 70,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                                    boxShadow: normalShadow),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                     Container(
+                                      width: 5,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                      
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10,),
+                                    Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Text('\$.${incomes - expenses}', style: const TextStyle(fontSize: 16, fontWeight:FontWeight.w300),)),)
+                                  ],
+                                ),
+                              ),
+                            ),
+                            FractionallySizedBox(
+                              widthFactor: .3,
+                              child: Container(
+                                height: 70,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                                    boxShadow: normalShadow),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                     Container(
+                                      width: 5,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.red,
+                                      
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10,),
+                                    Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Text('\$.$expenses', style: const TextStyle(fontSize: 16, fontWeight:FontWeight.w300),)),)
+                                  ],
+                                ),
+                              ),
+                            ),
+                            
+                              
+                            
+                        
+                          ],
+                        ),
+                      ),
                       LayoutBuilder(
                         builder:
                             (BuildContext context, BoxConstraints constraints) {
@@ -205,19 +284,18 @@ class CalendarState extends State<CalendarWidget> {
                                     },
                                     onPageChanged: (focusedDay) async {
                                       // Timer(const Duration(seconds: 1), () async {
-                                        setState(() {
-                                          loading = true;
-                                          newDate = true;
-                                          _focusedDay = focusedDay;
-                                        });
+                                      setState(() {
+                                        loading = true;
+                                        newDate = true;
+                                        _focusedDay = focusedDay;
+                                      });
 
-                                        await historyByMonth(
-                                            date: focusedDay.month,
-                                            force: true);
-                                        setState(() {
-                                          newDate = false;
-                                        });
-                                        // No need to call `setState()` here
+                                      await historyByMonth(
+                                          date: focusedDay.month, force: true);
+                                      setState(() {
+                                        newDate = false;
+                                      });
+                                      // No need to call `setState()` here
                                       // });
                                     },
                                   ),

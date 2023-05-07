@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:finance/config/constanst.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -10,9 +11,9 @@ Logger logger = Logger();
 Future<List> getCategoriest() async {
   try {
     String token = await getuserToken(formatted: true);
-
+    String lang = window.locale.languageCode;
     var data = await http.get(
-      Uri.parse("$url/categories"),
+      Uri.parse("$url/categories?lang=$lang"),
       headers: {"Authorization": token},
     );
     var payload = jsonDecode(data.body);
@@ -142,6 +143,7 @@ Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
         return wallet['balance'];
       }
     }
+     logger.w('online balance');
     String token = await getuserToken(formatted: true);
     dynamic response = await http.get(Uri.parse("$url/wallet/$walletId"),
         headers: {"Authorization": token});
@@ -150,7 +152,6 @@ Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
       throw response['error'];
     }
     data = response['data'];
-
     if (index != null && wallet != null) {
       walletCollection.putAt(index, {
         ...wallet,

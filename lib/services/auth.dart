@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:finance/helpers/fn/main.dart';
+import 'package:finance/pages/home/widgets/add_movment.dart';
 import 'package:finance/providers/user_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -47,6 +48,19 @@ Future<void> registerUser(payload) async {
   }
 }
 
+void logout({bool formatted = false}) async {
+  try {
+    Box userCollection = await Hive.openBox('user');
+    if(userCollection.isNotEmpty){
+      await userCollection.delete('token');
+      logger.i('Logout');
+    }
+
+  } catch (e) {
+    rethrow;
+  }
+}
+
 Future<String> getuserToken({bool formatted = false}) async {
   try {
     Box userCollection = await Hive.openBox('user');
@@ -64,4 +78,6 @@ Future<String> getuserToken({bool formatted = false}) async {
     print("error to get token");
     rethrow;
   }
+
+  
 }
