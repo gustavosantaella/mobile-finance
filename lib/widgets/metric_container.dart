@@ -27,8 +27,8 @@ Widget donutChart({double summaryExpenses = 0.0, double summaryIncomes = 0.0}) {
             ),
           ),
           dataSource: <ChartData>[
-            ChartData(lang('incomes'), summaryIncomes),
-            ChartData(lang('expenses'), summaryExpenses),
+            ChartData(lang('incomes'), 2.0),
+            ChartData(lang('expenses'), 2.0),
           ],
           xValueMapper: (ChartData data, _) => data.x,
           yValueMapper: (ChartData data, _) => data.y,
@@ -46,14 +46,14 @@ Widget piechart({data}) {
     data['incomes'].forEach((e) {
       incomes.add({
         "category": e['category'],
-        "value": e['value'],
+        "value": e['value'].toStringAsFixed(2) as double,
       });
     });
 
     data['expenses'].forEach((e) {
       expenses.add({
         "category": e['category'],
-        "value": e['value'],
+        "value": e['value'].toStringAsFixed(2) as double,
       });
     });
   }
@@ -96,7 +96,7 @@ Widget piechart({data}) {
                         xValueMapper: (Map<String, dynamic> datum, _) =>
                             datum['category'],
                         yValueMapper: (Map<String, dynamic> datum, _) =>
-                            datum['value'],
+                            datum['value'].toStringAsFixed(2) as double,
                         dataLabelSettings: const DataLabelSettings(
                           isVisible: true,
                           labelPosition: ChartDataLabelPosition.outside,
@@ -135,7 +135,7 @@ Widget piechart({data}) {
                         xValueMapper: (Map<String, dynamic> datum, _) =>
                             datum['category'],
                         yValueMapper: (Map<String, dynamic> datum, _) =>
-                            datum['value'],
+                            datum['value'].toStringAsFixed(2) as double,
                         dataLabelSettings: const DataLabelSettings(
                           isVisible: true,
                           labelPosition: ChartDataLabelPosition.outside,
@@ -168,13 +168,13 @@ Widget barChart(List data_list) {
       StackedColumnSeries<Map<String, dynamic>, String>(
         dataSource: data,
         xValueMapper: (Map<String, dynamic> datum, _) => datum['dateName'],
-        yValueMapper: (Map<String, dynamic> datum, _) => datum['income'],
+        yValueMapper: (Map<String, dynamic> datum, _) => datum['income'].toStringAsFixed(2) as double,
         name: 'Income',
       ),
       StackedColumnSeries<Map<String, dynamic>, String>(
         dataSource: data,
         xValueMapper: (Map<String, dynamic> datum, _) => datum['dateName'],
-        yValueMapper: (Map<String, dynamic> datum, _) => datum['expense'],
+        yValueMapper: (Map<String, dynamic> datum, _) => datum['expense'].toStringAsFixed(2) as double,
         name: 'Expense',
       ),
     ],

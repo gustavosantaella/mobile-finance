@@ -191,7 +191,7 @@ class CardState extends State<CardWidget> {
           child: Column(
             children: [
               Row(
-                children: [Text(widget.data['historyId'])],
+                children: [Text(widget.data['historyId'] ?? '')],
               ),
               const SizedBox(
                 height: 10,
@@ -201,7 +201,7 @@ class CardState extends State<CardWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      widget.data['categoryName'],
+                      widget.data['categories']['name'],
                       style: const TextStyle(fontSize: 10),
                     ),
                     Text(

@@ -210,7 +210,7 @@ class _AddMovementState extends State<AddMovementWidget> {
                                   descriptionController.text,
                                   categorySelected,
                                   isExpense,
-                                  provider.currentWallet['info']['walletId']);
+                                  provider.currentWallet['info']['_id']);
 
                               provider.notifyListeners();
                               if (context.mounted) {
@@ -218,10 +218,10 @@ class _AddMovementState extends State<AddMovementWidget> {
                                   loading = false;
                                 });
                                 provider.getBalance(
-                                    provider.currentWallet['info']['walletId'],
+                                    provider.currentWallet['info']['_id'],
                                     context);
                                 provider.setRefreshHistory(
-                                    provider.currentWallet['info']['walletId'],
+                                    provider.currentWallet['info']['_id'],
                                     context);
                                 Navigator.pop(context);
                               }

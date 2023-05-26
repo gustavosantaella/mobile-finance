@@ -54,7 +54,7 @@ Future<bool> addTohistory(String amount, String description, String category,
       "provider": provider.trim(),
       "walletId": walletId.trim()
     };
-    await http.post(Uri.parse("$url/financial/history/"),
+    await http.post(Uri.parse("$url/wallet/history/"),
         headers: {"Authorization": token, "Content-Type": "application/json"},
         body: jsonEncode(jsonBody));
     if (updateHistory) {
@@ -86,7 +86,7 @@ Future<Map> getHistory(String walletId, {bool force = false}) async {
     }
     String token = await getuserToken(formatted: true);
     final data =
-        await http.get(Uri.parse("$url/financial/history/$walletId"), headers: {
+        await http.get(Uri.parse("$url/wallet/history/$walletId"), headers: {
       "Authorization": token,
     });
     Map decode = jsonDecode(data.body);
@@ -145,13 +145,16 @@ Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
     }
      logger.w('online balance');
     String token = await getuserToken(formatted: true);
+
     dynamic response = await http.get(Uri.parse("$url/wallet/$walletId"),
         headers: {"Authorization": token});
     response = jsonDecode(response.body) as Map;
+
     if (response['status'] != 200) {
       throw response['error'];
     }
     data = response['data'];
+    logger.i(data);
     if (index != null && wallet != null) {
       walletCollection.putAt(index, {
         ...wallet,
@@ -162,8 +165,9 @@ Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
     index = null;
     wallet = null;
 
-    return data;
+    return {...data, };
   } catch (e) {
+    logger.e(e.toString());
     rethrow;
   }
 }

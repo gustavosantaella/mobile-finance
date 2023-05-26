@@ -60,12 +60,12 @@ class CalendarState extends State<CalendarWidget> {
     historyByMonth({dynamic date, bool force = false}) async {
       try {
         // await Future.delayed(const Duration(seconds: 3));
-        String walletId = walletProvider.currentWallet['info']['walletId'];
+        String walletId = walletProvider.currentWallet['info']['_id'];
         Map response = await getHistoryByDate(walletId,
             date: date ?? DateTime.now(), field: 'month');
         List dates = response['history'].map((item) {
           var date = DateFormat("yyyy-MM-dd")
-              .format(DateTime.parse(item['createdAt']));
+              .format(DateTime.parse(item['created_at']));
           return date;
         }).toList();
         List uniqueDates = [];
@@ -112,7 +112,7 @@ class CalendarState extends State<CalendarWidget> {
 
     historyByDate() async {
       Map response = await getHistoryByDate(
-          walletProvider.currentWallet['info']['walletId'],
+          walletProvider.currentWallet['info']['_id'],
           date: DateFormat('yyyy-MM-dd').format(_selectedDay),
           field: 'date');
       setState(() {

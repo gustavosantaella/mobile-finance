@@ -35,7 +35,7 @@ class BalanceWidget extends StatelessWidget {
                         onPressed: () async {
                           provider.loadingWallet = true;
                           provider.getBalance(
-                              provider.currentWallet['info']["walletId"],
+                              provider.currentWallet['info']["_id"],
                               context, force: true);
                           provider.notifyListeners();
                         },
@@ -44,7 +44,7 @@ class BalanceWidget extends StatelessWidget {
                         onPressed: () async {
                           provider.loadingWallet = true;
                           provider.getBalance(
-                              provider.currentWallet?['info']?["walletId"],
+                              provider.currentWallet?['info']?["_id"],
                               context);
                           provider.notifyListeners();
                         },
@@ -53,7 +53,7 @@ class BalanceWidget extends StatelessWidget {
                         onPressed: () async {
                           provider.loadingWallet = true;
                           provider.getBalance(
-                              provider.currentWallet['info']["walletId"],
+                              provider.currentWallet['info']["_id"],
                               context);
                           provider.notifyListeners();
                         },
@@ -257,13 +257,15 @@ class BalanceWidget extends StatelessWidget {
                 viewportFraction: 1,
                 height: MediaQuery.of(context).size.height / 2.5,
                 onPageChanged: (index, reason) async {
-                  walletProvider.loadingWallet = true;
+                
+                    walletProvider.loadingWallet = true;
                   walletProvider.getBalance(
                       walletProvider.wallets[index]['_id'], context);
                   walletProvider.currenIndex = index;
                   walletProvider.notifyListeners();
                   await walletProvider.setRefreshHistory(
                       walletProvider.wallets[index]['_id'], context);
+                  
                 }),
             items: walletProvider.wallets.map((wallet) {
               return Builder(

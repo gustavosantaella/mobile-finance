@@ -37,7 +37,7 @@ const String url = !kReleaseMode
     : 'https://finance-backend-klzw.onrender.com/api';
 
 
-const String prefixKey = 'Wafi';
+const String prefixKey = 'Bearer';
 
 const String appName = 'Wafi';
 

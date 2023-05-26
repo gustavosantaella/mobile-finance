@@ -26,16 +26,15 @@ class ListTransactionState extends State<ListTransactionWidget> {
 
   @override
   Widget build(BuildContext context) {
- 
     return GestureDetector(
-        onTap: (){
+        onTap: () {
           changeColorCard();
           bottomSheetWafi(context, HistoryDetail(widget.data['_id']));
         },
         onLongPressEnd: (details) => changeColorCard(),
         child: Container(
           decoration: BoxDecoration(
-              color: active == true ? Colors.grey[200] : null, 
+              color: active == true ? Colors.grey[200] : null,
               borderRadius: BorderRadius.circular(10)),
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -43,7 +42,10 @@ class ListTransactionState extends State<ListTransactionWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-               widget.data['createdAt'] != null ? DateFormat('dd/MM/yyyy HH:mm:ss a').format(DateTime.parse(widget.data['createdAt'])) : "Without date",
+                widget.data['created_at'] != null
+                    ? DateFormat('dd/MM/yyyy HH:mm:ss a')
+                        .format(DateTime.parse(widget.data['created_at']))
+                    : "Without date",
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -72,21 +74,32 @@ class ListTransactionState extends State<ListTransactionWidget> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              widget.data['historyId'] ?? '',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 18),
-                            ),
+                            // Text(
+
+                            //   style: const TextStyle(
+                            //       fontWeight: FontWeight.w400, fontSize: 18),
+                            // ),
+
+                            SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  widget.data['historyId'] ??
+                                      widget.data['_id'],
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700),
+                                ))
                           ]),
                     ),
                     Text(
                       "\$.${widget.data['value']}",
                       style: TextStyle(
-                        fontSize: 18,
-                        color: definitions['history']['type']
-                                ?[widget.data['type']]?['color'] ??
-                            definitions['colors']['default']
-                      ),
+                          fontSize: 18,
+                          color: definitions['history']['type']
+                                  ?[widget.data['type']]?['color'] ??
+                              definitions['colors']['default']),
                     ),
                   ],
                 ),
