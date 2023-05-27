@@ -62,14 +62,14 @@ class ListTransactionState extends State<ListTransactionsWidget> {
                     child: Container(
                       padding: marginAll,
                       decoration: BoxDecoration(
-                          color: Colors.black54.withOpacity(0.1),
+                          color: definitions['colors']['cobalto'],
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(15),
                               topRight: Radius.circular(15))),
                       child: Text(
                         lang(element['type']).toUpperCase(),
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ),
                   ),
@@ -86,8 +86,7 @@ class ListTransactionState extends State<ListTransactionsWidget> {
                         child: ListView(
                           children: [
                             ...printCards(element['data']),
-                            ...printCards(element['data']),
-                            ...printCards(element['data'])
+                       
                           ],
                         ),
                       )),
@@ -191,7 +190,7 @@ class CardState extends State<CardWidget> {
           child: Column(
             children: [
               Row(
-                children: [Text(widget.data['historyId'] ?? '')],
+                children: [Text(widget.data['historyId'] ?? 'without id')],
               ),
               const SizedBox(
                 height: 10,

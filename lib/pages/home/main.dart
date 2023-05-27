@@ -32,14 +32,14 @@ class HomeState extends State<HomePage> {
         provider.metrics['piechart']['incomes'].forEach((e) {
           incomes.add({
             "category": e['category'],
-            "value": e['value'],
+            "value": double.parse(e?['value'] ?? '0'),
           });
         });
 
         provider.metrics['piechart']['expenses'].forEach((e) {
           expenses.add({
             "category": e['category'],
-            "value": e['value'],
+            "value": double.parse(e?['value'] ?? '0'),
           });
         });
       }
@@ -138,8 +138,6 @@ class HomeState extends State<HomePage> {
 
     return Builder(
       builder: (context) {
-
-
         return Scaffold(
             bottomNavigationBar: const NavigationBarWidget(),
             drawer: const NavigationDrawer(
@@ -176,7 +174,7 @@ class HomeState extends State<HomePage> {
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children:  [
+                                      children: [
                                         Text(
                                           '${lang("hi")}!',
                                           style: const TextStyle(
@@ -202,7 +200,8 @@ class HomeState extends State<HomePage> {
                                           // icon
                                           alignment: Alignment.center,
                                           onPressed: () {
-                                            Navigator.popAndPushNamed(context, '/profile');
+                                            Navigator.popAndPushNamed(
+                                                context, '/profile');
                                           },
                                           icon: const Icon(
                                             Icons.person,

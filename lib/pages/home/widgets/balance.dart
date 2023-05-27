@@ -8,8 +8,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 getValue(dynamic num) {
   if (num != null) {
-    if (num > 0.001) {
-      return num;
+    if (double.parse(num) > 0.001) {
+      return double.parse(num);
     }
   }
 
@@ -120,7 +120,7 @@ class BalanceWidget extends StatelessWidget {
                             alignment: WrapAlignment.center,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             runAlignment: WrapAlignment.center,
-                            children: [
+                          children: [
                               Text(
                                 "${provider.currentWallet?["info"]?["currency"] ?? "Loading..."}",
                                 style: const TextStyle(

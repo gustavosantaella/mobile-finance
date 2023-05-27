@@ -11,6 +11,7 @@ import 'package:finance/widgets/metric_container.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:finance/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import "package:finance/services/calendar.dart";
@@ -22,6 +23,7 @@ class CalendarWidget extends StatefulWidget {
   CalendarState createState() => CalendarState();
 }
 
+final Logger logger = Logger();
 class CalendarState extends State<CalendarWidget> {
   final CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
@@ -32,17 +34,17 @@ class CalendarState extends State<CalendarWidget> {
   bool loading = false;
   List days = [];
   List _historyByDate = [];
-  double summaryIncomes = 0.0;
-  double summaryExpenses = 0.0;
-  double incomes = 0.0;
-  double expenses = 0.0;
-  double total = 0.0;
+  String summaryIncomes = '0.0';
+  String summaryExpenses = '0.0';
+  String incomes = '0.0';
+  String expenses = '0.0';
+  String total = '0.0';
   bool newDate = false;
   bool finished = false;
   late List _barChart = [];
   late Map _piechart = {};
-  double _metricsExpenses = 0.0;
-  double _metricsIncomes = 0.0;
+  String _metricsExpenses = '0.0';
+  String _metricsIncomes = '0.0';
   dynamic _localeCalendar;
 
   @override
@@ -75,7 +77,12 @@ class CalendarState extends State<CalendarWidget> {
           }
         });
         if (days.isEmpty || force) {
-          print(_focusedDay);
+          logger.w({
+            "income": response['incomes'].runtimeType,
+            "expense": response['expenses'].runtimeType,
+            "total": response['total'].runtimeType,
+          });
+          
           setState(() {
             loading = false;
             finished = true;
@@ -190,7 +197,7 @@ class CalendarState extends State<CalendarWidget> {
                                       ),
                                     ),
                                     const SizedBox(width: 10,),
-                                    Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Text('\$.${incomes - expenses}', style: const TextStyle(fontSize: 16, fontWeight:FontWeight.w300),)),)
+                                    Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Text('\$.${double.parse(incomes) - double.parse(expenses)}', style: const TextStyle(fontSize: 16, fontWeight:FontWeight.w300),)),)
                                   ],
                                 ),
                               ),

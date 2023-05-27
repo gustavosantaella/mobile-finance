@@ -12,7 +12,6 @@ Future<Map> getHistoryByDate(String walletId, {date, field}) async {
         headers: {"Authorization": token});
 
     Map res = jsonDecode(response.body);
-    print(res);
     if (res['ok'] != ok) {
       throw res['error'];
     }
