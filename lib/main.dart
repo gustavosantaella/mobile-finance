@@ -1,3 +1,4 @@
+import 'package:finance/helpers/fn/norifications.dart';
 import 'package:finance/pages/list/main.dart';
 import 'package:finance/services/cron.dart';
 import 'package:finance/widgets/splash_screen.dart';
@@ -26,6 +27,8 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     runApp(const SplashScreen());
+ 
+    await initNotifications();
     final appDocumentDirectory =
         await path_provider.getApplicationDocumentsDirectory();
     Hive.init(appDocumentDirectory.path);
@@ -35,6 +38,7 @@ void main() async {
       token: token,
     ));
   } catch (e) {
+    logger.e(e);
     runApp(const App());
   }
 }
@@ -48,15 +52,15 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends State<App> with WidgetsBindingObserver {
   bool loading = false;
   bool hasToken = false;
+
 
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.black87));
-        CronJob.unUnsedApp();
     super.initState();
   }
 

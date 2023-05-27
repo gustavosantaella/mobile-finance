@@ -3,6 +3,8 @@ import 'dart:ui';
 String lang(String key, {String defaultTransalation = 'Without transalation'}) {
   Map<String, Map<String, String>> languages = {
     "es": {
+      "Hey!, I'm sad": "Ey! No me haz usado en 30 minutos.",
+      "You have not used me":"Recuerda que gestionar tus finanzas es importante para tu economia",
       "income":"Ingresos",
       "Logout": "Cerrar sesion",
       "expense":"Egresos",
@@ -47,8 +49,6 @@ String lang(String key, {String defaultTransalation = 'Without transalation'}) {
       "add": "add"
     },
   };
-
-  // Logger logger = Logger(level: Logger.level);
   if (languages[window.locale.languageCode]?[key] != null) {
     return languages[window.locale.languageCode]?[key] as String;
   } else {
