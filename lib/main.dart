@@ -1,4 +1,5 @@
 import 'package:finance/pages/list/main.dart';
+import 'package:finance/services/cron.dart';
 import 'package:finance/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:finance/pages/calendar/main.dart';
@@ -55,6 +56,7 @@ class _AppState extends State<App> {
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.black87));
+        CronJob.unUnsedApp();
     super.initState();
   }
 
