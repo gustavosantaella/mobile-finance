@@ -8,7 +8,7 @@ Future<Map> historyDetail(String id, String walletId) async {
 
   String token = await getuserToken(formatted: true);
   
-  Response response = await get(Uri.parse("$url/financial/history/$walletId/$id"), headers: {
+  Response response = await get(Uri.parse("$url/wallet/history/detail/$id"), headers: {
     "Authorization": token
   });
 

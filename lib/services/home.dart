@@ -74,6 +74,7 @@ Future<bool> addTohistory(String amount, String description, String category,
 Future<Map> getHistory(String walletId, {bool force = false}) async {
   try {
     Box historyCollection = await Hive.openBox('history');
+    logger.d(walletId);
     dynamic index;
     if (historyCollection.isNotEmpty) {
       index = historyCollection.values
@@ -129,20 +130,9 @@ Future<List> getAllWalletsByOwner({bool force = false}) async {
 
 Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
   try {
-    Box walletCollection = await Hive.openBox('wallets');
+    // Box walletCollection = await Hive.openBox('wallets');
     Map data = {};
-    dynamic wallet;
-    dynamic index;
-    if (walletCollection.isNotEmpty) {
-      index = walletCollection.values
-          .toList()
-          .indexWhere((element) => element['_id'] == walletId);
-      wallet = walletCollection.get(index);
-      if (wallet['balance'] != 0 && force == false) {
-        logger.i('offline balance');
-        return wallet['balance'];
-      }
-    }
+
      logger.w('online balance');
     String token = await getuserToken(formatted: true);
 
@@ -155,15 +145,7 @@ Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
     }
     data = response['data'];
     logger.i(data);
-    if (index != null && wallet != null) {
-      walletCollection.putAt(index, {
-        ...wallet,
-        'balance': data,
-      });
-    }
 
-    index = null;
-    wallet = null;
 
     return {...data, };
   } catch (e) {

@@ -48,14 +48,13 @@ Future<void> registerUser(payload) async {
   }
 }
 
-void logout({bool formatted = false}) async {
+Future<void> logout({bool formatted = false}) async {
   try {
     Box userCollection = await Hive.openBox('user');
-    if(userCollection.isNotEmpty){
-      await userCollection.delete('token');
+      await userCollection.clear();
+      await Hive.deleteFromDisk();
       logger.i('Logout');
-    }
-
+    
   } catch (e) {
     rethrow;
   }
@@ -78,6 +77,5 @@ Future<String> getuserToken({bool formatted = false}) async {
     print("error to get token");
     rethrow;
   }
-
-  
 }
+

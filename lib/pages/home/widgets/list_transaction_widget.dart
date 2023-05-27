@@ -42,9 +42,9 @@ class ListTransactionState extends State<ListTransactionWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.data['created_at'] != null
+                (widget.data['createdAt'] != null) || widget.data['created_at'] != null
                     ? DateFormat('dd/MM/yyyy HH:mm:ss a')
-                        .format(DateTime.parse(widget.data['created_at']))
+                        .format(DateTime.parse(widget.data['createdAt'] ?? widget.data['created_at']))
                     : "Without date",
                 style: const TextStyle(
                   fontSize: 20,

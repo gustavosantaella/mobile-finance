@@ -33,7 +33,7 @@ Map<String, dynamic> definitions = {
 };
 
 const String url = !kReleaseMode
-    ? 'http://10.0.2.2:8000/api'
+    ? 'http://54.221.67.193:9000/api'
     : 'https://finance-backend-klzw.onrender.com/api';
 
 

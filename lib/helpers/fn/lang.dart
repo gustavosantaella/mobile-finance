@@ -4,6 +4,7 @@ String lang(String key, {String defaultTransalation = 'Without transalation'}) {
   Map<String, Map<String, String>> languages = {
     "es": {
       "income":"Ingresos",
+      "Logout": "Cerrar sesion",
       "expense":"Egresos",
       "Movements": "Movimientos",
       "Incomes": "Ingresos",

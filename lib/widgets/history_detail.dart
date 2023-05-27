@@ -22,16 +22,15 @@ class HistoryDetailState extends State<HistoryDetail> {
   @override
   Widget build(BuildContext context) {
     WalletProvider walletProvider = Provider.of<WalletProvider>(context);
-    if (loading == false && widget.id.isNotEmpty && data.isEmpty) {
+    if (loading == false && widget.id.isNotEmpty && data.isEmpty  && error == false) {
       setState(() {
         loading = true;
       });
       historyDetail(widget.id, walletProvider.currentWallet['info']['walletId'])
           .then((value) {
         data = value;
-
-        print(data);
       }).catchError((e) {
+        print(e);
         setState(() {
           error = true;
         });
