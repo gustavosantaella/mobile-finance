@@ -34,7 +34,7 @@ Map<String, dynamic> definitions = {
 
 const String url = !kReleaseMode
     ? 'http://54.221.67.193:9000/api'
-    : 'https://finance-backend-klzw.onrender.com/api';
+    : 'http://54.221.67.193:9000/api';
 
 
 const String prefixKey = 'Bearer';
