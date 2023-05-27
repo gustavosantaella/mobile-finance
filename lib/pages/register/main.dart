@@ -1,4 +1,5 @@
 import 'package:finance/config/constanst.dart';
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/helpers/fn/main.dart';
 import 'package:finance/services/auth.dart';
 import 'package:finance/services/country.dart';
@@ -17,11 +18,10 @@ class RegisterWidget extends StatefulWidget {
 class RegisterState extends State<RegisterWidget> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
-  Map _formData = {"password": "", "email": "", "country": ""};
+  final Map _formData = {"password": "", "email": "", "country": ""};
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _countryController = TextEditingController();
   late List<dynamic> _countries = [];
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
@@ -57,8 +57,8 @@ class RegisterState extends State<RegisterWidget> {
                     ),
                   ))
               .toList(),
-          decoration: GeneralInputStyle(),
-          hint: const Text('Country'),
+          decoration: generalInputStyle(),
+          hint:  Text(lang("Country")),
           onChanged: (country) {
             setState(() {
               _formData['country'] = country;
@@ -73,9 +73,9 @@ class RegisterState extends State<RegisterWidget> {
                 heightFactor: 1,
                 widthFactor: 1,
                 child: Container(
-                    color: Color(int.parse("#38b6ff".substring(1), radix: 16) +
-                        0xff000000),
-                    child: SingleChildScrollView(
+                    color: Colors.blue,
+                    child: Center(
+                        child: SingleChildScrollView(
                       child: Container(
                         margin: const EdgeInsets.all(20),
                         child: Center(
@@ -106,10 +106,10 @@ class RegisterState extends State<RegisterWidget> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              const Text(
-                                "Just one step for you to start managing your finance",
+                               Text(
+                                lang("Just one step for you to start managing your finance"),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.w400,
                                     letterSpacing: 3,
                                     color: Colors.white,
@@ -139,15 +139,15 @@ class RegisterState extends State<RegisterWidget> {
                                               }),
                                               keyboardType:
                                                   TextInputType.emailAddress,
-                                              decoration: const InputDecoration(
+                                              decoration:  InputDecoration(
                                                 fillColor: Colors.white,
                                                 filled: true,
-                                                border: OutlineInputBorder(
+                                                border: const OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.all(
                                                             Radius.circular(
                                                                 20))),
-                                                labelText: 'Email',
+                                                labelText: lang('Email'),
                                               ),
                                               // initialValue: ,
                                             ),
@@ -159,15 +159,15 @@ class RegisterState extends State<RegisterWidget> {
                                               }),
                                               keyboardType: TextInputType.text,
                                               obscureText: true,
-                                              decoration: const InputDecoration(
+                                              decoration:  InputDecoration(
                                                 fillColor: Colors.white,
                                                 filled: true,
-                                                border: OutlineInputBorder(
+                                                border: const OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.all(
                                                             Radius.circular(
                                                                 20))),
-                                                labelText: 'Password',
+                                                labelText: lang('Password'),
                                               ),
                                               // initialValue: '',
                                             ),
@@ -186,7 +186,7 @@ class RegisterState extends State<RegisterWidget> {
                                             SizedBox(
                                               width: double.infinity,
                                               child: TextButton(
-                                                onPressed: () async {
+                                                onPressed: _loading == true ? null : () async {
                                                   setState(() {
                                                     _loading = true;
                                                   });
@@ -211,9 +211,12 @@ class RegisterState extends State<RegisterWidget> {
                                                     await registerUser(
                                                         _formData);
                                                     if (context.mounted) {
-                                                    setState(() {
-                                                      _loading = false;
-                                                    });
+                                                      setState(() {
+                                                        _loading = false;
+                                                      });
+                                                      setState(() {
+                                                        _loading = false;
+                                                      });
                                                       Navigator.popAndPushNamed(
                                                           context, '/login');
                                                     }
@@ -238,7 +241,7 @@ class RegisterState extends State<RegisterWidget> {
                                                                 18.0), // Aquí se establece el radio del borde
                                                       ),
                                                     ),
-                                                    backgroundColor: MaterialStateProperty
+                                                    backgroundColor: _loading == true ? MaterialStateProperty.all(Colors.grey) : MaterialStateProperty
                                                         .all(colorFromHexString(
                                                             definitions['colors']
                                                                         [
@@ -246,9 +249,9 @@ class RegisterState extends State<RegisterWidget> {
                                                                     [
                                                                     'hexadecimal']
                                                                 ['cobalto']))),
-                                                child: const Text(
-                                                  'Sign Up',
-                                                  style: TextStyle(
+                                                child:  Text(
+                                                  lang('Sign Up'),
+                                                  style: const TextStyle(
                                                       fontSize: 20,
                                                       color: Colors.white),
                                                 ),
@@ -258,9 +261,9 @@ class RegisterState extends State<RegisterWidget> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                const Text(
-                                                  'Have an account?',
-                                                  style: TextStyle(
+                                                 Text(
+                                                  lang('Have an account?'),
+                                                  style:const TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black,
                                                     fontSize: 20,
@@ -271,9 +274,9 @@ class RegisterState extends State<RegisterWidget> {
                                                       Navigator.popAndPushNamed(
                                                           context, '/login');
                                                     },
-                                                    child: const Text(
-                                                      "Sign In",
-                                                      style: TextStyle(
+                                                    child:  Text(
+                                                      lang("Sign In"),
+                                                      style: const TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 20,
                                                       ),
@@ -287,6 +290,6 @@ class RegisterState extends State<RegisterWidget> {
                           ),
                         ),
                       ),
-                    )))));
+                    ))))));
   }
 }

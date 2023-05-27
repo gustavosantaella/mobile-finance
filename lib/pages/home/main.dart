@@ -1,14 +1,15 @@
-import 'package:finance/helpers/fn/bottom_sheets.dart';
-import 'package:finance/pages/home/widgets/add_movment.dart';
+import 'package:finance/config/constanst.dart';
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/pages/home/widgets/balance.dart';
-import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
+import 'package:finance/pages/home/widgets/transaction_container.dart';
 import 'package:finance/providers/app_provider.dart';
 import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
+import 'package:finance/widgets/metric_container.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:finance/config/constanst.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,148 +18,218 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
-  List<Widget> listTransactios(List data) {
-    List<Widget> array = [];
-    for (int i = 0; i < data.length; i++) {
-      array.add(ListTransactionWidget(data[i], i: i));
-    }
-    return array;
-  }
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<WalletProvider>(context, listen: true);
     final appProvider = Provider.of<AppProvider>(context, listen: true);
 
-    return Consumer<WalletProvider>(
-      builder: <WalletProvider>(context, value, child) {
+    Widget piechart() {
+      List<Map<String, dynamic>> incomes = [];
+      List<Map<String, dynamic>> expenses = [];
+
+      if (provider.metrics['piechart'] != null &&
+          provider.metrics['piechart']?.isNotEmpty) {
+        provider.metrics['piechart']['incomes'].forEach((e) {
+          incomes.add({
+            "category": e['category'],
+            "value": double.parse(e?['value'] ?? '0'),
+          });
+        });
+
+        provider.metrics['piechart']['expenses'].forEach((e) {
+          expenses.add({
+            "category": e['category'],
+            "value": double.parse(e?['value'] ?? '0'),
+          });
+        });
+      }
+      List<Widget> rows = [];
+      if (incomes.isNotEmpty) {
+        rows.add(Expanded(
+          child: FractionallySizedBox(
+            // widthFactor: .5,
+            child: Column(
+              children: [
+                SizedBox(
+                  child: SfCircularChart(
+                    title: ChartTitle(
+                      text: lang('incomes'),
+                      textStyle: const TextStyle(color: Colors.green),
+                    ),
+                    legend: Legend(
+                      isVisible: true,
+                      height: '10%',
+                      width: '100%%',
+                      orientation: LegendItemOrientation.vertical,
+                      overflowMode: LegendItemOverflowMode.wrap,
+                      position: LegendPosition.bottom,
+                    ),
+                    series: <CircularSeries>[
+                      PieSeries<Map<String, dynamic>, String>(
+                        dataSource: incomes,
+                        xValueMapper: (Map<String, dynamic> datum, _) =>
+                            datum['category'],
+                        yValueMapper: (Map<String, dynamic> datum, _) =>
+                            datum['value'],
+                        dataLabelSettings: const DataLabelSettings(
+                          isVisible: true,
+                          labelPosition: ChartDataLabelPosition.outside,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
+      }
+
+      if (expenses.isNotEmpty) {
+        rows.add(const Divider());
+        rows.add(
+          Expanded(
+            child: FractionallySizedBox(
+              child: Column(
+                children: [
+                  SizedBox(
+                    child: SfCircularChart(
+                      title: ChartTitle(
+                        text: lang('expenses'),
+                        textStyle: const TextStyle(color: Colors.red),
+                      ),
+                      legend: Legend(
+                        isVisible: true,
+                        height: '10%',
+                        width: '100%%',
+                        orientation: LegendItemOrientation.vertical,
+                        overflowMode: LegendItemOverflowMode.wrap,
+                        position: LegendPosition.bottom,
+                      ),
+                      series: <CircularSeries>[
+                        PieSeries<Map<String, dynamic>, String>(
+                          dataSource: expenses,
+                          xValueMapper: (Map<String, dynamic> datum, _) =>
+                              datum['category'],
+                          yValueMapper: (Map<String, dynamic> datum, _) =>
+                              datum['value'],
+                          dataLabelSettings: const DataLabelSettings(
+                            isVisible: true,
+                            labelPosition: ChartDataLabelPosition.outside,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+
+      return SingleChildScrollView(
+        child: Row(
+          // width: 200,
+          children: rows,
+        ),
+      );
+    }
+
+    return Builder(
+      builder: (context) {
         return Scaffold(
-            // appBar: AppBar(
-            //   elevation: 0,
-            //   backgroundColor: appProvider.currentBackground,
-            //   title: Container(
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.end,
-            //       children: const [
-            //         Icon(
-            //           Icons.settings,
-            //           size: 30,
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             bottomNavigationBar: const NavigationBarWidget(),
-            // drawer: const NavigationDrawer(
-            //   children: [
-            //     Text("In construction. Please wait to the next version."),
-            //   ],
-            // ),
+            drawer: const NavigationDrawer(
+              children: [
+                Text("In construction. Please wait to the next version."),
+              ],
+            ),
             resizeToAvoidBottomInset: true, // set it to false
 
             body: SafeArea(
+                child: SizedBox(
+              // margin: const EdgeInsets.only(top: 10),
               child: Stack(
                 children: [
                   FractionallySizedBox(
                       heightFactor: 1,
+                      widthFactor: 1,
                       child: Container(
                         decoration:
                             BoxDecoration(color: appProvider.currentBackground),
-                        child: Column(children: [
-                          // balance
-                          const BalanceWidget(),
-
-                          //  transactions
-                          Expanded(
-                            // flex: 1,
-                            child: FractionallySizedBox(
-                                widthFactor: 1,
-                                // heightFactor: 1,
-                                child: Container(
-                                  // height: MediaQuery.of(context).size.height,
-                                  margin: const EdgeInsets.all(10),
-                                  decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                        color: Color.fromRGBO(
-                                            255, 255, 255, 0.358),
-                                        blurRadius: 10.0,
-                                        spreadRadius: 2.0,
-                                      )
-                                    ],
-                                    color: Colors.white,
-                                  ),
-                                  child: Builder(builder: (context) {
-                                    if (provider.loadingHistory == true) {
-                                      return const Center(
-                                        child: FractionallySizedBox(
-                                          widthFactor: 0.1,
-                                          heightFactor: 0.1,
-                                          child: CircularProgressIndicator(),
+                        child: SizedBox(
+                          child: SingleChildScrollView(
+                            child: Column(children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    top: 30, left: 30, right: 30, bottom: 30),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${lang("hi")}!',
+                                          style: const TextStyle(
+                                              fontSize: 26, color: Colors.grey),
                                         ),
-                                      );
-                                    }
-
-                                    if (provider.loadingHistory == false &&
-                                        provider.history.isEmpty) {
-                                      return FractionallySizedBox(
-                                          heightFactor: 0.5,
-                                          widthFactor: 1,
-                                          child: Center(
-                                            widthFactor: 1,
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: const [
-                                                Text(
-                                                  'Add new movement',
-                                                  style: TextStyle(
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                                Icon(Icons.keyboard_arrow_down)
-                                              ],
-                                            ),
-                                          ));
-                                    }
-
-                                    return ListView(
-                                      children: listTransactios(
-                                          provider.history!.reversed.toList()),
-                                    );
-                                  }),
-                                )),
-                          )
-                        ]),
+                                        Text(
+                                          lang('Welcome back'),
+                                          style: const TextStyle(
+                                              fontSize: 18, color: Colors.grey),
+                                        )
+                                      ],
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: const Color.fromARGB(
+                                                  43, 28, 26, 26)),
+                                          color: const Color.fromARGB(
+                                              86, 158, 158, 158),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(100))),
+                                      child: IconButton(
+                                          // icon
+                                          alignment: Alignment.center,
+                                          onPressed: () {
+                                            Navigator.popAndPushNamed(
+                                                context, '/profile');
+                                          },
+                                          icon: const Icon(
+                                            Icons.person,
+                                          )),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              // balance
+                              const BalanceWidget(),
+                              piechart(),
+                              const TransactionContainer(),
+                              // MetricsContainer(
+                              //   summaryExpenses:
+                              //       provider.metrics['expenses'] ?? 0,
+                              //   summaryIncomes:
+                              //       provider.metrics['incomes'] ?? 0,
+                              //   barchart: provider!.metrics?['barchart'] ?? [],
+                              //   piechart: provider.metrics['piechart'] ?? {},
+                              // )
+                              //  transactions
+                            ]),
+                          ),
+                        ),
                       )),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 30),
-                        decoration: const BoxDecoration(),
-                        child: IconButton(
-                            onPressed: () => bottomSheetWafi(
-                                context, const AddMovementWidget()),
-                            icon: const Icon(
-                              Icons.add_circle_rounded,
-                              size: 60,
-                              color: Colors.blue,
-                            )),
-                      ),
-                    ),
-                  )
                 ],
               ),
-            ));
+            )));
       },
     );
   }

@@ -6,7 +6,7 @@ class WalletProvider extends ChangeNotifier {
   List wallets = [];
   dynamic currentWallet;
   late List history = [];
-  bool loadingHistory = false;
+  Map metrics = {};
   bool loadingWallet = false;
   int currenIndex = 0;
 
@@ -22,11 +22,12 @@ class WalletProvider extends ChangeNotifier {
     }
   }
 
-  Future<dynamic> getBalance(String walletId, BuildContext context) async {
+  Future<dynamic> getBalance(String walletId, BuildContext context, { bool force = false}) async {
     try {
+      loadingWallet = true;
       await Future.delayed(const Duration(seconds: 1));
 
-      Map response = await getWalletBalance(walletId);
+      Map response = await getWalletBalance(walletId, force: force);
       currentWallet = response;
       loadingWallet = false;
       notifyListeners();
@@ -42,7 +43,7 @@ class WalletProvider extends ChangeNotifier {
       Map response = await getHistory(walletId);
       history.clear();
       history.addAll(response['history']);
-      loadingHistory = false;
+      metrics = response['metrics'];
       notifyListeners();
 
       return history;
@@ -53,9 +54,9 @@ class WalletProvider extends ChangeNotifier {
     }
   }
 
-  Future<List> getWallets(userId, context) async {
+  Future<List> getWallets(context) async {
     try {
-      List wallets = await getAllWalletsByOwner(userId);
+      List wallets = await getAllWalletsByOwner();
       this.wallets = wallets;
       notifyListeners();
       return this.wallets;

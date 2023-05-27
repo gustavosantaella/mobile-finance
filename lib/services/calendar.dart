@@ -8,7 +8,7 @@ Future<Map> getHistoryByDate(String walletId, {date, field}) async {
   try {
     final String token = await getuserToken(formatted: true);
     Response response = await get(
-        Uri.parse("$url/financial/history/$walletId?$field=$date"),
+        Uri.parse("$url/wallet/history/$walletId?$field=$date"),
         headers: {"Authorization": token});
 
     Map res = jsonDecode(response.body);
@@ -20,5 +20,3 @@ Future<Map> getHistoryByDate(String walletId, {date, field}) async {
     rethrow;
   }
 }
-
-

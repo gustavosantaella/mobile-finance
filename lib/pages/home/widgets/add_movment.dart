@@ -1,8 +1,11 @@
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:finance/services/home.dart' as service;
 import 'package:finance/providers/wallet_provider.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
+Logger logger = Logger();
 class AddMovementWidget extends StatefulWidget {
   const AddMovementWidget({Key? key}) : super(key: key);
 
@@ -12,6 +15,7 @@ class AddMovementWidget extends StatefulWidget {
 
 class _AddMovementState extends State<AddMovementWidget> {
   static bool isExpense = false;
+  bool loading = false;
   final amountController = TextEditingController();
   final descriptionController = TextEditingController();
   late Future<List> categories;
@@ -54,10 +58,10 @@ class _AddMovementState extends State<AddMovementWidget> {
                         Center(
                           child: Container(
                             margin: const EdgeInsets.all(10),
-                            child: const Text(
-                              "ADD MOVEMENT",
+                            child:  Text(
+                              lang("ADD MOVEMENT"),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w200),
                             ),
                           ),
@@ -78,9 +82,9 @@ class _AddMovementState extends State<AddMovementWidget> {
                                 },
                                 keyboardType: TextInputType.number,
                                 controller: amountController,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Amount',
+                                decoration:  InputDecoration(
+                                  border:const OutlineInputBorder(),
+                                  labelText: lang('Amount'),
                                 ),
                               ),
                             )
@@ -96,9 +100,9 @@ class _AddMovementState extends State<AddMovementWidget> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.text,
                                   controller: descriptionController,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Description',
+                                  decoration:  InputDecoration(
+                                    border: const OutlineInputBorder(),
+                                    labelText: lang('Description'),
                                   ),
                                 ),
                               ),
@@ -126,7 +130,7 @@ class _AddMovementState extends State<AddMovementWidget> {
                                     child: FutureBuilder(
                                       future: categories,
                                       builder: (context, snapshot) {
-                                        if (snapshot.hasError) {
+                                        if (snapshot.hasError || snapshot.connectionState != ConnectionState.done) {
                                           return Container();
                                         }
 
@@ -141,13 +145,18 @@ class _AddMovementState extends State<AddMovementWidget> {
                                             ),
                                           ));
                                         });
+                                        var indexName = snapshot.data?.indexWhere((element) => element['id'] == categorySelected );
+                                        String name = lang('Category');
+                                        if(indexName != null &&  !indexName.isNegative){
+                                            name = snapshot.data?[indexName]?['label'];
+                                        }
                                         return DropdownButton(
                                             items: items,
                                             isDense: true,
                                             isExpanded: true,
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            hint: Text(categorySelected),
+                                            hint: Text(name),
                                             onChanged: (categoryId) {
                                               setState(() {
                                                 categorySelected = categoryId;
@@ -178,33 +187,52 @@ class _AddMovementState extends State<AddMovementWidget> {
                           ],
                         ),
                         ElevatedButton(
-                            onPressed: () async {
+                          style: ButtonStyle(
+                            backgroundColor: loading == true ? const MaterialStatePropertyAll(Colors.grey) : null
+                          ),
+                            onPressed:loading == true ? null : () async {
+                              try{
+                                setState(() {
+                                loading = true;
+                              });
                               bool validation =
                                   _formKey.currentState?.validate() as bool;
-                              if (validation == false) {
+                              if (validation == false || categorySelected.isEmpty) {
+                                setState(() {
+                                  loading = false;
+                                });
                                 return;
                               }
-                              provider.loadingHistory = true;
+                          
                               provider.loadingWallet = true;
                               await service.addTohistory(
                                   amountController.text,
                                   descriptionController.text,
                                   categorySelected,
                                   isExpense,
-                                  provider.currentWallet['info']['walletId']);
+                                  provider.currentWallet['info']['_id']);
 
                               provider.notifyListeners();
                               if (context.mounted) {
+                                setState(() {
+                                  loading = false;
+                                });
                                 provider.getBalance(
-                                    provider.currentWallet['info']['walletId'],
+                                    provider.currentWallet['info']['_id'],
                                     context);
                                 provider.setRefreshHistory(
-                                    provider.currentWallet['info']['walletId'],
+                                    provider.currentWallet['info']['_id'],
                                     context);
                                 Navigator.pop(context);
                               }
+                              }catch(e){
+                                setState(() {
+                                  loading = false;
+                                  logger.e(e.toString());
+                                });
+                              }
                             },
-                            child: const Text("Send"))
+                            child:  Text(lang('Submit')))
                       ],
                     ),
                   ],

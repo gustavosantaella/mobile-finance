@@ -1,4 +1,6 @@
+import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/providers/app_provider.dart';
+import 'package:finance/services/auth.dart';
 import 'package:finance/services/user.dart' as userService;
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:finance/widgets/snack_bar.dart';
@@ -28,7 +30,7 @@ class UserProfileState extends State<UserProfile> {
         data = response;
       });
 
-      _emailController.text = data['email'];
+      _emailController.text = data['email'] ?? 'without email';
     }
 
     if (data.isEmpty) {
@@ -39,8 +41,8 @@ class UserProfileState extends State<UserProfile> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: const Text("Profile"),
-          backgroundColor: appProvider.currentBackground,
+          title: Text(lang("Profile")),
+          backgroundColor: Colors.blue,
         ),
         bottomNavigationBar: const NavigationBarWidget(),
         body: SafeArea(
@@ -66,6 +68,7 @@ class UserProfileState extends State<UserProfile> {
                                     child: Container(
                                   margin: const EdgeInsets.all(10),
                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
@@ -106,7 +109,7 @@ class UserProfileState extends State<UserProfile> {
                                                       Text(e.toString()));
                                                 }
                                               },
-                                              child: const Text('Submit'))
+                                              child: Text(lang('Submit')))
                                         ],
                                       ),
                                       const SizedBox(
@@ -117,7 +120,7 @@ class UserProfileState extends State<UserProfile> {
                                           Row(
                                             children: const [
                                               Text(
-                                                'Choice background',
+                                                'Color de fondo',
                                                 style: TextStyle(fontSize: 20),
                                               ),
                                             ],
@@ -152,7 +155,7 @@ class UserProfileState extends State<UserProfile> {
                                                 showDialog(
                                                     context: context,
                                                     builder: (context) {
-                                                      final _passwordController =
+                                                      final passwordController =
                                                           TextEditingController();
                                                       return Dialog(
                                                           child: Wrap(
@@ -162,11 +165,13 @@ class UserProfileState extends State<UserProfile> {
                                                                 const EdgeInsets
                                                                     .all(10),
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
                                                                 TextField(
                                                                     controller:
-                                                                        _passwordController,
+                                                                        passwordController,
                                                                     decoration: const InputDecoration(
                                                                         label: Text(
                                                                             "New password"),
@@ -175,7 +180,7 @@ class UserProfileState extends State<UserProfile> {
                                                                 ElevatedButton(
                                                                     onPressed:
                                                                         () async {
-                                                                      if (_passwordController
+                                                                      if (passwordController
                                                                           .value
                                                                           .text
                                                                           .isEmpty) {
@@ -184,7 +189,7 @@ class UserProfileState extends State<UserProfile> {
 
                                                                       String
                                                                           value =
-                                                                          _passwordController
+                                                                          passwordController
                                                                               .value
                                                                               .text;
 
@@ -196,11 +201,12 @@ class UserProfileState extends State<UserProfile> {
                                                                         });
                                                                         if (context
                                                                             .mounted) {
-                                                                              Navigator.pop(context);
+                                                                          Navigator.pop(
+                                                                              context);
                                                                           SnackBarMessage(
                                                                               context,
                                                                               Colors.green,
-                                                                              const Text('Successfully'));
+                                                                              Text(lang('Successfully')));
                                                                         }
                                                                       } catch (e) {
                                                                         SnackBarMessage(
@@ -209,8 +215,9 @@ class UserProfileState extends State<UserProfile> {
                                                                             Text(e.toString()));
                                                                       }
                                                                     },
-                                                                    child: const Text(
-                                                                        'Submit'))
+                                                                    child: Text(
+                                                                        lang(
+                                                                            'Submit')))
                                                               ],
                                                             ),
                                                           ),
@@ -218,19 +225,40 @@ class UserProfileState extends State<UserProfile> {
                                                       ));
                                                     });
                                               },
-                                              child: const Text(
-                                                "Reset password",
-                                                style: TextStyle(
+                                              child: Text(
+                                                lang("Reset password"),
+                                                style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 17),
-                                              ))
+                                              )),
                                         ],
                                       ),
+                                      TextButton(
+                                          style: const ButtonStyle(
+                                            padding: MaterialStatePropertyAll(
+                                                EdgeInsets.all(10)),
+                                            backgroundColor:
+                                                MaterialStatePropertyAll(
+                                                    Colors.red),
+                                          ),
+                                          onPressed: () async {
+                                            await logout();
+                                            if(context.mounted){
+                                              Navigator.popAndPushNamed(context, '/login');
+                                            }
+
+                                          },
+                                          child: Text(
+                                            lang("Logout"),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 17),
+                                          ))
                                     ],
                                   ),
                                 )),
                               )),
-                        )
+                        ),
                       ],
                     ))),
           ),
