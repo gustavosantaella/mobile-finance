@@ -13,7 +13,7 @@ Future<Map> getHistoryByDate(String walletId, {date, field}) async {
 
     Map res = jsonDecode(response.body);
     if (res['ok'] != ok) {
-      throw res['error'];
+      throw res['message'];
     }
     return res['data'];
   } catch (e) {

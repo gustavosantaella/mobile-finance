@@ -2,6 +2,9 @@ import 'package:finance/helpers/fn/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+// http://10.0.2.2 -> LOCALHOST 
+// http://54.221.67.193 -> prod
+
 Map<String, dynamic> definitions = {
   "history": {
     "type": {

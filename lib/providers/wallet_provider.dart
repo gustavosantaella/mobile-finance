@@ -22,7 +22,8 @@ class WalletProvider extends ChangeNotifier {
     }
   }
 
-  Future<dynamic> getBalance(String walletId, BuildContext context, { bool force = false}) async {
+  Future<dynamic> getBalance(String walletId, BuildContext context,
+      {bool force = false}) async {
     try {
       loadingWallet = true;
       await Future.delayed(const Duration(seconds: 1));
@@ -56,13 +57,24 @@ class WalletProvider extends ChangeNotifier {
 
   Future<List> getWallets(context) async {
     try {
+      loadingWallet = true;
       List wallets = await getAllWalletsByOwner();
       this.wallets = wallets;
+      loadingWallet = false;
       notifyListeners();
       return this.wallets;
     } catch (e) {
       SnackBarMessage(context, Colors.red, Text(e.toString()));
       rethrow;
     }
+  }
+
+  Future<void> clearAll() async {
+    wallets = [];
+    currentWallet = null;
+    currenIndex = 0;
+    history = [];
+
+
   }
 }

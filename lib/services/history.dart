@@ -15,7 +15,7 @@ Future<Map> historyDetail(String id, String walletId) async {
   Map res = jsonDecode(response.body);
 
   if(res['ok'] != ok){
-    throw Exception([res['error']]);
+    throw Exception([res['message']]);
   }
   
   return res['data'];

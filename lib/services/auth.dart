@@ -6,6 +6,9 @@ import 'package:finance/providers/user_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:finance/config/constanst.dart';
+import 'package:logger/logger.dart';
+
+Logger logger = Logger();
 
 Future<dynamic> login(String email, String password,
     {required UserProvider userProvider}) async {
@@ -14,8 +17,9 @@ Future<dynamic> login(String email, String password,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"email": email, "password": password}));
     response = jsonDecode(response.body);
+    logger.d(response);
     if (response['status'] != 200) {
-      return response['error'];
+      return response['message'];
     }
     Box userCollection = await Hive.openBox('user');
 
@@ -37,7 +41,7 @@ Future<void> registerUser(payload) async {
         body: jsonencode, headers: {"Content-Type": "application/json"});
     Map res = jsonDecode(response.body);
     if (res['ok'] != ok) {
-      throw Exception(res['error'] ?? 'An error ocurred');
+      throw Exception(res['message'] ?? 'An error ocurred');
     }
 
     if (res['data'] != true) {
@@ -50,11 +54,15 @@ Future<void> registerUser(payload) async {
 
 Future<void> logout({bool formatted = false}) async {
   try {
-    Box userCollection = await Hive.openBox('user');
-      await userCollection.clear();
-      await Hive.deleteFromDisk();
-      logger.i('Logout');
-    
+    http.Response response = await http.post(Uri.parse('$url/auth/logout'),
+        headers: {"Authorization": await getuserToken(formatted: true)});
+    // Box userCollection = await Hive.openBox('user');
+    // Box historyCollection = await Hive.openBox('history');
+    List<Future> futures =
+        [ Hive.deleteFromDisk()].toList();
+
+    await Future.wait(futures);
+    logger.i('Logout');
   } catch (e) {
     rethrow;
   }
@@ -78,4 +86,3 @@ Future<String> getuserToken({bool formatted = false}) async {
     rethrow;
   }
 }
-
