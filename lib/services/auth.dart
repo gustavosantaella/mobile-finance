@@ -50,11 +50,15 @@ Future<void> registerUser(payload) async {
 
 Future<void> logout({bool formatted = false}) async {
   try {
-    Box userCollection = await Hive.openBox('user');
-      await userCollection.clear();
-      await Hive.deleteFromDisk();
-      logger.i('Logout');
-    
+    http.Response response = await http.post(Uri.parse('$url/auth/logout'),
+        headers: {"Authorization": await getuserToken(formatted: true)});
+    // Box userCollection = await Hive.openBox('user');
+    // Box historyCollection = await Hive.openBox('history');
+    List<Future> futures =
+        [ Hive.deleteFromDisk()].toList();
+
+    await Future.wait(futures);
+    logger.i('Logout');
   } catch (e) {
     rethrow;
   }
@@ -78,4 +82,3 @@ Future<String> getuserToken({bool formatted = false}) async {
     rethrow;
   }
 }
-

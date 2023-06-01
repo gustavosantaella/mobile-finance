@@ -1,11 +1,8 @@
-import 'package:finance/config/constanst.dart';
 import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/pages/home/widgets/balance.dart';
 import 'package:finance/pages/home/widgets/transaction_container.dart';
 import 'package:finance/providers/app_provider.dart';
-import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
-import 'package:finance/widgets/metric_container.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -214,15 +211,7 @@ class HomeState extends State<HomePage> {
                               const BalanceWidget(),
                               piechart(),
                               const TransactionContainer(),
-                              // MetricsContainer(
-                              //   summaryExpenses:
-                              //       provider.metrics['expenses'] ?? 0,
-                              //   summaryIncomes:
-                              //       provider.metrics['incomes'] ?? 0,
-                              //   barchart: provider!.metrics?['barchart'] ?? [],
-                              //   piechart: provider.metrics['piechart'] ?? {},
-                              // )
-                              //  transactions
+                            
                             ]),
                           ),
                         ),

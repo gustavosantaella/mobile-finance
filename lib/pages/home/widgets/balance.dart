@@ -3,6 +3,7 @@ import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -16,13 +17,14 @@ getValue(dynamic num) {
   return 0;
 }
 
+Logger logger = Logger();
 class BalanceWidget extends StatelessWidget {
   const BalanceWidget({Key? key}) : super(key: key);
 
   Widget printWallets(Map wallet, WalletProvider provider, context) {
     return SingleChildScrollView(
       child: provider.loadingWallet == true
-          ? Text('loading')
+          ? const CircularProgressIndicator()
           : Column(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               // crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,7 +93,7 @@ class BalanceWidget extends StatelessWidget {
                                                   provider.metrics['incomes']),
                                       title:
                                           "${getValue(provider.metrics['incomes'])}%",
-                                      color: Color.fromARGB(132, 36, 219, 42)),
+                                      color: const Color.fromARGB(132, 36, 219, 42)),
                                   PieChartSectionData(
                                       titleStyle: const TextStyle(
                                           color: Colors.white,
@@ -232,8 +234,9 @@ class BalanceWidget extends StatelessWidget {
     if (walletProvider.wallets.isEmpty && context.mounted) {
       walletProvider.getWallets(context);
     }
-    if (context.mounted && walletProvider.currentWallet == null) {
+    if (context.mounted && walletProvider.currentWallet == null && walletProvider.loadingWallet == false) {
       if (walletProvider.wallets.isNotEmpty) {
+        logger.e('Here');
         walletProvider.getBalance(walletProvider.wallets[0]['_id'], context);
         walletProvider.setRefreshHistory(
             walletProvider.wallets[0]['_id'], context);

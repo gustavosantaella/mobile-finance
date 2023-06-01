@@ -1,5 +1,6 @@
 import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/providers/app_provider.dart';
+import 'package:finance/providers/wallet_provider.dart';
 import 'package:finance/services/auth.dart';
 import 'package:finance/services/user.dart' as userService;
 import 'package:finance/widgets/navigation_bar.dart';
@@ -38,6 +39,8 @@ class UserProfileState extends State<UserProfile> {
     }
 
     AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
+    WalletProvider walletProvider =
+        Provider.of<WalletProvider>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -68,7 +71,8 @@ class UserProfileState extends State<UserProfile> {
                                     child: Container(
                                   margin: const EdgeInsets.all(10),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
@@ -242,11 +246,14 @@ class UserProfileState extends State<UserProfile> {
                                                     Colors.red),
                                           ),
                                           onPressed: () async {
-                                            await logout();
-                                            if(context.mounted){
-                                              Navigator.popAndPushNamed(context, '/login');
+                                            await Future.wait([
+                                              walletProvider.clearAll(),
+                                              logout()
+                                            ]);
+                                            if (context.mounted) {
+                                              Navigator.popAndPushNamed(
+                                                  context, '/login');
                                             }
-
                                           },
                                           child: Text(
                                             lang("Logout"),

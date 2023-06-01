@@ -61,8 +61,8 @@ Future<bool> addTohistory(String amount, String description, String category,
       List<Future> futures = [
         getWalletBalance(walletId, force: true),
         getHistory(walletId, force: true),
-       ].toList();
-      
+      ].toList();
+
       await Future.wait(futures);
     }
     return true;
@@ -133,21 +133,20 @@ Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
     // Box walletCollection = await Hive.openBox('wallets');
     Map data = {};
 
-     logger.w('online balance');
     String token = await getuserToken(formatted: true);
 
     dynamic response = await http.get(Uri.parse("$url/wallet/$walletId"),
         headers: {"Authorization": token});
     response = jsonDecode(response.body) as Map;
-
     if (response['status'] != 200) {
       throw response['error'];
     }
     data = response['data'];
-    logger.i(data);
+    logger.w('online balance');
 
-
-    return {...data, };
+    return {
+      ...data,
+    };
   } catch (e) {
     logger.e(e.toString());
     rethrow;
