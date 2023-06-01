@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // http://10.0.2.2 -> LOCALHOST 
+// http://54.221.67.193 -> prod
 
 Map<String, dynamic> definitions = {
   "history": {
@@ -35,7 +36,7 @@ Map<String, dynamic> definitions = {
 };
 
 const String url = !kReleaseMode
-    ? 'http://10.0.2.2:9000/api'
+    ? 'http://54.221.67.193:9000/api'
     : 'http://54.221.67.193:9000/api';
 
 

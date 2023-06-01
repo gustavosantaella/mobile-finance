@@ -139,7 +139,7 @@ Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
         headers: {"Authorization": token});
     response = jsonDecode(response.body) as Map;
     if (response['status'] != 200) {
-      throw response['error'];
+      throw response['message'];
     }
     data = response['data'];
     logger.w('online balance');

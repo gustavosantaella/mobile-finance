@@ -8,7 +8,7 @@ Future<List<dynamic>> getCountriesKeys() async {
     Response response = await  get(Uri.parse("$url/countries"));
     Map res = jsonDecode(response.body);
     if(res['ok'] != ok){
-      throw Exception(res['error']);
+      throw Exception(res['message']);
     }
 
     return res['data'];

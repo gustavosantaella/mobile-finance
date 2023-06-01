@@ -13,7 +13,7 @@ Future<Map> getUser() async {
 
   Map res = jsonDecode(response.body);
   if (res['ok'] != ok) {
-    throw Exception(res['error']);
+    throw Exception(res['message']);
   }
 
   return res['data'];
@@ -31,7 +31,7 @@ Future<bool> updateUserInfro(data) async {
     Map res = jsonDecode(response.body);
 
     if (res['ok'] != ok) {
-      throw Exception(res['error']);
+      throw Exception(res['message']);
     }
     return res['data'] as bool;
   } catch (e) {

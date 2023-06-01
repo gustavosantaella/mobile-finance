@@ -6,6 +6,9 @@ import 'package:finance/providers/user_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:finance/config/constanst.dart';
+import 'package:logger/logger.dart';
+
+Logger logger = Logger();
 
 Future<dynamic> login(String email, String password,
     {required UserProvider userProvider}) async {
@@ -14,8 +17,9 @@ Future<dynamic> login(String email, String password,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"email": email, "password": password}));
     response = jsonDecode(response.body);
+    logger.d(response);
     if (response['status'] != 200) {
-      return response['error'];
+      return response['message'];
     }
     Box userCollection = await Hive.openBox('user');
 
@@ -37,7 +41,7 @@ Future<void> registerUser(payload) async {
         body: jsonencode, headers: {"Content-Type": "application/json"});
     Map res = jsonDecode(response.body);
     if (res['ok'] != ok) {
-      throw Exception(res['error'] ?? 'An error ocurred');
+      throw Exception(res['message'] ?? 'An error ocurred');
     }
 
     if (res['data'] != true) {
