@@ -1,5 +1,6 @@
 import 'package:finance/helpers/fn/norifications.dart';
 import 'package:finance/pages/list/main.dart';
+import 'package:finance/providers/drawe_provider.dart';
 import 'package:finance/services/cron.dart';
 import 'package:finance/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         providers: [
           ChangeNotifierProvider<AppProvider>(
             create: (context) => AppProvider(),
+          ),
+          ChangeNotifierProvider<DrawerProvider>(
+            create: (context) => DrawerProvider(),
           ),
           ChangeNotifierProvider<UserProvider>(
             create: (context) => UserProvider(),
