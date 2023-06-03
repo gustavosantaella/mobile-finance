@@ -43,8 +43,9 @@ String lang(String key, {String defaultTransalation = 'Without transalation'}) {
     },
     "en": {
       "Reset password": "Restablecer clave",
-      "expenses": "expenses",
-      "incomes": "incomes",
+      "expenses": "Expenses",
+      "incomes": "Incomes",
+      "hi": "Hi",
       "new movement": "new movement",
       "add": "add"
     },
