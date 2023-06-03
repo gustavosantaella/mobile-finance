@@ -36,7 +36,7 @@ Map<String, dynamic> definitions = {
 };
 
 const String url = !kReleaseMode
-    ? 'http://54.221.67.193:9000/api'
+    ? 'http://10.0.2.2:9000/api'
     : 'http://54.221.67.193:9000/api';
 
 
