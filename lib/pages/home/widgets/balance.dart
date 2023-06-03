@@ -1,30 +1,30 @@
-import 'dart:ui';
-
 import 'package:finance/config/constanst.dart';
 import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/providers/wallet_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 getValue(dynamic num) {
   if (num != null) {
-    if (num > 0.001) {
-      return num;
+    if (double.parse(num) > 0.001) {
+      return double.parse(num);
     }
   }
 
   return 0;
 }
 
+Logger logger = Logger();
 class BalanceWidget extends StatelessWidget {
   const BalanceWidget({Key? key}) : super(key: key);
 
   Widget printWallets(Map wallet, WalletProvider provider, context) {
     return SingleChildScrollView(
       child: provider.loadingWallet == true
-          ? Text('loading')
+          ? const CircularProgressIndicator()
           : Column(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               // crossAxisAlignment: CrossAxisAlignment.center,
@@ -37,7 +37,7 @@ class BalanceWidget extends StatelessWidget {
                         onPressed: () async {
                           provider.loadingWallet = true;
                           provider.getBalance(
-                              provider.currentWallet['info']["walletId"],
+                              provider.currentWallet['info']["_id"],
                               context, force: true);
                           provider.notifyListeners();
                         },
@@ -46,7 +46,7 @@ class BalanceWidget extends StatelessWidget {
                         onPressed: () async {
                           provider.loadingWallet = true;
                           provider.getBalance(
-                              provider.currentWallet?['info']?["walletId"],
+                              provider.currentWallet?['info']?["_id"],
                               context);
                           provider.notifyListeners();
                         },
@@ -55,7 +55,7 @@ class BalanceWidget extends StatelessWidget {
                         onPressed: () async {
                           provider.loadingWallet = true;
                           provider.getBalance(
-                              provider.currentWallet['info']["walletId"],
+                              provider.currentWallet['info']["_id"],
                               context);
                           provider.notifyListeners();
                         },
@@ -93,7 +93,7 @@ class BalanceWidget extends StatelessWidget {
                                                   provider.metrics['incomes']),
                                       title:
                                           "${getValue(provider.metrics['incomes'])}%",
-                                      color: Color.fromARGB(132, 36, 219, 42)),
+                                      color: const Color.fromARGB(132, 36, 219, 42)),
                                   PieChartSectionData(
                                       titleStyle: const TextStyle(
                                           color: Colors.white,
@@ -122,7 +122,7 @@ class BalanceWidget extends StatelessWidget {
                             alignment: WrapAlignment.center,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             runAlignment: WrapAlignment.center,
-                            children: [
+                          children: [
                               Text(
                                 "${provider.currentWallet?["info"]?["currency"] ?? "Loading..."}",
                                 style: const TextStyle(
@@ -234,8 +234,9 @@ class BalanceWidget extends StatelessWidget {
     if (walletProvider.wallets.isEmpty && context.mounted) {
       walletProvider.getWallets(context);
     }
-    if (context.mounted && walletProvider.currentWallet == null) {
+    if (context.mounted && walletProvider.currentWallet == null && walletProvider.loadingWallet == false) {
       if (walletProvider.wallets.isNotEmpty) {
+        logger.e('Here');
         walletProvider.getBalance(walletProvider.wallets[0]['_id'], context);
         walletProvider.setRefreshHistory(
             walletProvider.wallets[0]['_id'], context);
@@ -259,13 +260,15 @@ class BalanceWidget extends StatelessWidget {
                 viewportFraction: 1,
                 height: MediaQuery.of(context).size.height / 2.5,
                 onPageChanged: (index, reason) async {
-                  walletProvider.loadingWallet = true;
+                
+                    walletProvider.loadingWallet = true;
                   walletProvider.getBalance(
                       walletProvider.wallets[index]['_id'], context);
                   walletProvider.currenIndex = index;
                   walletProvider.notifyListeners();
                   await walletProvider.setRefreshHistory(
                       walletProvider.wallets[index]['_id'], context);
+                  
                 }),
             items: walletProvider.wallets.map((wallet) {
               return Builder(

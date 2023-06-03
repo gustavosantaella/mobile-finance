@@ -1,11 +1,8 @@
-import 'package:finance/config/constanst.dart';
 import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/pages/home/widgets/balance.dart';
 import 'package:finance/pages/home/widgets/transaction_container.dart';
 import 'package:finance/providers/app_provider.dart';
-import 'package:finance/providers/user_provider.dart';
 import 'package:finance/providers/wallet_provider.dart';
-import 'package:finance/widgets/metric_container.dart';
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,14 +29,14 @@ class HomeState extends State<HomePage> {
         provider.metrics['piechart']['incomes'].forEach((e) {
           incomes.add({
             "category": e['category'],
-            "value": e['value'],
+            "value": double.parse(e?['value'] ?? '0'),
           });
         });
 
         provider.metrics['piechart']['expenses'].forEach((e) {
           expenses.add({
             "category": e['category'],
-            "value": e['value'],
+            "value": double.parse(e?['value'] ?? '0'),
           });
         });
       }
@@ -138,8 +135,6 @@ class HomeState extends State<HomePage> {
 
     return Builder(
       builder: (context) {
-
-
         return Scaffold(
             bottomNavigationBar: const NavigationBarWidget(),
             drawer: const NavigationDrawer(
@@ -176,7 +171,7 @@ class HomeState extends State<HomePage> {
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children:  [
+                                      children: [
                                         Text(
                                           '${lang("hi")}!',
                                           style: const TextStyle(
@@ -202,7 +197,8 @@ class HomeState extends State<HomePage> {
                                           // icon
                                           alignment: Alignment.center,
                                           onPressed: () {
-                                            Navigator.popAndPushNamed(context, '/profile');
+                                            Navigator.popAndPushNamed(
+                                                context, '/profile');
                                           },
                                           icon: const Icon(
                                             Icons.person,
@@ -215,15 +211,7 @@ class HomeState extends State<HomePage> {
                               const BalanceWidget(),
                               piechart(),
                               const TransactionContainer(),
-                              // MetricsContainer(
-                              //   summaryExpenses:
-                              //       provider.metrics['expenses'] ?? 0,
-                              //   summaryIncomes:
-                              //       provider.metrics['incomes'] ?? 0,
-                              //   barchart: provider!.metrics?['barchart'] ?? [],
-                              //   piechart: provider.metrics['piechart'] ?? {},
-                              // )
-                              //  transactions
+                            
                             ]),
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:finance/config/constanst.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -10,9 +11,9 @@ Logger logger = Logger();
 Future<List> getCategoriest() async {
   try {
     String token = await getuserToken(formatted: true);
-
+    String lang = window.locale.languageCode;
     var data = await http.get(
-      Uri.parse("$url/categories"),
+      Uri.parse("$url/categories?lang=$lang"),
       headers: {"Authorization": token},
     );
     var payload = jsonDecode(data.body);
@@ -53,15 +54,15 @@ Future<bool> addTohistory(String amount, String description, String category,
       "provider": provider.trim(),
       "walletId": walletId.trim()
     };
-    await http.post(Uri.parse("$url/financial/history/"),
+    await http.post(Uri.parse("$url/wallet/history/"),
         headers: {"Authorization": token, "Content-Type": "application/json"},
         body: jsonEncode(jsonBody));
     if (updateHistory) {
       List<Future> futures = [
         getWalletBalance(walletId, force: true),
         getHistory(walletId, force: true),
-       ].toList();
-      
+      ].toList();
+
       await Future.wait(futures);
     }
     return true;
@@ -73,6 +74,7 @@ Future<bool> addTohistory(String amount, String description, String category,
 Future<Map> getHistory(String walletId, {bool force = false}) async {
   try {
     Box historyCollection = await Hive.openBox('history');
+    logger.d(walletId);
     dynamic index;
     if (historyCollection.isNotEmpty) {
       index = historyCollection.values
@@ -85,7 +87,7 @@ Future<Map> getHistory(String walletId, {bool force = false}) async {
     }
     String token = await getuserToken(formatted: true);
     final data =
-        await http.get(Uri.parse("$url/financial/history/$walletId"), headers: {
+        await http.get(Uri.parse("$url/wallet/history/$walletId"), headers: {
       "Authorization": token,
     });
     Map decode = jsonDecode(data.body);
@@ -128,41 +130,25 @@ Future<List> getAllWalletsByOwner({bool force = false}) async {
 
 Future<Map> getWalletBalance(String walletId, {bool force = false}) async {
   try {
-    Box walletCollection = await Hive.openBox('wallets');
+    // Box walletCollection = await Hive.openBox('wallets');
     Map data = {};
-    dynamic wallet;
-    dynamic index;
-    if (walletCollection.isNotEmpty) {
-      index = walletCollection.values
-          .toList()
-          .indexWhere((element) => element['_id'] == walletId);
-      wallet = walletCollection.get(index);
-      if (wallet['balance'] != 0 && force == false) {
-        logger.i('offline balance');
-        return wallet['balance'];
-      }
-    }
+
     String token = await getuserToken(formatted: true);
+
     dynamic response = await http.get(Uri.parse("$url/wallet/$walletId"),
         headers: {"Authorization": token});
     response = jsonDecode(response.body) as Map;
     if (response['status'] != 200) {
-      throw response['error'];
+      throw response['message'];
     }
     data = response['data'];
+    logger.w('online balance');
 
-    if (index != null && wallet != null) {
-      walletCollection.putAt(index, {
-        ...wallet,
-        'balance': data,
-      });
-    }
-
-    index = null;
-    wallet = null;
-
-    return data;
+    return {
+      ...data,
+    };
   } catch (e) {
+    logger.e(e.toString());
     rethrow;
   }
 }

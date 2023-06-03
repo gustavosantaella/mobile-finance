@@ -2,6 +2,9 @@ import 'package:finance/helpers/fn/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+// http://10.0.2.2 -> LOCALHOST 
+// http://54.221.67.193 -> prod
+
 Map<String, dynamic> definitions = {
   "history": {
     "type": {
@@ -33,15 +36,11 @@ Map<String, dynamic> definitions = {
 };
 
 const String url = !kReleaseMode
-    ? 'http://10.0.2.2:8000/api'
-    : 'https://finance-backend-klzw.onrender.com/api';
+    ? 'http://54.221.67.193:9000/api'
+    : 'http://54.221.67.193:9000/api';
 
-// Just if your use ngrok [RECOMENDED]
-// const String url = !kReleaseMode
-//     ? 'https://ecab-190-79-162-128.ngrok.io/api'
-//     : 'https://finance-backend-klzw.onrender.com/api';
 
-const String prefixKey = 'Wafi';
+const String prefixKey = 'Bearer';
 
 const String appName = 'Wafi';
 

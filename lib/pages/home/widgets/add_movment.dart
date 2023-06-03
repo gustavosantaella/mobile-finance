@@ -82,9 +82,9 @@ class _AddMovementState extends State<AddMovementWidget> {
                                 },
                                 keyboardType: TextInputType.number,
                                 controller: amountController,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Amount',
+                                decoration:  InputDecoration(
+                                  border:const OutlineInputBorder(),
+                                  labelText: lang('Amount'),
                                 ),
                               ),
                             )
@@ -100,9 +100,9 @@ class _AddMovementState extends State<AddMovementWidget> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.text,
                                   controller: descriptionController,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Description',
+                                  decoration:  InputDecoration(
+                                    border: const OutlineInputBorder(),
+                                    labelText: lang('Description'),
                                   ),
                                 ),
                               ),
@@ -130,7 +130,7 @@ class _AddMovementState extends State<AddMovementWidget> {
                                     child: FutureBuilder(
                                       future: categories,
                                       builder: (context, snapshot) {
-                                        if (snapshot.hasError) {
+                                        if (snapshot.hasError || snapshot.connectionState != ConnectionState.done) {
                                           return Container();
                                         }
 
@@ -145,13 +145,18 @@ class _AddMovementState extends State<AddMovementWidget> {
                                             ),
                                           ));
                                         });
+                                        var indexName = snapshot.data?.indexWhere((element) => element['id'] == categorySelected );
+                                        String name = lang('Category');
+                                        if(indexName != null &&  !indexName.isNegative){
+                                            name = snapshot.data?[indexName]?['label'];
+                                        }
                                         return DropdownButton(
                                             items: items,
                                             isDense: true,
                                             isExpanded: true,
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            hint: Text(categorySelected),
+                                            hint: Text(name),
                                             onChanged: (categoryId) {
                                               setState(() {
                                                 categorySelected = categoryId;
@@ -192,19 +197,20 @@ class _AddMovementState extends State<AddMovementWidget> {
                               });
                               bool validation =
                                   _formKey.currentState?.validate() as bool;
-                              if (validation == false) {
+                              if (validation == false || categorySelected.isEmpty) {
                                 setState(() {
                                   loading = false;
                                 });
                                 return;
                               }
+                          
                               provider.loadingWallet = true;
                               await service.addTohistory(
                                   amountController.text,
                                   descriptionController.text,
                                   categorySelected,
                                   isExpense,
-                                  provider.currentWallet['info']['walletId']);
+                                  provider.currentWallet['info']['_id']);
 
                               provider.notifyListeners();
                               if (context.mounted) {
@@ -212,10 +218,10 @@ class _AddMovementState extends State<AddMovementWidget> {
                                   loading = false;
                                 });
                                 provider.getBalance(
-                                    provider.currentWallet['info']['walletId'],
+                                    provider.currentWallet['info']['_id'],
                                     context);
                                 provider.setRefreshHistory(
-                                    provider.currentWallet['info']['walletId'],
+                                    provider.currentWallet['info']['_id'],
                                     context);
                                 Navigator.pop(context);
                               }

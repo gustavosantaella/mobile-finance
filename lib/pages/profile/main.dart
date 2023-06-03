@@ -1,5 +1,7 @@
 import 'package:finance/helpers/fn/lang.dart';
 import 'package:finance/providers/app_provider.dart';
+import 'package:finance/providers/wallet_provider.dart';
+import 'package:finance/services/auth.dart';
 import 'package:finance/services/user.dart' as userService;
 import 'package:finance/widgets/navigation_bar.dart';
 import 'package:finance/widgets/snack_bar.dart';
@@ -29,7 +31,7 @@ class UserProfileState extends State<UserProfile> {
         data = response;
       });
 
-      _emailController.text = data['email'];
+      _emailController.text = data['email'] ?? 'without email';
     }
 
     if (data.isEmpty) {
@@ -37,10 +39,12 @@ class UserProfileState extends State<UserProfile> {
     }
 
     AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
+    WalletProvider walletProvider =
+        Provider.of<WalletProvider>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title:  Text(lang("Profile")),
+          title: Text(lang("Profile")),
           backgroundColor: Colors.blue,
         ),
         bottomNavigationBar: const NavigationBarWidget(),
@@ -67,6 +71,8 @@ class UserProfileState extends State<UserProfile> {
                                     child: Container(
                                   margin: const EdgeInsets.all(10),
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
@@ -107,7 +113,7 @@ class UserProfileState extends State<UserProfile> {
                                                       Text(e.toString()));
                                                 }
                                               },
-                                              child:  Text(lang('Submit')))
+                                              child: Text(lang('Submit')))
                                         ],
                                       ),
                                       const SizedBox(
@@ -163,7 +169,9 @@ class UserProfileState extends State<UserProfile> {
                                                                 const EdgeInsets
                                                                     .all(10),
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
                                                                 TextField(
                                                                     controller:
@@ -197,11 +205,12 @@ class UserProfileState extends State<UserProfile> {
                                                                         });
                                                                         if (context
                                                                             .mounted) {
-                                                                              Navigator.pop(context);
+                                                                          Navigator.pop(
+                                                                              context);
                                                                           SnackBarMessage(
                                                                               context,
                                                                               Colors.green,
-                                                                               Text(lang('Successfully')));
+                                                                              Text(lang('Successfully')));
                                                                         }
                                                                       } catch (e) {
                                                                         SnackBarMessage(
@@ -210,8 +219,9 @@ class UserProfileState extends State<UserProfile> {
                                                                             Text(e.toString()));
                                                                       }
                                                                     },
-                                                                    child:  Text(
-                                                                        lang('Submit')))
+                                                                    child: Text(
+                                                                        lang(
+                                                                            'Submit')))
                                                               ],
                                                             ),
                                                           ),
@@ -219,19 +229,43 @@ class UserProfileState extends State<UserProfile> {
                                                       ));
                                                     });
                                               },
-                                              child:  Text(
+                                              child: Text(
                                                 lang("Reset password"),
-                                                style:const TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 17),
-                                              ))
+                                              )),
                                         ],
                                       ),
+                                      TextButton(
+                                          style: const ButtonStyle(
+                                            padding: MaterialStatePropertyAll(
+                                                EdgeInsets.all(10)),
+                                            backgroundColor:
+                                                MaterialStatePropertyAll(
+                                                    Colors.red),
+                                          ),
+                                          onPressed: () async {
+                                            await Future.wait([
+                                              walletProvider.clearAll(),
+                                              logout()
+                                            ]);
+                                            if (context.mounted) {
+                                              Navigator.popAndPushNamed(
+                                                  context, '/login');
+                                            }
+                                          },
+                                          child: Text(
+                                            lang("Logout"),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 17),
+                                          ))
                                     ],
                                   ),
                                 )),
                               )),
-                        )
+                        ),
                       ],
                     ))),
           ),
