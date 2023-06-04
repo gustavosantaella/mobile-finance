@@ -27,7 +27,7 @@ class SplashScreen extends StatelessWidget {
           ),
            Directionality(
             textDirection: TextDirection.ltr,
-            child: Text(lang("You can to manage your finnaces with me"), 
+            child: Text(lang("You can to manage your finances with me"), 
             textAlign: TextAlign.center,
             style:const  TextStyle(
               fontWeight:FontWeight.w300,

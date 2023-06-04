@@ -20,7 +20,7 @@ String lang(String key, {String defaultTransalation = 'Without transalation'}) {
       "Type":"Tipo",
       "Category":"Categoria",
       "Provider":"Proveedor",
-      "You can to manage your finnaces with me": 'Empieza a manejar tus finanzas conmigo',
+      "You can to manage your finances with me": 'Empieza a manejar tus finanzas conmigo',
       "Register now":"Registrate ahora",
       "Just one step for you to start managing your finance":
           "A un solo paso de poder gestionar tus finanzas",
