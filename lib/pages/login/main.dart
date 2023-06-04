@@ -118,6 +118,9 @@ class LoginWidgetState extends State<LoginWidget> {
                                         ),
                                         // initialValue: '',
                                       ),
+                                      TextButton(onPressed: (){
+                                        Navigator.pushNamed(context, '/forgot-password');
+                                      }, child: Text(lang('Forgot password'), style: const TextStyle(color: Colors.white),)),
                                       SizedBox(
                                         width: double.infinity,
                                         child: TextButton(

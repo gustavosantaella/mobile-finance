@@ -86,3 +86,52 @@ Future<String> getuserToken({bool formatted = false}) async {
     rethrow;
   }
 }
+
+
+Future<dynamic> getToken(String email) async {
+  try{
+    http.Response response = await http.post(Uri.parse("$url/auth/forgot-password"), body: {
+      "email": email
+    });
+    Map res = jsonDecode(response.body);
+
+    if(res['ok'] != ok){
+      throw  Exception(res['message']);
+    }
+
+  }catch(e){
+    return e.toString();
+  }
+}
+
+
+Future<dynamic> forgotPasswordValidateCode(String code) async {
+  try{
+ http.Response response = await http.post(Uri.parse("$url/auth/validate-code"), body: {
+      "code": code
+    });
+    Map res = jsonDecode(response.body);
+    if(res['ok'] != ok){
+      throw Exception(res["message"]);
+    }
+    return  res["data"];
+  }catch(e){
+    rethrow;
+  }
+}
+
+Future<dynamic> forgotPasswordChange(String password, String email) async {
+  try{
+ http.Response response = await http.post(Uri.parse("$url/auth/forgot-password-change"), body: {
+      "email": email,
+      "password": password
+    });
+    Map res = jsonDecode(response.body);
+    if(res['ok'] != ok){
+      throw Exception(res["message"]);
+    }
+    return  res["data"];
+  }catch(e){
+    rethrow;
+  }
+}

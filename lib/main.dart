@@ -1,4 +1,7 @@
 import 'package:finance/helpers/fn/norifications.dart';
+import 'package:finance/pages/forgotPassword/ForgotPasswordChange.dart';
+import 'package:finance/pages/forgotPassword/ForgotPasswordCheckCode.dart';
+import 'package:finance/pages/forgotPassword/main.dart';
 import 'package:finance/pages/list/main.dart';
 import 'package:finance/providers/drawe_provider.dart';
 import 'package:finance/services/cron.dart';
@@ -87,6 +90,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           initialRoute: widget.token.isEmpty ? '/login' : '/home',
           routes: {
             "/login": (context) => const LoginWidget(),
+            "/forgot-password": (context) => const ForgotPasswordWidget(),
+            "/forgot-password-check-code": (context) => const ForgotPasswordCheckCode(),
+            "/forgot-password-change-password": (context) => const ForgotPasswordChange(),
             "/register": (context) => const RegisterWidget(),
             "/home": (context) => const HomePage(),
             "/calendar": (context) => const CalendarWidget(),
