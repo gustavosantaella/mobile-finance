@@ -1,17 +1,25 @@
 import 'dart:ui';
 
-String lang(String key, {String defaultTransalation = 'Without transalation'}) {
+String lang(String key) {
   Map<String, Map<String, String>> languages = {
     "es": {
       "Hey!, I'm sad": "Ey! No me haz usado en 30 minutos.",
       "You have not used me":"Recuerda que gestionar tus finanzas es importante para tu economia",
       "income":"Ingresos",
+      "Anually": "Anualmente",
+      "Quarterly": "Trimestralmente",
+      "Daily": "Diariamente",
+      "Monthly": "Mensualmente",
       "Logout": "Cerrar sesion",
+      "Schedule name": "Nombre de la programacion",
       "Check token": "Verificar codigo",
+      "Next date":"Proxima fecha",
+      "Cancel": "Cancelar",
       "expense":"Egresos",
       "Movements": "Movimientos",
       "Verification code": "Codigo de verificacion",
       "Get token": "Obtener codigo",
+      "Schedules": "Programaciones",
       "Incomes": "Ingresos",
       "Forgot password": "Recuperar contrasena",
       "Expenses": "Egresos",

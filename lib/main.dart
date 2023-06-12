@@ -3,6 +3,7 @@ import 'package:finance/pages/forgotPassword/ForgotPasswordChange.dart';
 import 'package:finance/pages/forgotPassword/ForgotPasswordCheckCode.dart';
 import 'package:finance/pages/forgotPassword/main.dart';
 import 'package:finance/pages/list/main.dart';
+import 'package:finance/pages/schedules/main.dart';
 import 'package:finance/providers/drawe_provider.dart';
 import 'package:finance/services/cron.dart';
 import 'package:finance/widgets/splash_screen.dart';
@@ -87,7 +88,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           ),
         ],
         child: MaterialApp(
-          initialRoute: widget.token.isEmpty ? '/login' : '/home',
+          initialRoute: widget.token.isEmpty ? '/login' : '/schedules',
           routes: {
             "/login": (context) => const LoginWidget(),
             "/forgot-password": (context) => const ForgotPasswordWidget(),
@@ -98,6 +99,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             "/calendar": (context) => const CalendarWidget(),
             "/profile": (context) => const UserProfile(),
             "/list": (context) => const ListTransactionsWidget(),
+            "/schedules": (context) => const ScheduleWidget(),
           },
         ),
       ),

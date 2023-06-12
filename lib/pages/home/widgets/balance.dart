@@ -21,7 +21,7 @@ getValue(dynamic num) {
 
 Logger logger = Logger();
 
-class BalanceWidget extends StatelessWidget {
+class BalanceWidget extends StatelessWidget  {
   const BalanceWidget({Key? key}) : super(key: key);
   Widget printWallets(Map wallet, WalletProvider provider, context) {
     return Builder(builder: (context) {
@@ -47,13 +47,13 @@ class BalanceWidget extends StatelessWidget {
                             provider.notifyListeners();
                           },
                           icon: const Icon(Icons.refresh)),
-                      // IconButton(
-                      //     onPressed: () async {
-                      //       drawerProvider.children = Settings();
-                      //       drawerProvider.notifyListeners();
-                      //       Scaffold.of(context).openDrawer();
-                      //     },
-                      //     icon: const Icon(Icons.settings)),
+                      IconButton(
+                          onPressed: () async {
+                            
+                            Navigator.pushNamed(context, '/schedules');
+                            
+                          },
+                          icon: const Icon(Icons.punch_clock_sharp)),
                       // IconButton(
                       //     onPressed: () async {
                       //       provider.loadingWallet = true;
@@ -245,7 +245,6 @@ class BalanceWidget extends StatelessWidget {
         walletProvider.currentWallet == null &&
         walletProvider.loadingWallet == false) {
       if (walletProvider.wallets.isNotEmpty) {
-        logger.e('Here');
         walletProvider.getBalance(walletProvider.wallets[0]['_id'], context);
         walletProvider.setRefreshHistory(
             walletProvider.wallets[0]['_id'], context);

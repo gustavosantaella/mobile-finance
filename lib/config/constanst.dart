@@ -6,9 +6,13 @@ import 'package:flutter/material.dart';
 // http://54.221.67.193 -> prod
 
 Map<String, dynamic> definitions = {
+  "schedules":{
+    "finances": ["Daily", 'Monthly', "Quarterly", "Anually"],
+    "subscriptions": [],
+  },
   "history": {
     "type": {
-      "withdraw": Colors.black12,
+      // "withdraw": Colors.black12,
       "income": {
         "color": Colors.green,
         "icon": Icons.check,
@@ -50,7 +54,7 @@ Function generalInputStyle =  ( {labelText = '', border }) =>  const InputDecora
   fillColor: Colors.white,
   filled: true,);
 
-const borderRadiusAll = BorderRadius.all(Radius.circular(15));
+const borderRadiusAll = BorderRadius.all(Radius.circular(20));
 
 const marginAll = EdgeInsets.all(20);
 
