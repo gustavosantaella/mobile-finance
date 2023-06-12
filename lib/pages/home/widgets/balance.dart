@@ -44,6 +44,7 @@ class BalanceWidget extends StatelessWidget  {
                             provider.getBalance(
                                 provider.currentWallet['info']["_id"], context,
                                 force: true);
+                              // provider.setRefreshHistory( provider.currentWallet['info']["_id"], context,);
                             provider.notifyListeners();
                           },
                           icon: const Icon(Icons.refresh)),

@@ -88,7 +88,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           ),
         ],
         child: MaterialApp(
-          initialRoute: widget.token.isEmpty ? '/login' : '/schedules',
+          initialRoute: widget.token.isEmpty ? '/login' : '/home',
           routes: {
             "/login": (context) => const LoginWidget(),
             "/forgot-password": (context) => const ForgotPasswordWidget(),
