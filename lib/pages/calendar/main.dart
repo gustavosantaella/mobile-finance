@@ -1,20 +1,20 @@
 import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/bottom_sheets.dart';
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
-import 'package:finance/providers/app_provider.dart';
-import 'package:finance/providers/wallet_provider.dart';
-import 'package:finance/widgets/metric_container.dart';
-import 'package:finance/widgets/navigation_bar.dart';
-import 'package:finance/widgets/snack_bar.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/bottom_sheets.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/pages/home/widgets/list_transaction_widget.dart';
+import 'package:wafi/providers/app_provider.dart';
+import 'package:wafi/providers/wallet_provider.dart';
+import 'package:wafi/widgets/metric_container.dart';
+import 'package:wafi/widgets/navigation_bar.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import "package:finance/services/calendar.dart";
+import "package:wafi/services/calendar.dart";
 
 class CalendarWidget extends StatefulWidget {
   const CalendarWidget({super.key});
@@ -103,7 +103,7 @@ class CalendarState extends State<CalendarWidget> {
           loading = false;
           finished = true;
         });
-        SnackBarMessage(context, Colors.red, Text(e.toString()));
+       SnackBarMessage(context, Text(e.toString()));
       }
     }
 

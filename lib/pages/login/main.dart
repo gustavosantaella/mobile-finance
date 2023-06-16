@@ -1,10 +1,10 @@
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/helpers/fn/main.dart';
-import 'package:finance/providers/user_provider.dart';
-import 'package:finance/widgets/snack_bar.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/helpers/fn/main.dart';
+import 'package:wafi/providers/user_provider.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:finance/services/auth.dart';
+import 'package:wafi/services/auth.dart';
 import 'package:provider/provider.dart';
 
 class LoginWidget extends StatefulWidget {
@@ -16,6 +16,8 @@ class LoginWidget extends StatefulWidget {
 class LoginWidgetState extends State<LoginWidget> {
   final _formKey = GlobalKey<FormState>();
   dynamic error;
+
+  bool obscureTextPassword = true;
   bool loading = false;
 
   final _emailController = TextEditingController();
@@ -78,7 +80,7 @@ class LoginWidgetState extends State<LoginWidget> {
                                         }),
                                         keyboardType:
                                             TextInputType.emailAddress,
-                                        decoration:  InputDecoration(
+                                        decoration: InputDecoration(
                                           fillColor: Colors.white,
                                           filled: true,
                                           border: const OutlineInputBorder(
@@ -94,8 +96,19 @@ class LoginWidgetState extends State<LoginWidget> {
                                           _formData['password'] = value;
                                         }),
                                         keyboardType: TextInputType.text,
-                                        obscureText: true,
-                                        decoration:  InputDecoration(
+                                        obscureText: obscureTextPassword,
+                                        decoration: InputDecoration(
+                                          suffixIcon: SizedBox(
+                                              child: IconButton(
+                                            icon: const Icon(
+                                                Icons.remove_red_eye_rounded),
+                                            onPressed: () => {
+                                              setState(() {
+                                                obscureTextPassword =
+                                                    !obscureTextPassword;
+                                              })
+                                            },
+                                          )),
                                           fillColor: Colors.white,
                                           filled: true,
                                           border: const OutlineInputBorder(
@@ -105,6 +118,16 @@ class LoginWidgetState extends State<LoginWidget> {
                                         ),
                                         // initialValue: '',
                                       ),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pushNamed(
+                                                context, '/forgot-password');
+                                          },
+                                          child: Text(
+                                            lang('Forgot password'),
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )),
                                       SizedBox(
                                         width: double.infinity,
                                         child: TextButton(
@@ -124,7 +147,6 @@ class LoginWidgetState extends State<LoginWidget> {
                                                         .isEmpty) {
                                                       SnackBarMessage(
                                                           context,
-                                                          Colors.red,
                                                           Text(
                                                               'Invalid input for $key'));
                                                       hasError = true;
@@ -139,23 +161,19 @@ class LoginWidgetState extends State<LoginWidget> {
                                                     return;
                                                   }
                                                   try {
-                                                    print('loading');
                                                     dynamic error = await login(
                                                         _emailController.text,
                                                         _passwordController
                                                             .text,
                                                         userProvider:
                                                             userProvider);
-                                                    print(error);
-                                                    print('yes');
+
                                                     if (error != null) {
                                                       if (context.mounted) {
                                                         setState(() {
                                                           loading = false;
                                                         });
-                                                        SnackBarMessage(
-                                                            context,
-                                                            Colors.red,
+                                                        SnackBarMessage(context,
                                                             Text(error));
                                                       }
                                                     }
@@ -172,9 +190,7 @@ class LoginWidgetState extends State<LoginWidget> {
                                                       loading = false;
                                                     });
                                                     if (context.mounted) {
-                                                      SnackBarMessage(
-                                                          context,
-                                                          Colors.red,
+                                                      SnackBarMessage(context,
                                                           Text(e.toString()));
                                                     }
                                                   }
@@ -198,9 +214,9 @@ class LoginWidgetState extends State<LoginWidget> {
                                                                   [
                                                                   'hexadecimal']
                                                               ['cobalto']))),
-                                          child:  Text(
+                                          child: Text(
                                             lang('Sign In'),
-                                            style:const TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 20,
                                                 color: Colors.white),
                                           ),
@@ -223,7 +239,7 @@ class LoginWidgetState extends State<LoginWidget> {
                                                 Navigator.popAndPushNamed(
                                                     context, '/register');
                                               },
-                                              child:  Text(
+                                              child: Text(
                                                 lang("Sign Up"),
                                                 style: const TextStyle(
                                                   color: Colors.white,

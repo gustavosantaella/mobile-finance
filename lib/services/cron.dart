@@ -1,7 +1,7 @@
 import 'package:cron/cron.dart';
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/helpers/fn/norifications.dart';
-import 'package:finance/services/auth.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/helpers/fn/norifications.dart';
+import 'package:wafi/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class CronJob {

@@ -1,9 +1,9 @@
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/bottom_sheets.dart';
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/pages/home/widgets/add_movment.dart';
-import 'package:finance/pages/home/widgets/list_transaction_widget.dart';
-import 'package:finance/providers/wallet_provider.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/bottom_sheets.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/pages/home/widgets/add_movment.dart';
+import 'package:wafi/pages/home/widgets/list_transaction_widget.dart';
+import 'package:wafi/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

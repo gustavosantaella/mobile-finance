@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import "package:finance/config/constanst.dart";
+import "package:wafi/config/constanst.dart";
 import 'auth.dart';
 
 Future<Map> getHistoryByDate(String walletId, {date, field}) async {

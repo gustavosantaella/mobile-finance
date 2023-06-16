@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/providers/wallet_provider.dart';
-import 'package:finance/services/history.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/providers/wallet_provider.dart';
+import 'package:wafi/services/history.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +34,7 @@ class HistoryDetailState extends State<HistoryDetail> {
         setState(() {
           error = true;
         });
-        //  SnackBarMessage(context, Colors.red, Text(e.toString()));
+        // SnackBarMessage(context, Text(e.toString()));
       }).whenComplete(() {
         setState(() {
           loading = false;
@@ -49,15 +49,18 @@ class HistoryDetailState extends State<HistoryDetail> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  textDirection: TextDirection.rtl,
+                
                   children: [
                     IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
+                        onPressed: () async {
+                          deleteHistory(context, historyId: data['historyId']);
+                          // Navigator.pop(context);
                         },
                         icon: const Icon(
-                          Icons.keyboard_double_arrow_left,
-                          color: Colors.black,
-                          size: 20,
+                          Icons.delete,
+                          color: Colors.red,
+                          size: 25,
                         )),
                     Text(
                       "#${data['historyId']}",

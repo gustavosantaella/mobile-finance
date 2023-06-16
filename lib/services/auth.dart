@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:finance/helpers/fn/main.dart';
-import 'package:finance/pages/home/widgets/add_movment.dart';
-import 'package:finance/providers/user_provider.dart';
+import 'package:wafi/helpers/fn/main.dart';
+import 'package:wafi/pages/home/widgets/add_movment.dart';
+import 'package:wafi/providers/user_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:finance/config/constanst.dart';
+import 'package:wafi/config/constanst.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
@@ -83,6 +83,55 @@ Future<String> getuserToken({bool formatted = false}) async {
     return token;
   } catch (e) {
     print("error to get token");
+    rethrow;
+  }
+}
+
+
+Future<dynamic> getToken(String email) async {
+  try{
+    http.Response response = await http.post(Uri.parse("$url/auth/forgot-password"), body: {
+      "email": email
+    });
+    Map res = jsonDecode(response.body);
+
+    if(res['ok'] != ok){
+      throw  Exception(res['message']);
+    }
+
+  }catch(e){
+    return e.toString();
+  }
+}
+
+
+Future<dynamic> forgotPasswordValidateCode(String code) async {
+  try{
+ http.Response response = await http.post(Uri.parse("$url/auth/validate-code"), body: {
+      "code": code
+    });
+    Map res = jsonDecode(response.body);
+    if(res['ok'] != ok){
+      throw Exception(res["message"]);
+    }
+    return  res["data"];
+  }catch(e){
+    rethrow;
+  }
+}
+
+Future<dynamic> forgotPasswordChange(String password, String email) async {
+  try{
+ http.Response response = await http.post(Uri.parse("$url/auth/forgot-password-change"), body: {
+      "email": email,
+      "password": password
+    });
+    Map res = jsonDecode(response.body);
+    if(res['ok'] != ok){
+      throw Exception(res["message"]);
+    }
+    return  res["data"];
+  }catch(e){
     rethrow;
   }
 }
