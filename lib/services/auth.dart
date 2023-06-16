@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:finance/helpers/fn/main.dart';
-import 'package:finance/pages/home/widgets/add_movment.dart';
-import 'package:finance/providers/user_provider.dart';
+import 'package:wafi/helpers/fn/main.dart';
+import 'package:wafi/pages/home/widgets/add_movment.dart';
+import 'package:wafi/providers/user_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:finance/config/constanst.dart';
+import 'package:wafi/config/constanst.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();

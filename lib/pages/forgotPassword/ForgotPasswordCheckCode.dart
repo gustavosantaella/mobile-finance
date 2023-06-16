@@ -1,9 +1,9 @@
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/helpers/fn/main.dart';
-import 'package:finance/widgets/snack_bar.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/helpers/fn/main.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:finance/services/auth.dart';
+import 'package:wafi/services/auth.dart';
 
 class ForgotPasswordCheckCode extends StatefulWidget {
   const ForgotPasswordCheckCode({Key? key}) : super(key: key);
@@ -102,9 +102,7 @@ class ForgotPasswordCheckCodeState extends State<ForgotPasswordCheckCode> {
                                                       .forEach((key, value) {
                                                     if (_formData[key]
                                                         .isEmpty) {
-                                                      SnackBarMessage(
-                                                          context,
-                                                          Colors.red,
+                                                      SnackBarMessage(context,
                                                           Text(
                                                               'Invalid input for $key'));
                                                       hasError = true;
@@ -129,9 +127,7 @@ class ForgotPasswordCheckCodeState extends State<ForgotPasswordCheckCode> {
                                                         setState(() {
                                                           loading = false;
                                                         });
-                                                        SnackBarMessage(
-                                                            context,
-                                                            Colors.red,
+                                                       SnackBarMessage(context,
                                                             const Text(
                                                                 "Response is empty. Please try agan"));
                                                         Navigator
@@ -155,9 +151,7 @@ class ForgotPasswordCheckCodeState extends State<ForgotPasswordCheckCode> {
                                                       loading = false;
                                                     });
                                                     if (context.mounted) {
-                                                      SnackBarMessage(
-                                                          context,
-                                                          Colors.red,
+                                                      SnackBarMessage(context,
                                                           Text(e.toString()));
                                                           Navigator.pop(context);
                                                     }

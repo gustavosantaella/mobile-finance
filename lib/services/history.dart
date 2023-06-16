@@ -1,22 +1,38 @@
 import 'dart:convert';
 
-import 'package:finance/config/constanst.dart';
-import 'package:finance/services/auth.dart';
-import 'package:http/http.dart' ;
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/services/auth.dart';
+import 'package:http/http.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 
+const String _prefix = "wallet/history";
 Future<Map> historyDetail(String id, String walletId) async {
-
   String token = await getuserToken(formatted: true);
-  
-  Response response = await get(Uri.parse("$url/wallet/history/detail/$id"), headers: {
-    "Authorization": token
-  });
+  Response response = await get(Uri.parse("$url/$_prefix/detail/$id"),
+      headers: {"Authorization": token});
 
   Map res = jsonDecode(response.body);
 
-  if(res['ok'] != ok){
+  if (res['ok'] != ok) {
     throw Exception([res['message']]);
   }
-  
+
   return res['data'];
+}
+
+Future<void> deleteHistory(context, {required String historyId}) async {
+  try {
+    String token = await getuserToken(formatted: true);
+    Response response = await get(Uri.parse("$url/$_prefix/delete/$historyId"),
+        headers: {"Authorization": token});
+
+    Map res = jsonDecode(response.body);
+
+    if (res['ok'] != ok) {
+      throw Exception([res['message']]);
+    }
+
+  } catch (e) {
+    SnackBarMessage(context, e.toString());
+  }
 }

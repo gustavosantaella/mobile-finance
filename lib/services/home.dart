@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
-import 'package:finance/config/constanst.dart';
+import 'package:wafi/config/constanst.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
@@ -73,18 +73,8 @@ Future<bool> addTohistory(String amount, String description, String category,
 
 Future<Map> getHistory(String walletId, {bool force = false}) async {
   try {
-    Box historyCollection = await Hive.openBox('history');
+    // Box historyCollection = await Hive.openBox('history');
     logger.d(walletId);
-    dynamic index;
-    if (historyCollection.isNotEmpty) {
-      index = historyCollection.values
-          .toList()
-          .indexWhere((element) => element['walletId'] == walletId);
-      if (index > -1 && force == false) {
-        logger.i('offline history');
-        return historyCollection.getAt(index);
-      }
-    }
     String token = await getuserToken(formatted: true);
     final data =
         await http.get(Uri.parse("$url/wallet/history/$walletId"), headers: {
@@ -95,11 +85,6 @@ Future<Map> getHistory(String walletId, {bool force = false}) async {
       throw decode['error'];
     }
 
-    if (index != null) {
-      historyCollection.putAt(index, decode['data']);
-    } else {
-      historyCollection.add(decode['data']);
-    }
     return decode['data'];
   } catch (e) {
     rethrow;

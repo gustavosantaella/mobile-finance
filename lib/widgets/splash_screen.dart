@@ -1,5 +1,5 @@
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/lang.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/lang.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {

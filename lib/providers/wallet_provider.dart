@@ -1,5 +1,5 @@
-import 'package:finance/services/home.dart';
-import 'package:finance/widgets/snack_bar.dart';
+import 'package:wafi/services/home.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 
 class WalletProvider extends ChangeNotifier {
@@ -34,7 +34,7 @@ class WalletProvider extends ChangeNotifier {
       notifyListeners();
       return currentWallet;
     } catch (e) {
-      SnackBarMessage(context, Colors.red, Text(e.toString()));
+     SnackBarMessage(context, Text(e.toString()));
     }
   }
 
@@ -49,7 +49,7 @@ class WalletProvider extends ChangeNotifier {
 
       return history;
     } catch (e) {
-      SnackBarMessage(context, Colors.red, Text(e.toString()));
+     SnackBarMessage(context, Text(e.toString()));
 
       rethrow;
     }
@@ -64,7 +64,7 @@ class WalletProvider extends ChangeNotifier {
       notifyListeners();
       return this.wallets;
     } catch (e) {
-      SnackBarMessage(context, Colors.red, Text(e.toString()));
+     SnackBarMessage(context, Text(e.toString()));
       rethrow;
     }
   }

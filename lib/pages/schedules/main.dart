@@ -1,15 +1,15 @@
 import 'dart:async';
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/bottom_sheets.dart';
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/providers/wallet_provider.dart';
-import 'package:finance/services/schedule.dart';
-import 'package:finance/widgets/navigation_bar.dart';
-import 'package:finance/widgets/snack_bar.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/bottom_sheets.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/providers/wallet_provider.dart';
+import 'package:wafi/services/schedule.dart';
+import 'package:wafi/widgets/navigation_bar.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:finance/services/home.dart' as service;
+import 'package:wafi/services/home.dart' as service;
 
 Logger logger = Logger();
 
@@ -66,8 +66,8 @@ class ScheduleStateWidget extends State<ScheduleWidget> {
                       ),
                       onPressed: () {
                         // add here
-                        bottomSheetWafi(
-                            context,  AddOrEditScheduleWidget(getSchedulesByWallet));
+                        bottomSheetWafi(context,
+                            AddOrEditScheduleWidget(getSchedulesByWallet));
                       }),
                 ),
               ],
@@ -335,8 +335,7 @@ class AddOrEditScheduleState extends State<AddOrEditScheduleWidget> {
                                   Navigator.pop(context);
                                 }
                               } catch (e) {
-                                SnackBarMessage(
-                                    context, Colors.red, Text(e.toString()));
+                                SnackBarMessage(context, Text(e.toString()));
                               } finally {
                                 setState(() {
                                   loading = false;

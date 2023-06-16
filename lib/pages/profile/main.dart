@@ -1,10 +1,10 @@
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/providers/app_provider.dart';
-import 'package:finance/providers/wallet_provider.dart';
-import 'package:finance/services/auth.dart';
-import 'package:finance/services/user.dart' as userService;
-import 'package:finance/widgets/navigation_bar.dart';
-import 'package:finance/widgets/snack_bar.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/providers/app_provider.dart';
+import 'package:wafi/providers/wallet_provider.dart';
+import 'package:wafi/services/auth.dart';
+import 'package:wafi/services/user.dart' as userService;
+import 'package:wafi/widgets/navigation_bar.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
@@ -101,15 +101,14 @@ class UserProfileState extends State<UserProfile> {
                                                           {"email": value});
                                                   if (context.mounted) {
                                                     SnackBarMessage(
-                                                        context,
-                                                        Colors.green,
-                                                        const Text(
-                                                            'Successfully'));
+                                                      context,
+                                                      const Text(
+                                                          'Successfully'),
+                                                      color: Colors.green,
+                                                    );
                                                   }
                                                 } catch (e) {
-                                                  SnackBarMessage(
-                                                      context,
-                                                      Colors.red,
+                                                  SnackBarMessage(context,
                                                       Text(e.toString()));
                                                 }
                                               },
@@ -208,14 +207,15 @@ class UserProfileState extends State<UserProfile> {
                                                                           Navigator.pop(
                                                                               context);
                                                                           SnackBarMessage(
-                                                                              context,
-                                                                              Colors.green,
-                                                                              Text(lang('Successfully')));
+                                                                            context,
+                                                                            Text(lang('Successfully')),
+                                                                            color:
+                                                                                Colors.green,
+                                                                          );
                                                                         }
                                                                       } catch (e) {
                                                                         SnackBarMessage(
                                                                             context,
-                                                                            Colors.red,
                                                                             Text(e.toString()));
                                                                       }
                                                                     },

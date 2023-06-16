@@ -1,9 +1,9 @@
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/helpers/fn/main.dart';
-import 'package:finance/widgets/snack_bar.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/helpers/fn/main.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:finance/services/auth.dart';
+import 'package:wafi/services/auth.dart';
 
 class ForgotPasswordWidget extends StatefulWidget {
   const ForgotPasswordWidget({Key? key, int step = 1}) : super(key: key);
@@ -103,9 +103,7 @@ class ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                                       .forEach((key, value) {
                                                     if (_formData[key]
                                                         .isEmpty) {
-                                                      SnackBarMessage(
-                                                          context,
-                                                          Colors.red,
+                                                      SnackBarMessage(context,
                                                           Text(
                                                               'Invalid input for $key'));
                                                       hasError = true;
@@ -129,9 +127,7 @@ class ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                                         setState(() {
                                                           loading = false;
                                                         });
-                                                        SnackBarMessage(
-                                                            context,
-                                                            Colors.red,
+                                                       SnackBarMessage(context,
                                                             Text(error));
                                                       }
                                                     }
@@ -148,9 +144,7 @@ class ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                                       loading = false;
                                                     });
                                                     if (context.mounted) {
-                                                      SnackBarMessage(
-                                                          context,
-                                                          Colors.red,
+                                                      SnackBarMessage(context,
                                                           Text(e.toString()));
                                                     }
                                                   }

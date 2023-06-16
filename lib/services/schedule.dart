@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:finance/config/constanst.dart';
-import 'package:finance/services/auth.dart';
-import 'package:finance/widgets/snack_bar.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/services/auth.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
@@ -15,7 +15,7 @@ Future<void> add(BuildContext context, Map data) async {
         body: jsonEncode(data),
         headers: {"Content-Type": "application/json", "Authorization": token});
   } catch (e) {
-    SnackBarMessage(context, Colors.red, Text(e.toString()));
+   SnackBarMessage(context, Text(e.toString()));
     rethrow;
   }
 }
@@ -33,7 +33,7 @@ Future<List> getSchedules(BuildContext context, String walletId) async {
     }
     return res['data'];
   } catch (e) {
-    SnackBarMessage(context, Colors.red, Text(e.toString()));
+   SnackBarMessage(context, Text(e.toString()));
     rethrow;
   }
 }
@@ -51,7 +51,7 @@ Future<bool> deleteSchedule(BuildContext context, String schedulePk) async {
     }
     return true;
   } catch (e) {
-    SnackBarMessage(context, Colors.red, Text(e.toString()));
+   SnackBarMessage(context, Text(e.toString()));
     rethrow;
   }
 }

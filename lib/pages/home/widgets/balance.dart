@@ -1,7 +1,7 @@
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/providers/drawe_provider.dart';
-import 'package:finance/providers/wallet_provider.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/providers/drawe_provider.dart';
+import 'package:wafi/providers/wallet_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
