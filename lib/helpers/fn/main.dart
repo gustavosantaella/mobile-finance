@@ -22,3 +22,7 @@ Map toMap(data) {
   data?.forEach((key, value) => map[key] = value);
   return map;
 }
+
+String emailIdentifier(String email){
+  return email.split('@')[0];
+}
