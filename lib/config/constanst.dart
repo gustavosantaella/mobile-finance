@@ -6,6 +6,9 @@ import 'package:wafi/helpers/fn/main.dart';
 // http://10.0.2.2 -> LOCALHOST 
 // http://54.221.67.193 -> prod
 
+// http://10.0.2.2 -> LOCALHOST 
+// http://54.221.67.193 -> prod
+
 Map<String, dynamic> definitions = {
   "schedules":{
     "finances": ["Daily", 'Monthly', "Quarterly", "Anually"],
