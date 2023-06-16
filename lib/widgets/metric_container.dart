@@ -1,4 +1,4 @@
-import 'package:finance/helpers/fn/lang.dart';
+import 'package:wafi/helpers/fn/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

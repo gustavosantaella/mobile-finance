@@ -1,4 +1,4 @@
-import 'package:finance/config/constanst.dart';
+import 'package:wafi/config/constanst.dart';
 import 'package:flutter/material.dart';
 
 class AppProvider extends ChangeNotifier {

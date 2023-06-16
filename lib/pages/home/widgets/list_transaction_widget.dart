@@ -1,8 +1,8 @@
-import 'package:finance/helpers/fn/bottom_sheets.dart';
-import 'package:finance/widgets/history_detail.dart';
+import 'package:wafi/helpers/fn/bottom_sheets.dart';
+import 'package:wafi/widgets/history_detail.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:finance/config/constanst.dart';
+import 'package:wafi/config/constanst.dart';
 import 'package:intl/intl.dart';
 
 class ListTransactionWidget extends StatefulWidget {
@@ -74,11 +74,7 @@ class ListTransactionState extends State<ListTransactionWidget> {
                             const SizedBox(
                               width: 10,
                             ),
-                            // Text(
-
-                            //   style: const TextStyle(
-                            //       fontWeight: FontWeight.w400, fontSize: 18),
-                            // ),
+                            
 
                             SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,

@@ -1,14 +1,19 @@
-import 'package:finance/helpers/fn/main.dart';
+import 'package:wafi/helpers/fn/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:wafi/helpers/fn/main.dart';
 
 // http://10.0.2.2 -> LOCALHOST 
 // http://54.221.67.193 -> prod
 
 Map<String, dynamic> definitions = {
+  "schedules":{
+    "finances": ["Daily", 'Monthly', "Quarterly", "Anually"],
+    "subscriptions": [],
+  },
   "history": {
     "type": {
-      "withdraw": Colors.black12,
+      // "withdraw": Colors.black12,
       "income": {
         "color": Colors.green,
         "icon": Icons.check,
@@ -50,7 +55,7 @@ Function generalInputStyle =  ( {labelText = '', border }) =>  const InputDecora
   fillColor: Colors.white,
   filled: true,);
 
-const borderRadiusAll = BorderRadius.all(Radius.circular(15));
+const borderRadiusAll = BorderRadius.all(Radius.circular(20));
 
 const marginAll = EdgeInsets.all(20);
 
@@ -61,3 +66,4 @@ const normalShadow = <BoxShadow>[
     spreadRadius: 2.0,
   )
 ];
+

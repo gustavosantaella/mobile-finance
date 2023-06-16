@@ -1,9 +1,9 @@
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/helpers/fn/main.dart';
-import 'package:finance/services/auth.dart';
-import 'package:finance/services/country.dart';
-import 'package:finance/widgets/snack_bar.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/helpers/fn/main.dart';
+import 'package:wafi/services/auth.dart';
+import 'package:wafi/services/country.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 
 const fontFamily = 'ubuntu';
@@ -40,7 +40,7 @@ class RegisterState extends State<RegisterWidget> {
         _countries = response;
       });
     } catch (error) {
-      SnackBarMessage(context, Colors.red, Text(error.toString()));
+     SnackBarMessage(context, Text(error.toString()));
     }
   }
 
@@ -196,9 +196,7 @@ class RegisterState extends State<RegisterWidget> {
                                                       .forEach((key, value) {
                                                     if (_formData[key]
                                                         .isEmpty) {
-                                                      SnackBarMessage(
-                                                          context,
-                                                          Colors.red,
+                                                      SnackBarMessage(context,
                                                           Text(
                                                               'Invalid input for $key'));
                                                       setState(() {
@@ -225,9 +223,7 @@ class RegisterState extends State<RegisterWidget> {
                                                       _loading = false;
                                                     });
                                                     if (context.mounted) {
-                                                      SnackBarMessage(
-                                                          context,
-                                                          Colors.red,
+                                                      SnackBarMessage(context,
                                                           Text(e.toString()));
                                                     }
                                                   }

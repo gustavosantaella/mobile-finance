@@ -1,5 +1,5 @@
-import 'package:finance/config/constanst.dart';
-import 'package:finance/helpers/fn/lang.dart';
+import 'package:wafi/config/constanst.dart';
+import 'package:wafi/helpers/fn/lang.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -27,7 +27,7 @@ class SplashScreen extends StatelessWidget {
           ),
            Directionality(
             textDirection: TextDirection.ltr,
-            child: Text(lang("You can to manage your finnaces with me"), 
+            child: Text(lang("You can to manage your finances with me"), 
             textAlign: TextAlign.center,
             style:const  TextStyle(
               fontWeight:FontWeight.w300,

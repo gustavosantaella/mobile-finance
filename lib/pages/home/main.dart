@@ -1,9 +1,10 @@
-import 'package:finance/helpers/fn/lang.dart';
-import 'package:finance/pages/home/widgets/balance.dart';
-import 'package:finance/pages/home/widgets/transaction_container.dart';
-import 'package:finance/providers/app_provider.dart';
-import 'package:finance/providers/wallet_provider.dart';
-import 'package:finance/widgets/navigation_bar.dart';
+import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/pages/home/widgets/balance.dart';
+import 'package:wafi/pages/home/widgets/transaction_container.dart';
+import 'package:wafi/providers/app_provider.dart';
+import 'package:wafi/providers/drawe_provider.dart';
+import 'package:wafi/providers/wallet_provider.dart';
+import 'package:wafi/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -19,6 +20,7 @@ class HomeState extends State<HomePage> {
   Widget build(BuildContext context) {
     final provider = Provider.of<WalletProvider>(context, listen: true);
     final appProvider = Provider.of<AppProvider>(context, listen: true);
+    final drawerProvider = Provider.of<DrawerProvider>(context, listen: true);
 
     Widget piechart() {
       List<Map<String, dynamic>> incomes = [];
@@ -137,10 +139,8 @@ class HomeState extends State<HomePage> {
       builder: (context) {
         return Scaffold(
             bottomNavigationBar: const NavigationBarWidget(),
-            drawer: const NavigationDrawer(
-              children: [
-                Text("In construction. Please wait to the next version."),
-              ],
+            drawer:  NavigationDrawer(
+              children: drawerProvider.children,
             ),
             resizeToAvoidBottomInset: true, // set it to false
 
@@ -204,6 +204,7 @@ class HomeState extends State<HomePage> {
                                             Icons.person,
                                           )),
                                     )
+                                
                                   ],
                                 ),
                               ),

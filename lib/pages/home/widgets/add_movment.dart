@@ -1,7 +1,7 @@
-import 'package:finance/helpers/fn/lang.dart';
+import 'package:wafi/helpers/fn/lang.dart';
 import 'package:flutter/material.dart';
-import 'package:finance/services/home.dart' as service;
-import 'package:finance/providers/wallet_provider.dart';
+import 'package:wafi/services/home.dart' as service;
+import 'package:wafi/providers/wallet_provider.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
