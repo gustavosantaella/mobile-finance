@@ -22,7 +22,10 @@ class HistoryDetailState extends State<HistoryDetail> {
   @override
   Widget build(BuildContext context) {
     WalletProvider walletProvider = Provider.of<WalletProvider>(context);
-    if (loading == false && widget.id.isNotEmpty && data.isEmpty  && error == false) {
+    if (loading == false &&
+        widget.id.isNotEmpty &&
+        data.isEmpty &&
+        error == false) {
       setState(() {
         loading = true;
       });
@@ -30,7 +33,6 @@ class HistoryDetailState extends State<HistoryDetail> {
           .then((value) {
         data = value;
       }).catchError((e) {
-        print(e);
         setState(() {
           error = true;
         });
@@ -39,7 +41,6 @@ class HistoryDetailState extends State<HistoryDetail> {
         setState(() {
           loading = false;
         });
-        print('completed');
       });
     }
     return Container(
@@ -50,12 +51,20 @@ class HistoryDetailState extends State<HistoryDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   textDirection: TextDirection.rtl,
-                
                   children: [
                     IconButton(
                         onPressed: () async {
-                          deleteHistory(context, historyId: data['historyId']);
-                          // Navigator.pop(context);
+                          await deleteHistory(context,
+                              historyId: data['_id']);
+                          if (context.mounted) {
+                            walletProvider.setRefreshHistory(
+                                walletProvider.currentWallet['info']['_id'],
+                                context);
+
+                                walletProvider.getBalance(walletProvider.currentWallet['info']['_id'], context);
+
+                            Navigator.pop(context);
+                          }
                         },
                         icon: const Icon(
                           Icons.delete,
@@ -75,7 +84,7 @@ class HistoryDetailState extends State<HistoryDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     Text(lang("Amount"), style: const TextStyle(fontSize: 17)),
+                    Text(lang("Amount"), style: const TextStyle(fontSize: 17)),
                     Text(
                       "\$.${data['value']}",
                       style: const TextStyle(
@@ -89,7 +98,7 @@ class HistoryDetailState extends State<HistoryDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     Text(lang("Type"), style: const TextStyle(fontSize: 17)),
+                    Text(lang("Type"), style: const TextStyle(fontSize: 17)),
                     Text(
                       "${lang(data['type'])}",
                       style: TextStyle(
@@ -106,7 +115,8 @@ class HistoryDetailState extends State<HistoryDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     Text(lang("Provider"), style: const TextStyle(fontSize: 17)),
+                    Text(lang("Provider"),
+                        style: const TextStyle(fontSize: 17)),
                     Text(
                       "${data['gateway']['provider']}",
                       style: const TextStyle(
@@ -121,7 +131,8 @@ class HistoryDetailState extends State<HistoryDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     Text(lang("Category"), style: const TextStyle(fontSize: 17)),
+                    Text(lang("Category"),
+                        style: const TextStyle(fontSize: 17)),
                     Text(
                       "${data['categories']['name']}",
                       style: const TextStyle(
