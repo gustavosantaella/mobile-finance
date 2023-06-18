@@ -1,7 +1,6 @@
 import 'package:wafi/helpers/fn/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wafi/helpers/fn/main.dart';
 
 // http://10.0.2.2 -> LOCALHOST 
 // http://54.221.67.193 -> prod
@@ -10,6 +9,11 @@ import 'package:wafi/helpers/fn/main.dart';
 // http://54.221.67.193 -> prod
 
 Map<String, dynamic> definitions = {
+  "notifications":{
+    "local":{
+      "foregroundServiceNotificationId": 888
+    }
+  },
   "schedules":{
     "finances": ["Daily", 'Monthly', "Quarterly", "Anually"],
     "subscriptions": [],
