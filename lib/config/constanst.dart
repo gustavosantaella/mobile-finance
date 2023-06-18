@@ -10,6 +10,11 @@ import 'package:wafi/helpers/fn/main.dart';
 // http://54.221.67.193 -> prod
 
 Map<String, dynamic> definitions = {
+  "notifications":{
+    "local":{
+      "foregroundServiceNotificationId": 888
+    }
+  },
   "schedules":{
     "finances": ["Daily", 'Monthly', "Quarterly", "Anually"],
     "subscriptions": [],
@@ -43,7 +48,7 @@ Map<String, dynamic> definitions = {
   }
 };
 
-const String url = !kReleaseMode
+const String url = kReleaseMode
     ? 'http://10.0.2.2:9000/api'
     : 'http://54.221.67.193:9000/api';
 

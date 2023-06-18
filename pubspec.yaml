@@ -13,10 +13,10 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.5
+  # device_info_plus:
   provider: ^6.0.5
   search_choices: ^2.2.5
   dropdown_search: 5.0.6
-  sqflite: 
   table_calendar: ^3.0.9
   fl_chart:
   flutter_circle_color_picker: ^0.3.0
@@ -29,6 +29,7 @@ dependencies:
   intl: ^0.18.1
   cron: ^0.5.1
   flutter_local_notifications: ^14.1.0
+  flutter_background_service: 3.0.1
 
 dev_dependencies:
   flutter_test:

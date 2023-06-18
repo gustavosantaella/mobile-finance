@@ -1,4 +1,4 @@
-package com.softlink.finance
+package com.softlink.wafi
 
 import io.flutter.embedding.android.FlutterActivity
 

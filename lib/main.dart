@@ -1,13 +1,11 @@
-import 'package:wafi/helpers/fn/lang.dart';
 import 'package:wafi/helpers/fn/norifications.dart';
+import 'package:wafi/helpers/obj/background_service.dart';
 import 'package:wafi/pages/forgotPassword/ForgotPasswordChange.dart';
 import 'package:wafi/pages/forgotPassword/ForgotPasswordCheckCode.dart';
 import 'package:wafi/pages/forgotPassword/main.dart';
 import 'package:wafi/pages/list/main.dart';
 import 'package:wafi/pages/schedules/main.dart';
 import 'package:wafi/providers/drawe_provider.dart';
-import 'package:wafi/services/cron.dart';
-import 'package:wafi/widgets/snack_bar.dart';
 import 'package:wafi/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:wafi/pages/calendar/main.dart';
@@ -29,16 +27,18 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 Logger logger = Logger();
 void main() async {
   try {
-    logger.v("lang: ${window.locale.languageCode}");
-
-    WidgetsFlutterBinding.ensureInitialized();
-
     runApp(const SplashScreen());
+    logger.v("lang: ${window.locale.languageCode}");
+    WidgetsFlutterBinding.ensureInitialized();
 
     await initNotifications();
     final appDocumentDirectory =
         await path_provider.getApplicationDocumentsDirectory();
     Hive.init(appDocumentDirectory.path);
+
+    LocalBackgroundService.init();
+
+
     await Future.delayed(const Duration(seconds: 5));
     String token = await getuserToken();
     runApp(App(
@@ -70,17 +70,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.black87));
     super.initState();
-  }
-
-  void a() async {
-    while (true) {
-      final SnackBar snackBar =
-          SnackBar(content: Text("your snackbar message"));
-            showNotificacion(title: lang("Hey!, I'm sad"), content:lang( "You have not used me"), id: 1);
-      snackbarKey.currentState?.showSnackBar(snackBar);
-      print(234);
-      await Future.delayed(Duration(seconds: 5));
-    }
   }
 
   @override
