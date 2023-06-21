@@ -3,6 +3,10 @@ import 'dart:ui';
 String lang(String key) {
   Map<String, Map<String, String>> languages = {
     "es": {
+      "Make login and get started to manager your finances with me": "Inicia sesion y empieza a gestionar tus finanzas de manera agil y sencilla",
+      "Ey! Make login and get started": "Inicia sesion para gestioanr tus finanzas",
+      "Ey! remeber to register a new finance": "Quizas quieres agregar algun nuevo movimiento?",
+      "Register a new financing. If you manage your finances you can detect some flaws": "Recuerda que registrar tus finanzas es importante para que puedas detectar picos de botella y ademas puedas identificas cuales son tus mayores fuentes de ingresos y gastos",
       "Hey!, I'm sad": "Ey! No me haz usado en 30 minutos.",
       "You have not used me":"Recuerda que gestionar tus finanzas es importante para tu economia",
       "income":"Ingresos",
@@ -36,7 +40,7 @@ String lang(String key) {
       "Type":"Tipo",
       "Category":"Categoria",
       "Provider":"Proveedor",
-      "You can manage your finances with me": 'Empieza a manejar tus finanzas conmigo',
+      "You can to manage your finances with me": 'Empieza a manejar tus finanzas conmigo',
       "Register now":"Registrate ahora",
       "Just one step for you to start managing your finance":
           "A un solo paso de poder gestionar tus finanzas",

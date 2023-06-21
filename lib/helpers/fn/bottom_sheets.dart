@@ -9,7 +9,7 @@ bottomSheetWafi(context, widget, { callback }) async {
       borderRadius: BorderRadius.circular(10.0),
     ),
     builder: (BuildContext context) {
-      return callback;
+      return widget;
     },
   );
 }
