@@ -77,4 +77,10 @@ class WalletProvider extends ChangeNotifier {
 
 
   }
+
+
+   getPkByCurrency(String currency){
+    List wallets = this.wallets.where((element) => element['currency'] == currency).toList();
+    return wallets.isNotEmpty ? wallets[0]['_id'] : null;
+  }
 }
