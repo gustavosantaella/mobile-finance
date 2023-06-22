@@ -1,10 +1,10 @@
 import 'package:logger/logger.dart';
 import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/lang.dart';
-import 'package:wafi/providers/app_provider.dart';
+// import 'package:wafi/providers/app_provider.dart';
 import 'package:wafi/providers/wallet_provider.dart';
 import 'package:wafi/services/auth.dart';
-import 'package:wafi/services/user.dart' as userService;
+import 'package:wafi/services/user.dart' as user_service;
 import 'package:wafi/services/history.dart';
 import 'package:wafi/widgets/navigation_bar.dart';
 import 'package:wafi/widgets/snack_bar.dart';
@@ -33,7 +33,7 @@ class UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     getUser() async {
-      Map response = await userService.getUser();
+      Map response = await user_service.getUser();
       print(response);
       setState(() {
         data = response;
@@ -277,7 +277,7 @@ SizedBox listElements(context, {widget, data}) {
                             String value = passwordController.value.text;
 
                             try {
-                              await userService
+                              await user_service
                                   .updateUserInfro({"password": value});
                               if (context.mounted) {
                                 SnackBarMessage(
