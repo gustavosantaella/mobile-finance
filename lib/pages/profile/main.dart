@@ -46,9 +46,9 @@ class UserProfileState extends State<UserProfile> {
       getUser();
     }
 
-    AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
-    WalletProvider walletProvider =
-        Provider.of<WalletProvider>(context, listen: false);
+    // AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
+    //  WalletProvider walletProvider =
+    //     Provider.of<WalletProvider>(context, listen: true);
     return Scaffold(
         bottomNavigationBar: const NavigationBarWidget(),
         body: SafeArea(
@@ -171,7 +171,7 @@ class UserProfileState extends State<UserProfile> {
                             padding: const EdgeInsets.all(10),
                             child: Text(
                               lang('Logout'),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ))
                     ],
@@ -321,7 +321,7 @@ SizedBox listElements(context, {widget, data}) {
           ),
           Center(
             child: DropdownButton(
-                value: walleToRestore.text = walletProvider.wallets[0]['currency'],
+                value: walleToRestore.text = walletProvider.wallets.isEmpty ? null : walletProvider.wallets[0]?['currency'],
                 items: walletProvider.wallets
                     .map((wallet) => DropdownMenuItem(
                           value: wallet['currency'],
@@ -336,6 +336,12 @@ SizedBox listElements(context, {widget, data}) {
           TextButton(
               onPressed: () async {
                 try {
+                  if(
+                    walletProvider.wallets.isEmpty
+                  ){
+                    SnackBarMessage(context, lang('You not have wallets'));
+                    return;
+                  }
                   if (walleToRestore.text.isEmpty) {
                     walleToRestore.text = walletProvider.wallets[0]['currency'];
                   }

@@ -3,6 +3,7 @@ import 'dart:ui';
 String lang(String key) {
   Map<String, Map<String, String>> languages = {
     "es": {
+      "You not have wallets": 'No tienes wallets',
       "Select a wallet to restore": "Selecciona una wallet",
       "Please wait a moment...": "Por favor espere un momento...",
       "Movements has been reset": "Tus wallets han sido restauradas",
