@@ -1,16 +1,20 @@
+import 'package:logger/logger.dart';
 import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/lang.dart';
-import 'package:wafi/providers/app_provider.dart';
+// import 'package:wafi/providers/app_provider.dart';
 import 'package:wafi/providers/wallet_provider.dart';
 import 'package:wafi/services/auth.dart';
-import 'package:wafi/services/user.dart' as userService;
+import 'package:wafi/services/user.dart' as user_service;
+import 'package:wafi/services/history.dart';
 import 'package:wafi/widgets/navigation_bar.dart';
 import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:wafi/helpers/fn/main.dart';
+
+Logger logger = Logger();
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -29,7 +33,7 @@ class UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     getUser() async {
-      Map response = await userService.getUser();
+      Map response = await user_service.getUser();
       print(response);
       setState(() {
         data = response;
@@ -42,9 +46,9 @@ class UserProfileState extends State<UserProfile> {
       getUser();
     }
 
-    AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
-    WalletProvider walletProvider =
-        Provider.of<WalletProvider>(context, listen: false);
+    // AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
+    //  WalletProvider walletProvider =
+    //     Provider.of<WalletProvider>(context, listen: true);
     return Scaffold(
         bottomNavigationBar: const NavigationBarWidget(),
         body: SafeArea(
@@ -167,7 +171,7 @@ class UserProfileState extends State<UserProfile> {
                             padding: const EdgeInsets.all(10),
                             child: Text(
                               lang('Logout'),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ))
                     ],
@@ -238,7 +242,9 @@ SingleChildScrollView objectives(widget) {
 }
 
 SizedBox listElements(context, {widget, data}) {
+  WalletProvider walletProvider = Provider.of<WalletProvider>(context);
   final passwordController = TextEditingController();
+  final walleToRestore = TextEditingController();
   return SizedBox(
       child: Column(
     children: [
@@ -247,8 +253,8 @@ SizedBox listElements(context, {widget, data}) {
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
           title: Text(lang("Reset password")),
           children: [
-             Text(
-                lang('If you want to reset password, you can to insert a new password in  the following input, after that you can login whit your new password.')),
+            Text(lang(
+                'If you want to reset password, you can to insert a new password in  the following input, after that you can login whit your new password.')),
             Wrap(
               children: [
                 Container(
@@ -258,7 +264,7 @@ SizedBox listElements(context, {widget, data}) {
                     children: [
                       TextField(
                           controller: passwordController,
-                          decoration:  InputDecoration(
+                          decoration: InputDecoration(
                               label: Text(lang("New password")),
                               border: const OutlineInputBorder())),
                       ElevatedButton(
@@ -271,7 +277,7 @@ SizedBox listElements(context, {widget, data}) {
                             String value = passwordController.value.text;
 
                             try {
-                              await userService
+                              await user_service
                                   .updateUserInfro({"password": value});
                               if (context.mounted) {
                                 SnackBarMessage(
@@ -295,7 +301,7 @@ SizedBox listElements(context, {widget, data}) {
         expandedAlignment: Alignment.topLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         title: Text(lang("Change subscription")),
-        children:  [
+        children: [
           Text(lang('This feature is beign developed')),
         ],
       ),
@@ -306,8 +312,53 @@ SizedBox listElements(context, {widget, data}) {
         children: [
           Text(lang(
               'This action is very dangerous because delete your finance history. Then you can register new finances again. \n\n This is very used to restore your history or if you need restore your balance.')),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            lang("Select a wallet to restore"),
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+          Center(
+            child: DropdownButton(
+                value: walleToRestore.text = walletProvider.wallets.isEmpty ? null : walletProvider.wallets[0]?['currency'],
+                items: walletProvider.wallets
+                    .map((wallet) => DropdownMenuItem(
+                          value: wallet['currency'],
+                          child: Text(wallet['currency']),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                    // walleToRestore.text = value;
+                  walleToRestore.text = value.toString();
+                }),
+          ),
           TextButton(
-              onPressed: () async {},
+              onPressed: () async {
+                try {
+                  if(
+                    walletProvider.wallets.isEmpty
+                  ){
+                    SnackBarMessage(context, lang('You not have wallets'));
+                    return;
+                  }
+                  if (walleToRestore.text.isEmpty) {
+                    walleToRestore.text = walletProvider.wallets[0]['currency'];
+                  }
+                  walleToRestore.text = walletProvider.getPkByCurrency(walleToRestore.text);
+                  SnackBarMessage(context, lang("Please wait a moment..."),
+                      color: Colors.grey);
+                  await restoreHistoryMovements(context,
+                      walletPk: walleToRestore.text);
+                     
+                  logger.d("restore suscces");
+                  SnackBarMessage(context, lang("Movements has been reset"),
+                      color: Colors.green);
+                } catch (e) {
+                  print("errror");
+                  print(e.toString());
+                }
+              },
               child: Container(
                 decoration: const BoxDecoration(
                     color: Colors.red, borderRadius: borderRadiusAll),
