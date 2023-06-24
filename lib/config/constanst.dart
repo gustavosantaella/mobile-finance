@@ -9,12 +9,6 @@ import 'package:flutter/material.dart';
 // http://54.221.67.193 -> prod
 
 Map<String, dynamic> definitions = {
-  "google": {
-    "recaptcha":{
-      "secret": "6Lf0-aomAAAAAAkkAb6mFaZ1EYSojo4R5lBU2iKp",
-      "webKey": "6Lf0-aomAAAAAF3KI-67Q0SdTNkMIKQg2_YfvAF-"
-    }
-  },
   "notifications":{
     "local":{
       "foregroundServiceNotificationId": 888
@@ -53,7 +47,7 @@ Map<String, dynamic> definitions = {
   }
 };
 
-const String url = !kReleaseMode
+const String url = kReleaseMode
     ? 'http://10.0.2.2:9000/api'
     : 'http://54.221.67.193:9000/api';
 

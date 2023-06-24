@@ -23,6 +23,12 @@ Map toMap(data) {
   return map;
 }
 
-String emailIdentifier(String email){
+String emailIdentifier(String email) {
   return email.split('@')[0];
+}
+
+Future<void> route(BuildContext context, String pathRoute) async {
+  if (ModalRoute.of(context)?.settings.name == pathRoute) return;
+
+  await Navigator.popAndPushNamed(context, pathRoute);
 }
