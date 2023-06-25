@@ -9,6 +9,12 @@ import 'package:flutter/material.dart';
 // http://54.221.67.193 -> prod
 
 Map<String, dynamic> definitions = {
+  "google": {
+    "recaptcha":{
+      "secret": "6Lf0-aomAAAAAAkkAb6mFaZ1EYSojo4R5lBU2iKp",
+      "webKey": "6Lf0-aomAAAAAF3KI-67Q0SdTNkMIKQg2_YfvAF-"
+    }
+  },
   "notifications":{
     "local":{
       "foregroundServiceNotificationId": 888
