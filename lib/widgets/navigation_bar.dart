@@ -13,7 +13,7 @@ class NavigationBarWidget extends StatelessWidget {
         child: NavigationBar(
           elevation: 0,
           shadowColor: Colors.transparent,
-          height: MediaQuery.of(context).size.height / 15,
+          // height: MediaQuery.of(context).size.height,
           backgroundColor: definitions['colors']['cobalto'],
           destinations: [
             IconButton(
@@ -43,8 +43,7 @@ class NavigationBarWidget extends StatelessWidget {
                 icon: const Icon(Icons.home, color: Colors.white)),
             IconButton(
                 onPressed: () async {
-                  if (ModalRoute.of(context)?.settings.name == '/calendar')
-                    return;
+                  if (ModalRoute.of(context)?.settings.name == '/calendar') return;
 
                   await Navigator.popAndPushNamed(context, '/calendar');
                 },

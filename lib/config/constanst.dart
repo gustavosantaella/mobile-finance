@@ -18,6 +18,9 @@ Map<String, dynamic> definitions = {
     "finances": ["Daily", 'Monthly', "Quarterly", "Anually"],
     "subscriptions": [],
   },
+  "loans":{
+    "types": ['canceled', 'paid', 'pending']
+  },
   "history": {
     "type": {
       // "withdraw": Colors.black12,
@@ -47,7 +50,7 @@ Map<String, dynamic> definitions = {
   }
 };
 
-const String url = kReleaseMode
+const String url = !kReleaseMode
     ? 'http://10.0.2.2:9000/api'
     : 'http://54.221.67.193:9000/api';
 
@@ -74,3 +77,6 @@ const normalShadow = <BoxShadow>[
   )
 ];
 
+ const OutlineInputBorder outlineInputBorder = OutlineInputBorder(borderRadius: borderRadiusAll);
+
+ const int maxAttemps = 3;

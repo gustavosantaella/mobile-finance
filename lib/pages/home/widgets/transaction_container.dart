@@ -73,12 +73,9 @@ class TransactionContainer extends StatelessWidget {
                                     Color.fromARGB(255, 10, 179, 208))),
                             onPressed: () {
                               bottomSheetWafi(
-                                  context,
-                                  const Scaffold(
-                                    persistentFooterAlignment:AlignmentDirectional.topEnd,
-                                    body: AddMovementWidget(),
-                                  )
-                                 );
+                                context,
+                                const AddMovementWidget(),
+                              );
                             },
                             child: Text(
                               lang('add'),
@@ -95,6 +92,5 @@ class TransactionContainer extends StatelessWidget {
         ],
       ),
     );
-  
   }
 }

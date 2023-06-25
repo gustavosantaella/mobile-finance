@@ -32,3 +32,12 @@ Future<void> route(BuildContext context, String pathRoute) async {
 
   await Navigator.popAndPushNamed(context, pathRoute);
 }
+
+
+getWalletByCurrency(String currency, List wallets){
+  List w = wallets.where((element) => element['currency'] == currency).toList(); 
+  if(w.isEmpty){
+    return null;
+  }
+  return w[0];
+}

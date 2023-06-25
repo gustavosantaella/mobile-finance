@@ -1,11 +1,14 @@
+import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:wafi/services/home.dart' as service;
 import 'package:wafi/providers/wallet_provider.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:wafi/widgets/categories_widget.dart';
 
 Logger logger = Logger();
+
 class AddMovementWidget extends StatefulWidget {
   const AddMovementWidget({Key? key}) : super(key: key);
 
@@ -19,7 +22,7 @@ class _AddMovementState extends State<AddMovementWidget> {
   final amountController = TextEditingController();
   final descriptionController = TextEditingController();
   late Future<List> categories;
-  String categorySelected = '';
+  Map categorySelected = {};
 
   Future<List> getCategories() async {
     try {
@@ -58,7 +61,7 @@ class _AddMovementState extends State<AddMovementWidget> {
                         Center(
                           child: Container(
                             margin: const EdgeInsets.all(10),
-                            child:  Text(
+                            child: Text(
                               lang("ADD MOVEMENT"),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
@@ -69,7 +72,6 @@ class _AddMovementState extends State<AddMovementWidget> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Icon(Icons.attach_money),
                             Flexible(
                               child: TextFormField(
                                 validator: (value) {
@@ -82,8 +84,9 @@ class _AddMovementState extends State<AddMovementWidget> {
                                 },
                                 keyboardType: TextInputType.number,
                                 controller: amountController,
-                                decoration:  InputDecoration(
-                                  border:const OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.attach_money),
+                                  border: outlineInputBorder,
                                   labelText: lang('Amount'),
                                 ),
                               ),
@@ -95,13 +98,13 @@ class _AddMovementState extends State<AddMovementWidget> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Icon(Icons.description),
                               Flexible(
                                 child: TextFormField(
                                   keyboardType: TextInputType.text,
                                   controller: descriptionController,
-                                  decoration:  InputDecoration(
-                                    border: const OutlineInputBorder(),
+                                  decoration: InputDecoration(
+                                    border: outlineInputBorder,
+                                    prefixIcon: const Icon(Icons.description),
                                     labelText: lang('Description'),
                                   ),
                                 ),
@@ -109,63 +112,18 @@ class _AddMovementState extends State<AddMovementWidget> {
                             ],
                           ),
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Row(
-                              children: const [
-                                Icon(Icons.category),
-                              ],
-                            ),
                             Flexible(
-                              child: Container(
-                                  margin: const EdgeInsets.only(top: 10),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: const Color.fromRGBO(
-                                              100, 100, 100, .7)),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: DropdownButtonHideUnderline(
-                                    child: FutureBuilder(
-                                      future: categories,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasError || snapshot.connectionState != ConnectionState.done) {
-                                          return Container();
-                                        }
-
-                                        List<DropdownMenuItem> items = [];
-                                        snapshot.data?.forEach((item) {
-                                          items.add(DropdownMenuItem(
-                                            value: item?['id'],
-                                            child: SizedBox(
-                                              width: 200,
-                                              child: Text(
-                                                  item['label'].toString()),
-                                            ),
-                                          ));
-                                        });
-                                        var indexName = snapshot.data?.indexWhere((element) => element['id'] == categorySelected );
-                                        String name = lang('Category');
-                                        if(indexName != null &&  !indexName.isNegative){
-                                            name = snapshot.data?[indexName]?['label'];
-                                        }
-                                        return DropdownButton(
-                                            items: items,
-                                            isDense: true,
-                                            isExpanded: true,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            hint: Text(name),
-                                            onChanged: (categoryId) {
-                                              setState(() {
-                                                categorySelected = categoryId;
-                                              });
-                                            });
-                                      },
-                                    ),
-                                  )),
-                            )
+                                child: CategoriesWidget((e) {
+                              setState(() {
+                                categorySelected = e as Map;
+                              });
+                            }, categorySelected['label'] ?? ""))
                           ],
                         ),
                         Row(
@@ -187,52 +145,59 @@ class _AddMovementState extends State<AddMovementWidget> {
                           ],
                         ),
                         ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: loading == true ? const MaterialStatePropertyAll(Colors.grey) : null
-                          ),
-                            onPressed:loading == true ? null : () async {
-                              try{
-                                setState(() {
-                                loading = true;
-                              });
-                              bool validation =
-                                  _formKey.currentState?.validate() as bool;
-                              if (validation == false || categorySelected.isEmpty) {
-                                setState(() {
-                                  loading = false;
-                                });
-                                return;
-                              }
-                          
-                              provider.loadingWallet = true;
-                              await service.addTohistory(
-                                  amountController.text,
-                                  descriptionController.text,
-                                  categorySelected,
-                                  isExpense,
-                                  provider.currentWallet['info']['_id']);
+                            style: ButtonStyle(
+                                backgroundColor: loading == true
+                                    ? const MaterialStatePropertyAll(
+                                        Colors.grey)
+                                    : null),
+                            onPressed: loading == true
+                                ? null
+                                : () async {
 
-                              provider.notifyListeners();
-                              if (context.mounted) {
-                                setState(() {
-                                  loading = false;
-                                });
-                                provider.getBalance(
-                                    provider.currentWallet['info']['_id'],
-                                    context);
-                                provider.setRefreshHistory(
-                                    provider.currentWallet['info']['_id'],
-                                    context);
-                                Navigator.pop(context);
-                              }
-                              }catch(e){
-                                setState(() {
-                                  loading = false;
-                                  logger.e(e.toString());
-                                });
-                              }
-                            },
-                            child:  Text(lang('Submit')))
+                                    try {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      bool validation = _formKey.currentState
+                                          ?.validate() as bool;
+                                      if (validation == false ||
+                                          categorySelected.isEmpty) {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        return;
+                                      }
+
+                                      provider.loadingWallet = true;
+                                      await service.addTohistory(
+                                          amountController.text,
+                                          descriptionController.text,
+                                          categorySelected['id'],
+                                          isExpense,
+                                          provider.currentWallet['info']
+                                              ['_id']);
+                                      if (context.mounted) {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        provider.getBalance(
+                                            provider.currentWallet['info']
+                                                ['_id'],
+                                            context);
+                                        provider.setRefreshHistory(
+                                            provider.currentWallet['info']
+                                                ['_id'],
+                                            context);
+                                        Navigator.pop(context);
+                                      }
+                                    } catch (e) {
+                                      setState(() {
+                                        loading = false;
+                                        logger.e(e.toString());
+                                      });
+                                    }
+                                  },
+                            child: Text(lang('Submit')))
                       ],
                     ),
                   ],

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
-bottomSheetWafi(context, widget, { callback }) async {
+bottomSheetWafi(context, widget) async {
   return await showModalBottomSheet<void>(
-    isScrollControlled: false,
-    useSafeArea: true,
+    isScrollControlled: true,
     context: context,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
     ),
     builder: (BuildContext context) {
-      return widget;
+      return Padding(
+        padding:EdgeInsets.only(bottom:  MediaQuery.of(context).viewInsets.bottom),
+        child: widget,
+      );
     },
   );
 }
