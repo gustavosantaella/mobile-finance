@@ -29,6 +29,7 @@ Future<dynamic> login(String email, String password,
     userProvider.setUserId = response['data']['userId'];
     return null;
   } catch (e) {
+    print(e);
     return e.toString();
   }
 }

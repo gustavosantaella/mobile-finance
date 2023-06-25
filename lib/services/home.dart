@@ -16,7 +16,7 @@ Future<List> getCategoriest() async {
       Uri.parse("$url/categories?lang=$lang"),
       headers: {"Authorization": token},
     );
-    var payload = jsonDecode(data.body);
+    var payload = json.decode(data.body);
     if (data.statusCode != 200) {
       throw payload['error'];
     }

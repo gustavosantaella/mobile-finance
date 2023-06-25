@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:hive/hive.dart';
 import 'package:wafi/helpers/fn/lang.dart';
 import 'package:wafi/helpers/fn/norifications.dart';
-import 'package:wafi/services/auth.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 final backGroundNotifications = {
@@ -13,7 +12,7 @@ final backGroundNotifications = {
           await path_provider.getApplicationDocumentsDirectory();
       bool boxExists =
           await Hive.boxExists('user', path: appDocumentDirectory.path);
-      if (!boxExists) {
+      if (boxExists) {
         showNotificacion(
             title: lang('Ey! remeber to register a new finance'),
             content: lang(

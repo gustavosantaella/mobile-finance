@@ -27,8 +27,8 @@ Future<void> showNotificacion({String channelId = 'default', String channelName 
       AndroidNotificationDetails(
     "default",
     'default',
-    importance: Importance.max,
-    priority: Priority.high,
+    importance: Importance.low,
+    priority: Priority.low,
   );
 
   const NotificationDetails notificationDetails = NotificationDetails(
