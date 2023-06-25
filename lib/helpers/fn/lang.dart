@@ -6,6 +6,8 @@ String lang(String key) {
       "Loans":"Prestamos",
       "Debts": "Deudas",
       "loan": "prestamo",
+      "Who?": "Deudor o prestamista",
+      "Select a walle to assign Loan": "Selecciona una billetera para asocciar el prestamo",
       "loans":"prestamos",
       "My debts": "Mis deudas",
       "Description": "Descripcion",

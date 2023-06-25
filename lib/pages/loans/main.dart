@@ -2,10 +2,12 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/bottom_sheets.dart';
 import 'package:wafi/helpers/fn/lang.dart';
 import 'package:wafi/pages/loans/new_loan_widget.dart';
+import 'package:wafi/providers/wallet_provider.dart';
 import 'package:wafi/services/home.dart';
 import 'package:wafi/services/loan.dart';
 import 'package:wafi/widgets/card_widget.dart';
@@ -162,6 +164,7 @@ class LoandsState extends State<LoansWidget> {
 
 Widget printCards(BuildContext context, List<dynamic> loans,
     {Function? onDelete, LoandsState? widget}) {
+  WalletProvider walletProvider = Provider.of(context);
   return SizedBox(
     height: MediaQuery.of(context).size.height / 1.8,
     child: ListView(
@@ -181,10 +184,16 @@ Widget printCards(BuildContext context, List<dynamic> loans,
                               if (loanIndex > -1) {
                                 loans[loanIndex]['status'] = el;
                                 widget?.setState(() {
-                                    loans = [...loans];
+                                  loans = [...loans];
                                 });
                               }
                               if (context.mounted) {
+                                walletProvider.getBalance(
+                                    e['walletPk'], context);
+                                walletProvider.setRefreshHistory(
+                                    e['_id'], context);
+                                    walletProvider.notifyListeners();
+
                                 Navigator.pop(context);
                               }
                             } catch (e) {
@@ -194,6 +203,8 @@ Widget printCards(BuildContext context, List<dynamic> loans,
                             }
                           },
                           child: Tag(el, TagColorOptions.getColor(el))))
+                      .toList()
+                      .reversed
                       .toList();
                   bottomSheetWafi(
                       context,
@@ -286,6 +297,8 @@ Widget printCards(BuildContext context, List<dynamic> loans,
                   ],
                 )),
               ))
+          .toList()
+          .reversed
           .toList(),
     ),
   );
