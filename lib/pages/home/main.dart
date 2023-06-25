@@ -17,6 +17,20 @@ class HomePage extends StatefulWidget {
 
 class HomeState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      WalletProvider walletProvider = Provider.of(context, listen: false);
+      walletProvider.setRefreshHistory(walletProvider.currentWallet['info']['_id'], context);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<WalletProvider>(context, listen: true);
     final appProvider = Provider.of<AppProvider>(context, listen: true);
@@ -139,7 +153,7 @@ class HomeState extends State<HomePage> {
       builder: (context) {
         return Scaffold(
             bottomNavigationBar: const NavigationBarWidget(),
-            drawer:  NavigationDrawer(
+            drawer: NavigationDrawer(
               children: drawerProvider.children,
             ),
             resizeToAvoidBottomInset: true, // set it to false
@@ -204,7 +218,6 @@ class HomeState extends State<HomePage> {
                                             Icons.person,
                                           )),
                                     )
-                                
                                   ],
                                 ),
                               ),
@@ -212,7 +225,6 @@ class HomeState extends State<HomePage> {
                               const BalanceWidget(),
                               piechart(),
                               const TransactionContainer(),
-                            
                             ]),
                           ),
                         ),

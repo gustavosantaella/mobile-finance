@@ -24,6 +24,9 @@ Map<String, dynamic> definitions = {
     "finances": ["Daily", 'Monthly', "Quarterly", "Anually"],
     "subscriptions": [],
   },
+  "loans":{
+    "types": ['canceled', 'paid', 'pending']
+  },
   "history": {
     "type": {
       // "withdraw": Colors.black12,
@@ -80,3 +83,6 @@ const normalShadow = <BoxShadow>[
   )
 ];
 
+ const OutlineInputBorder outlineInputBorder = OutlineInputBorder(borderRadius: borderRadiusAll);
+
+ const int maxAttemps = 3;

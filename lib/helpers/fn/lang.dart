@@ -3,6 +3,21 @@ import 'dart:ui';
 String lang(String key) {
   Map<String, Map<String, String>> languages = {
     "es": {
+      "Loans":"Prestamos",
+      "Debts": "Deudas",
+      "loan": "prestamo",
+      "Who?": "Deudor o prestamista",
+      "Select a walle to assign Loan": "Selecciona una billetera para asocciar el prestamo",
+      "loans":"prestamos",
+      "My debts": "Mis deudas",
+      "Description": "Descripcion",
+      "Create and assign category": "Crear y asignar categoria",
+      "My leans": "Mis prestamos",
+      "debt": "deuda",
+      "Update the status whe you know some advance about your loans.": "Actualiza el status del prestamo o dedua cuando estes seguro de hacerlo, esto te ayudara a tener un control sobre las personas que te deben algun dinero o a las personas a las que debes.",
+      "Debotors": "Deudores",
+      "debotors": "deudores",
+      "Search": "Buscar",
       "You not have wallets": 'No tienes wallets',
       "Select a wallet to restore": "Selecciona una wallet",
       "Please wait a moment...": "Por favor espere un momento...",

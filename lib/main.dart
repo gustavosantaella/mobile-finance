@@ -1,9 +1,11 @@
+import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/norifications.dart';
 import 'package:wafi/helpers/obj/background_service.dart';
 import 'package:wafi/pages/forgotPassword/ForgotPasswordChange.dart';
 import 'package:wafi/pages/forgotPassword/ForgotPasswordCheckCode.dart';
 import 'package:wafi/pages/forgotPassword/main.dart';
 import 'package:wafi/pages/list/main.dart';
+import 'package:wafi/pages/loans/main.dart';
 import 'package:wafi/pages/schedules/main.dart';
 import 'package:wafi/providers/drawe_provider.dart';
 import 'package:wafi/widgets/splash_screen.dart';
@@ -27,6 +29,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 Logger logger = Logger();
 void main() async {
   try {
+    logger.d("URL API: $url");
     runApp(const SplashScreen());
     logger.v("lang: ${window.locale.languageCode}");
     WidgetsFlutterBinding.ensureInitialized();
@@ -68,7 +71,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.black87));
+        const SystemUiOverlayStyle(statusBarColor: Colors.white));
     super.initState();
   }
 
@@ -106,6 +109,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             "/profile": (context) => const UserProfile(),
             "/list": (context) => const ListTransactionsWidget(),
             "/schedules": (context) => const ScheduleWidget(),
+            "/loans": (context) => const LoansWidget(),
           },
         ),
       ),
