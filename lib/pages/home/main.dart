@@ -21,7 +21,8 @@ class HomeState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       WalletProvider walletProvider = Provider.of(context, listen: false);
-      walletProvider.setRefreshHistory(walletProvider.currentWallet['info']['_id'], context);
+      walletProvider.setRefreshHistory(
+          walletProvider.currentWallet['info']['_id'], context);
     });
   }
 
@@ -152,6 +153,17 @@ class HomeState extends State<HomePage> {
     return Builder(
       builder: (context) {
         return Scaffold(
+            extendBody: true,
+            // floatingActionButton: FloatingActionButton(
+            //   onPressed: () {},
+            //   foregroundColor: Colors.red,
+            //   splashColor: Colors.red,
+            //   backgroundColor: Colors.white,
+            //   hoverColor: Colors.yellow,
+            //   child: const Icon(Icons.home),
+            // ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: const NavigationBarWidget(),
             drawer: NavigationDrawer(
               children: drawerProvider.children,
