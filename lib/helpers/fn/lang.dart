@@ -99,3 +99,7 @@ String lang(String key) {
     return key;
   }
 }
+
+String getSystemLang(){
+  return window.locale.languageCode;
+}

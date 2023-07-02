@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/lang.dart';
+import 'package:wafi/services/categories.dart';
 import 'package:wafi/services/home.dart';
 import 'package:wafi/widgets/navigation_bar.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 
 Logger logger = Logger();
 
@@ -41,7 +43,7 @@ class CategoriesState extends State<CategoriesWidget> {
     }).catchError((err) {
       logger.e(err.toString());
       if (attemp != maxAttemps) {
-        return _getCategories(attemp: attemp + 1 );
+        return _getCategories(attemp: attemp + 1);
       }
       setState(() {
         hasError = true;
@@ -108,7 +110,21 @@ class CategoriesState extends State<CategoriesWidget> {
                               ),
                               if (showCreateAndAssingButtom == true)
                                 TextButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      try {
+                                        Map category = await CategoryService
+                                            .createCategory(
+                                                _searchInputController.text,
+                                                getSystemLang());
+                                        widget
+                                            .setStateCategoryCallback(category);
+                                        if (context.mounted) {
+                                          Navigator.pop(context);
+                                        }
+                                      } catch (e) {
+                                        SnackBarMessage(context, e.toString());
+                                      }
+                                    },
                                     child: Text(
                                         lang("Create and assign category")))
                               else
