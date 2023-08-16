@@ -12,7 +12,7 @@ class NavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of(context, listen: true);
+    // AppProvider appProvider = Provider.of(context, listen: true);
     return Container(
         decoration: const BoxDecoration(borderRadius: borderRadiusAll),
         // margin: const EdgeInsets.all(10),
@@ -21,19 +21,15 @@ class NavigationBarWidget extends StatelessWidget {
             switch (value) {
               case 0:
                 await route(context, '/home');
-                appProvider.setCurrenIndexRoute = value;
                 break;
               case 1:
                 await route(context, '/loans');
-                appProvider.setCurrenIndexRoute = value;
                 break;
               case 2:
                 await route(context, '/list');
-                appProvider.setCurrenIndexRoute = value;
                 break;
               case 3:
                 await route(context, '/calendar');
-                appProvider.setCurrenIndexRoute = value;
                 break;
 
               default:
@@ -42,7 +38,7 @@ class NavigationBarWidget extends StatelessWidget {
             }
 
           },
-          currentIndex: appProvider.currentIndexRoute,
+          currentIndex: 0,
           backgroundColor: definitions['colors']['cobalto'],
           // height: MediaQuery.of(context).size.height / 12,
           // notchMargin: 10,
