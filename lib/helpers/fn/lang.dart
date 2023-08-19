@@ -3,6 +3,7 @@ import 'dart:ui';
 String lang(String key) {
   Map<String, Map<String, String>> languages = {
     "es": {
+      "My account": "Mi cuenta",
       "Loans":"Prestamos",
       "Debts": "Deudas",
       "loan": "prestamo",
@@ -76,8 +77,13 @@ String lang(String key) {
       "incomes": "Ingresos",
       "New movement": "nuevo movimiento",
       "add": 'agregar',
+      "Conversion": "Conversion",
+      "Convert": "Convertir",
+      "Conversions": "Conversiones",
+      "New wallet": "Nueva billereta",
       'Welcome back': "bienvenido de vuelta",
       "hi": 'Hola',
+      "Hi!": 'Hola!',
       "Submit": "Enviar",
       "Dayli metric": "Metricas diarias",
       "email": "correo",
@@ -98,4 +104,7 @@ String lang(String key) {
   } else {
     return key;
   }
+}
+String getSystemLang(){
+  return window.locale.languageCode;
 }
