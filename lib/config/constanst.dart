@@ -61,6 +61,9 @@ const String url = !kReleaseMode
     : 'http://54.221.67.193:9000/api';
 
 
+const String currencyApi = "https://ms-countries.onrender.com";
+
+
 const String prefixKey = 'Bearer';
 
 const String appName = 'Wafi';

@@ -1,6 +1,7 @@
 import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/norifications.dart';
 import 'package:wafi/helpers/obj/background_service.dart';
+import 'package:wafi/pages/conversions/main.dart';
 import 'package:wafi/pages/forgotPassword/ForgotPasswordChange.dart';
 import 'package:wafi/pages/forgotPassword/ForgotPasswordCheckCode.dart';
 import 'package:wafi/pages/forgotPassword/main.dart';
@@ -34,12 +35,12 @@ void main() async {
     logger.v("lang: ${window.locale.languageCode}");
     WidgetsFlutterBinding.ensureInitialized();
 
-    await initNotifications();
+    // await initNotifications();
     final appDocumentDirectory =
         await path_provider.getApplicationDocumentsDirectory();
     Hive.init(appDocumentDirectory.path);
 
-    LocalBackgroundService.init();
+    // LocalBackgroundService.init();
 
 
     await Future.delayed(const Duration(seconds: 5));
@@ -109,6 +110,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             "/profile": (context) => const UserProfile(),
             "/list": (context) => const ListTransactionsWidget(),
             "/schedules": (context) => const ScheduleWidget(),
+            "/conversion": (context) => const ConversionScreen(),
             "/loans": (context) => const LoansWidget(),
           },
         ),
