@@ -4,10 +4,12 @@ import 'package:wafi/pages/home/widgets/transaction_container.dart';
 import 'package:wafi/providers/app_provider.dart';
 import 'package:wafi/providers/drawe_provider.dart';
 import 'package:wafi/providers/wallet_provider.dart';
+import 'package:wafi/services/auth.dart';
 import 'package:wafi/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:wafi/widgets/snack_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,6 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -35,7 +38,7 @@ class HomeState extends State<HomePage> {
   Widget build(BuildContext context) {
     final provider = Provider.of<WalletProvider>(context, listen: true);
     final appProvider = Provider.of<AppProvider>(context, listen: true);
-    final drawerProvider = Provider.of<DrawerProvider>(context, listen: true);
+    final drawerProvider = Provider.of<DrawerProvider>(context, listen: false);
 
     Widget piechart() {
       List<Map<String, dynamic>> incomes = [];
@@ -150,10 +153,16 @@ class HomeState extends State<HomePage> {
       );
     }
 
+    drawerProvider.children = [
+      TextButton(onPressed: () {}, child: Text(lang("Conversions"))),
+      TextButton(onPressed: () {}, child: Text(lang("New Wallet"))),
+    ];
     return Builder(
       builder: (context) {
         return Scaffold(
             extendBody: true,
+            key: _scaffoldKey,
+            appBar: appBarWidget(context, lang("Hi!"), subTitle: lang("Welcome back"), key: _scaffoldKey),
             // floatingActionButton: FloatingActionButton(
             //   onPressed: () {},
             //   foregroundColor: Colors.red,
@@ -165,9 +174,7 @@ class HomeState extends State<HomePage> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: const NavigationBarWidget(),
-            drawer: NavigationDrawer(
-              children: drawerProvider.children,
-            ),
+            drawer: mainDrawer(context),
             resizeToAvoidBottomInset: true, // set it to false
 
             body: SafeArea(
@@ -184,55 +191,7 @@ class HomeState extends State<HomePage> {
                         child: SizedBox(
                           child: SingleChildScrollView(
                             child: Column(children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    top: 30, left: 30, right: 30, bottom: 30),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${lang("hi")}!',
-                                          style: const TextStyle(
-                                              fontSize: 26, color: Colors.grey),
-                                        ),
-                                        Text(
-                                          lang('Welcome back'),
-                                          style: const TextStyle(
-                                              fontSize: 18, color: Colors.grey),
-                                        )
-                                      ],
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  43, 28, 26, 26)),
-                                          color: const Color.fromARGB(
-                                              86, 158, 158, 158),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(100))),
-                                      child: IconButton(
-                                          // icon
-                                          alignment: Alignment.center,
-                                          onPressed: () {
-                                            Navigator.popAndPushNamed(
-                                                context, '/profile');
-                                          },
-                                          icon: const Icon(
-                                            Icons.person,
-                                          )),
-                                    )
-                                  ],
-                                ),
-                              ),
+                          
                               // balance
                               const BalanceWidget(),
                               piechart(),

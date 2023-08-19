@@ -5,6 +5,8 @@ import 'package:wafi/helpers/fn/lang.dart';
 import 'package:wafi/helpers/fn/main.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:wafi/providers/app_provider.dart';
+import 'package:wafi/providers/user_provider.dart';
+import 'package:wafi/services/auth.dart';
 import 'package:wafi/widgets/snack_bar.dart';
 
 class NavigationBarWidget extends StatelessWidget {
@@ -36,7 +38,6 @@ class NavigationBarWidget extends StatelessWidget {
                 SnackBarMessage(context, lang("404:Route not found"));
                 break;
             }
-
           },
           currentIndex: 0,
           backgroundColor: definitions['colors']['cobalto'],
@@ -93,19 +94,37 @@ class NavigationBarWidget extends StatelessWidget {
 }
 
 AppBar appBarWidget(BuildContext context, String title,
-        {String? subTitle, Widget? leading}) =>
+        {String? subTitle, Widget? leading, GlobalKey<ScaffoldState>? key}) =>
     AppBar(
       leading: leading,
       automaticallyImplyLeading: false,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-                color: Colors.black26,
-                fontWeight: FontWeight.w500,
-                fontSize: 24),
+          Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    if (key == null) {
+                      return;
+                    }
+                    if (key.currentState != null) {
+                      key.currentState!.closeDrawer();
+                    }
+                    key.currentState?.openDrawer();
+                  },
+                  icon: const Icon(
+                    Icons.menu,
+                    color: Colors.black,
+                  )),
+              Text(
+                title,
+                style: const TextStyle(
+                    color: Colors.black26,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24),
+              ),
+            ],
           ),
           if (subTitle != null)
             Text(
@@ -122,3 +141,90 @@ AppBar appBarWidget(BuildContext context, String title,
       elevation: 0,
       foregroundColor: Colors.white,
     );
+
+Drawer mainDrawer(BuildContext context) {
+  return Drawer(
+    child: ListView(
+      // Important: Remove any padding from the ListView.
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, "/profile");
+          },
+          child: DrawerHeader(
+            margin: EdgeInsets.zero,
+            child: Container(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.person),
+                      Text(
+                        lang("My account"),
+                        style: const TextStyle(fontSize: 20),
+                      )
+                    ],
+                  ),
+                  TextButton(
+                      onPressed: () {},
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: definitions['colors']['cobalto'],
+                            borderRadius: borderRadiusAll),
+                        child: const Text(
+                          "WAFI PREMIUM",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ))
+                ],
+              ),
+            ),
+          ),
+        ),
+        ListTile(
+          title: Text(lang('Home')),
+          onTap: () {
+            Navigator.popAndPushNamed(context, "/home");
+            // Update the state of the app.
+            // ...
+          },
+        ),
+        ListTile(
+          title: Text(lang('Conversions')),
+          onTap: () {
+            Navigator.pushNamed(context, '/conversion');
+            // Update the state of the app.
+            // ...
+          },
+        ),
+        ListTile(
+          title: Text(lang("New wallet")),
+          onTap: () {
+            // Update the state of the app.
+            // ...
+          },
+        ),
+        ListTile(
+          title: Text(
+            lang("Logout"),
+            style: const TextStyle(color: Colors.red),
+          ),
+          onTap: () {
+            try {
+              logout();
+              Navigator.popAndPushNamed(context, '/login');
+            } catch (e) {
+              SnackBarMessage(context, e.toString());
+            }
+            // Update the state of the app.
+            // ...
+          },
+        ),
+      ],
+    ),
+  );
+}
