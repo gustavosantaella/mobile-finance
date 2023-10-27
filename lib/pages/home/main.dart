@@ -1,3 +1,5 @@
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/lang.dart';
 import 'package:wafi/pages/home/widgets/balance.dart';
 import 'package:wafi/pages/home/widgets/transaction_container.dart';
@@ -162,7 +164,8 @@ class HomeState extends State<HomePage> {
         return Scaffold(
             extendBody: true,
             key: _scaffoldKey,
-            appBar: appBarWidget(context, lang("Hi!"), subTitle: lang("Welcome back"), key: _scaffoldKey),
+            appBar: appBarWidget(context, lang("Hi!"),
+                subTitle: lang("Welcome back"), key: _scaffoldKey),
             // floatingActionButton: FloatingActionButton(
             //   onPressed: () {},
             //   foregroundColor: Colors.red,
@@ -191,7 +194,10 @@ class HomeState extends State<HomePage> {
                         child: SizedBox(
                           child: SingleChildScrollView(
                             child: Column(children: [
-                          
+                                AdmobBanner(
+                                  adSize: AdmobBannerSize.LARGE_BANNER,
+                                  adUnitId: ads['banner1'] as String,
+                                ),
                               // balance
                               const BalanceWidget(),
                               piechart(),

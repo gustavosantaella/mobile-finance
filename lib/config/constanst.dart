@@ -63,6 +63,9 @@ const String url = !kReleaseMode
 
 const String currencyApi = "https://ms-countries.onrender.com";
 
+const Map<String, String>ads = {
+  "banner1": !kReleaseMode  ? "ca-app-pub-3940256099942544/6300978111" : "ca-app-pub-7887143920740339/1914591205"
+};
 
 const String prefixKey = 'Bearer';
 

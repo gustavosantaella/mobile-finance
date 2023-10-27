@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/lang.dart';
 import 'package:wafi/helpers/fn/main.dart';
@@ -43,6 +44,7 @@ class LoginWidgetState extends State<LoginWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                   
                         Text(
                           appName.toUpperCase(),
                           style: const TextStyle(
@@ -51,6 +53,10 @@ class LoginWidgetState extends State<LoginWidget> {
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
                         ),
+                             AdmobBanner(
+                                adSize: AdmobBannerSize.LARGE_BANNER,
+                                adUnitId: ads['banner1'] as String,
+                              ),
                         const SizedBox(
                           height: 30,
                         ),

@@ -26,6 +26,7 @@ import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:admob_flutter/admob_flutter.dart';
 
 Logger logger = Logger();
 void main() async {
@@ -34,14 +35,13 @@ void main() async {
     runApp(const SplashScreen());
     logger.v("lang: ${window.locale.languageCode}");
     WidgetsFlutterBinding.ensureInitialized();
-
+    Admob.initialize();
     // await initNotifications();
     final appDocumentDirectory =
         await path_provider.getApplicationDocumentsDirectory();
     Hive.init(appDocumentDirectory.path);
 
     // LocalBackgroundService.init();
-
 
     await Future.delayed(const Duration(seconds: 5));
     String token = await getuserToken();

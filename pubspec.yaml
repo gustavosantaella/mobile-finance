@@ -12,6 +12,8 @@ dependencies:
   # flutter_baseflow_permissions: ^0.0.2
   flutter:
     sdk: flutter
+
+  admob_flutter:  
   http: ^0.13.5
   # device_info_plus:
   provider: ^6.0.5
