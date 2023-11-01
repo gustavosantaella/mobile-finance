@@ -25,7 +25,11 @@ class HomeState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _bannerAd = simpleAd(ads['banner1'] as String);
+      try{
+        _bannerAd = simpleAd(ads['banner1'] as String);
+      }catch(e){
+        // 
+      }
       WalletProvider walletProvider = Provider.of(context, listen: false);
       walletProvider.setRefreshHistory(
           walletProvider.currentWallet['info']['_id'], context);

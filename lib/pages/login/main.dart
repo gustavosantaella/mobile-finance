@@ -31,7 +31,11 @@ class LoginWidgetState extends State<LoginWidget> {
 
   @override
   void initState() {
-    _bannerAd = simpleAd(ads['banner1'] as String);
+    try {
+      _bannerAd = simpleAd(ads['banner1'] as String);
+    } catch (e) {
+      //
+    }
     super.initState();
   }
 
@@ -58,12 +62,12 @@ class LoginWidgetState extends State<LoginWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                         if (_bannerAd != null)
-                                SizedBox(
-                                  width: _bannerAd?.size.width.toDouble(),
-                                  height: 100,
-                                  child: AdWidget(ad: _bannerAd!),
-                                ),
+                        if (_bannerAd != null)
+                          SizedBox(
+                            width: _bannerAd?.size.width.toDouble(),
+                            height: 100,
+                            child: AdWidget(ad: _bannerAd!),
+                          ),
                         Text(
                           appName.toUpperCase(),
                           style: const TextStyle(
@@ -72,10 +76,10 @@ class LoginWidgetState extends State<LoginWidget> {
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
                         ),
-                            //  AdmobBanner(
-                            //     adSize: AdmobBannerSize.LARGE_BANNER,
-                            //     adUnitId: ads['banner1'] as String,
-                            //   ),
+                        //  AdmobBanner(
+                        //     adSize: AdmobBannerSize.LARGE_BANNER,
+                        //     adUnitId: ads['banner1'] as String,
+                        //   ),
                         const SizedBox(
                           height: 30,
                         ),

@@ -58,13 +58,14 @@ Map<String, dynamic> definitions = {
 
 const String url = !kReleaseMode
     ? 'http://10.0.2.2:9000/api'
-    : 'http://54.221.67.193:9000/api';
+    : 'https://wafi.thesoftlink.com/api';
 
 
 const String currencyApi = "https://ms-countries.onrender.com";
 
 const Map<String, String>ads = {
-  "banner1": !kReleaseMode  ? "ca-app-pub-3940256099942544/6300978111" : "ca-app-pub-7887143920740339/1914591205"
+  "banner1": !kReleaseMode  ? "ca-app-pub-3940256099942544/6300978111" : "ca-app-pub-7887143920740339/4096813678",
+  "load-1": kReleaseMode  ? "ca-app-pub-3940256099942544/6300978111" : "ca-app-pub-7887143920740339/1914591205"
 };
 
 const String prefixKey = 'Bearer';

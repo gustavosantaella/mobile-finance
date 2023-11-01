@@ -10,11 +10,18 @@ BannerAd simpleAd(String adUnitId) {
     listener: BannerAdListener(
       // Called when an ad is successfully received.
       onAdLoaded: (ad) {
-        logger.w("Banner is loaded");
+        logger.w({
+          "message": "Banner is loaded",
+          "ad": ad
+        });
       },
       // Called when an ad request failed.
       onAdFailedToLoad: (ad, err) {
-        logger.w("Error to load simpleBanner");
+        logger.w({
+          "message": "Error to load simpleBanner",
+          "add": ad,
+          "error": err
+        });
 
         // Dispose the ad here to free resources.
         ad.dispose();

@@ -19,8 +19,12 @@ class SplashState extends State<SplashScreen> {
 
   @override
   void initState() {
-    _bannerAd = simpleAd(ads['banner1'] as String);
-    _bannerAd2 = simpleAd(ads['banner1'] as String);
+    try {
+      _bannerAd = simpleAd(ads['banner1'] as String);
+      _bannerAd2 = simpleAd(ads['banner1'] as String);
+    } catch (e) {
+      //
+    }
 
     super.initState();
   }
