@@ -1,8 +1,10 @@
-import 'package:admob_flutter/admob_flutter.dart';
+// import 'package:admob_flutter/admob_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/lang.dart';
 import 'package:wafi/helpers/fn/main.dart';
 import 'package:wafi/providers/user_provider.dart';
+import 'package:wafi/widgets/ads.dart';
 import 'package:wafi/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:wafi/services/auth.dart';
@@ -17,6 +19,7 @@ class LoginWidget extends StatefulWidget {
 class LoginWidgetState extends State<LoginWidget> {
   final _formKey = GlobalKey<FormState>();
   dynamic error;
+  BannerAd? _bannerAd;
 
   bool obscureTextPassword = true;
   bool loading = false;
@@ -25,6 +28,17 @@ class LoginWidgetState extends State<LoginWidget> {
   final _passwordController = TextEditingController();
 
   final Map _formData = {"email": '', "password": ''};
+
+  @override
+  void initState() {
+    _bannerAd = simpleAd(ads['banner1'] as String);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +58,12 @@ class LoginWidgetState extends State<LoginWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                   
+                         if (_bannerAd != null)
+                                SizedBox(
+                                  width: _bannerAd?.size.width.toDouble(),
+                                  height: 100,
+                                  child: AdWidget(ad: _bannerAd!),
+                                ),
                         Text(
                           appName.toUpperCase(),
                           style: const TextStyle(
@@ -53,10 +72,10 @@ class LoginWidgetState extends State<LoginWidget> {
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
                         ),
-                             AdmobBanner(
-                                adSize: AdmobBannerSize.LARGE_BANNER,
-                                adUnitId: ads['banner1'] as String,
-                              ),
+                            //  AdmobBanner(
+                            //     adSize: AdmobBannerSize.LARGE_BANNER,
+                            //     adUnitId: ads['banner1'] as String,
+                            //   ),
                         const SizedBox(
                           height: 30,
                         ),

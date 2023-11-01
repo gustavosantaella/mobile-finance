@@ -1,4 +1,3 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:wafi/config/constanst.dart';
 import 'package:wafi/helpers/fn/lang.dart';
 import 'package:wafi/pages/home/widgets/balance.dart';
@@ -6,12 +5,12 @@ import 'package:wafi/pages/home/widgets/transaction_container.dart';
 import 'package:wafi/providers/app_provider.dart';
 import 'package:wafi/providers/drawe_provider.dart';
 import 'package:wafi/providers/wallet_provider.dart';
-import 'package:wafi/services/auth.dart';
 import 'package:wafi/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:wafi/widgets/snack_bar.dart';
+import 'package:wafi/widgets/ads.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,11 +19,13 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
+  BannerAd? _bannerAd;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _bannerAd = simpleAd(ads['banner1'] as String);
       WalletProvider walletProvider = Provider.of(context, listen: false);
       walletProvider.setRefreshHistory(
           walletProvider.currentWallet['info']['_id'], context);
@@ -194,9 +195,12 @@ class HomeState extends State<HomePage> {
                         child: SizedBox(
                           child: SingleChildScrollView(
                             child: Column(children: [
-                                AdmobBanner(
-                                  adSize: AdmobBannerSize.LARGE_BANNER,
-                                  adUnitId: ads['banner1'] as String,
+                              
+                              if (_bannerAd != null)
+                                SizedBox(
+                                  width: _bannerAd?.size.width.toDouble(),
+                                  height: 100,
+                                  child: AdWidget(ad: _bannerAd!),
                                 ),
                               // balance
                               const BalanceWidget(),

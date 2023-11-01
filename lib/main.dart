@@ -26,16 +26,24 @@ import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:admob_flutter/admob_flutter.dart';
+// import 'package:admob_flutter/admob_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 Logger logger = Logger();
 void main() async {
   try {
-    logger.d("URL API: $url");
     runApp(const SplashScreen());
-    logger.v("lang: ${window.locale.languageCode}");
     WidgetsFlutterBinding.ensureInitialized();
-    Admob.initialize();
+    logger.d("URL API: $url");
+    logger.v("lang: ${window.locale.languageCode}");
+    try {
+      await MobileAds.instance.initialize();
+      logger.w("Ads has been initialize");
+    } catch (e) {
+      logger.w("An error ocurred to initialize ads");
+      logger.wtf(e);
+      return runApp(const SplashScreen());
+    }
     // await initNotifications();
     final appDocumentDirectory =
         await path_provider.getApplicationDocumentsDirectory();
