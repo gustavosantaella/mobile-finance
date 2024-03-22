@@ -60,7 +60,9 @@ fun WafiTheme(
             val window = (view.context as Activity).window
 
             when{
-                mainBlueColor ->window.statusBarColor = mainBlueColorArgb()
+                mainBlueColor -> {
+                    window.statusBarColor = mainBlueColorArgb()
+                }
                 else ->   window.statusBarColor = colorScheme.primary.toArgb()
             }
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme

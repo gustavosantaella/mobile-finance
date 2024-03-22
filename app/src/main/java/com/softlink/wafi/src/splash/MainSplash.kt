@@ -1,6 +1,10 @@
 package com.softlink.wafi.src.splash
 
 import RenderMainLogo
+import android.annotation.SuppressLint
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,13 +25,28 @@ import com.softlink.wafi.ui.theme.MainBlueColor
 import com.softlink.wafi.ui.theme.WafiTheme
 
 
-@Composable()
-fun MainSplash()  {
+@SuppressLint("CustomSplashScreen")
+class MainSplashActivity : ComponentActivity(){
 
-    WafiTheme(
-        mainBlueColor = true
-    ) {
-        Surface(modifier = Modifier.fillMaxSize(), color = MainBlueColor) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent(){
+            WafiTheme(
+                mainBlueColor = true
+            ) {
+                Surface(modifier = Modifier.fillMaxSize(), color = MainBlueColor) {
+                    MainSplash()
+                }
+        }
+
+
+    }
+}
+@Composable()
+private fun MainSplash()  {
+
+
                 Column(
                         modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -40,7 +59,6 @@ fun MainSplash()  {
                     Text(text = "MANAGE YOUR FINANCES WITH ME", color = Blank, fontSize = 30.sp, textAlign = TextAlign.Center, letterSpacing = 10.sp, lineHeight = 50.sp)
 
                 }
-        }
     }
 }
 

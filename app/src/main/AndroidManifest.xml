@@ -23,6 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
+        <activity
+            android:name=".src.activities.home.HomeActivity"
+            android:label="Home Activity" />
+
+        <activity
+            android:name=".src.splash.MainSplashActivity"
+            android:label="Main splash Activity" />
     </application>
 
 </manifest>
