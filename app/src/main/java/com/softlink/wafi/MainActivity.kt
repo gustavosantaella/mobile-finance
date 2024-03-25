@@ -29,9 +29,12 @@ class MainActivity : ComponentActivity() {
                     val intent = Intent(this, MainSplashActivity::class.java)
                     startActivity(intent)
 
+
                     Handler().postDelayed({
-                        Redirect.To(this, HomeActivity::class.java, null)
+                                          Redirect.To(this, HomeActivity::class.java, null)
                     }, 5000)
+
+
                 }
             }
         }

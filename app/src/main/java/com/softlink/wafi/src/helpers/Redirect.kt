@@ -2,8 +2,7 @@ package com.softlink.wafi.src.helpers
 
 import android.app.Activity
 import android.content.Intent
-import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Composable
+
 
 class Redirect{
     class To(parent: Activity, activity: Class<*>, data: Class<*>?){
