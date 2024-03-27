@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.softlink.wafi.src.activities.home.HomeActivity
+import com.softlink.wafi.src.database.SQLiteDB
 import com.softlink.wafi.src.helpers.Redirect
 import com.softlink.wafi.src.splash.MainSplashActivity
 import com.softlink.wafi.ui.theme.WafiTheme
@@ -20,7 +21,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
 
             WafiTheme {

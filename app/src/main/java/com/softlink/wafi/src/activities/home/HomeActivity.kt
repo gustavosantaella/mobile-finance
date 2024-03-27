@@ -60,7 +60,9 @@ class HomeActivity: ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = default()) {
 
                     Scaffold(
+                        modifier = Modifier.padding(5.dp),
                         bottomBar = { Nav() }
+
 
                     ) { innerPadding ->
                      Column {
